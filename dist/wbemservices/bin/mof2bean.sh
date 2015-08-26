@@ -39,7 +39,7 @@ ECHO="echo"
 PWD="pwd"
 
 # If JDK is not in /usr/java, edit as needed
-JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/jre
+JAVA_HOME="/usr/java"
 
 # If java is not in /usr/bin, edit as needed
 JAVA="$JAVA_HOME/bin/java -classpath"

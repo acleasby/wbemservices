@@ -18,7 +18,7 @@
  *Sun Microsystems, Inc.
  *
  *Portions created by: Sun Microsystems, Inc.
- *are Copyright © 2001 Sun Microsystems, Inc.
+ *are Copyright Â© 2001 Sun Microsystems, Inc.
  *
  *All Rights Reserved.
  *
@@ -99,9 +99,9 @@ class IndicationPoller {
 		    return false;
 		} 
 	    }
-	    Enumeration enum = inst1.getProperties().elements();
-	    while (enum.hasMoreElements()) {
-		CIMProperty cp = (CIMProperty)enum.nextElement();
+	    Enumeration enumeration = inst1.getProperties().elements();
+	    while (enumeration.hasMoreElements()) {
+		CIMProperty cp = (CIMProperty)enumeration.nextElement();
 		CIMValue v1 = cp.getValue();
 		CIMValue v2 = null;
 		try {

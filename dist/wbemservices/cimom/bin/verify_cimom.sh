@@ -36,7 +36,7 @@ ECHO="echo"
 
 # If JDK is not set, use a reasonable default
 if [ -z $JAVA_HOME ]; then
- export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/jre
+ export JAVA_HOME="/usr/java"
 fi
 
 if [ ! -d $JAVA_HOME ]; then
@@ -44,7 +44,7 @@ if [ ! -d $JAVA_HOME ]; then
  echo The JAVA_HOME environment variable must be set to an
  echo existing copy of a JDK.
  echo
- echo Example: export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/jre
+ echo Example: export JAVA_HOME=$JAVA_HOME
  echo
  exit 2
 fi

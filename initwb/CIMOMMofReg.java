@@ -18,7 +18,7 @@
  *Sun Microsystems, Inc.
  *
  *Portions created by: Sun Microsystems, Inc.
- *are Copyright ¨ 2003 Sun Microsystems, Inc.
+ *are Copyright Â¨ 2003 Sun Microsystems, Inc.
  *
  *All Rights Reserved.
  *

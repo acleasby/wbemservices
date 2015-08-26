@@ -18,7 +18,7 @@
  *Sun Microsystems, Inc.
  *
  *Portions created by: Sun Microsystems, Inc.
- *are Copyright © 2001 Sun Microsystems, Inc.
+ *are Copyright Â© 2001 Sun Microsystems, Inc.
  *
  *All Rights Reserved.
  *
@@ -180,8 +180,8 @@ public class Util {
      * @param enum The Enumeration of objects to sort
      * @return     Enumeration containing sorted objectsy 
      */
-    public static Enumeration sortEnumeration(Enumeration enum) {
-	Vector list = enumToVector(enum);
+    public static Enumeration sortEnumeration(Enumeration enumeration) {
+	Vector list = enumToVector(enumeration);
 	sortVector(list);
 	return list.elements();
     }

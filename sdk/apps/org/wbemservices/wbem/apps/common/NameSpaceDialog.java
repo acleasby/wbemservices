@@ -18,7 +18,7 @@
  *Sun Microsystems, Inc.
  *
  *Portions created by: Sun Microsystems, Inc.
- *are Copyright © 2001 Sun Microsystems, Inc.
+ *are Copyright Â© 2001 Sun Microsystems, Inc.
  *
  *All Rights Reserved.
  *
@@ -238,7 +238,7 @@ public class NameSpaceDialog extends AdminDialog implements
     }
 
     public static Enumeration getAllNameSpaces() {
-	Enumeration enum = null;
+	Enumeration enumeration = null;
 
 	CIMObjectPath op = new CIMObjectPath();
 	if ((foundClassName == NOT_FOUND) || (foundClassName == CIM_NAMESPACE)) {
@@ -246,8 +246,8 @@ public class NameSpaceDialog extends AdminDialog implements
 	    CIMClient interopClient = CIMClientObject.createInteropClient();
 	    op.setObjectName("CIM_Namespace");
 	    try {
-		enum = interopClient.enumerateInstanceNames(op);
-		if (enum.hasMoreElements()) {
+            enumeration = interopClient.enumerateInstanceNames(op);
+		if (enumeration.hasMoreElements()) {
 		    foundClassName = CIM_NAMESPACE;
 		} else {
 		    foundClassName = NOT_FOUND;
@@ -268,8 +268,8 @@ public class NameSpaceDialog extends AdminDialog implements
 	    op.setObjectName("__Namespace");
 	    CIMClient rootClient = CIMClientObject.changeNameSpace("root");
 	    try {
-		enum = rootClient.enumerateInstanceNames(op);
-		if (enum.hasMoreElements()) {
+            enumeration = rootClient.enumerateInstanceNames(op);
+		if (enumeration.hasMoreElements()) {
 		    foundClassName = __NAMESPACE;
 		} else {
 		    foundClassName = NOT_FOUND;
@@ -288,9 +288,9 @@ public class NameSpaceDialog extends AdminDialog implements
 
 	Vector v = new Vector();
 	// if we have Namespace object paths, get the namespace names.
-	if ((enum != null) && (foundClassName != NOT_FOUND)) {
-	    while (enum.hasMoreElements()) {
-		CIMObjectPath opNS = (CIMObjectPath)enum.nextElement();
+	if ((enumeration != null) && (foundClassName != NOT_FOUND)) {
+	    while (enumeration.hasMoreElements()) {
+		CIMObjectPath opNS = (CIMObjectPath)enumeration.nextElement();
 
 		if (foundClassName == CIM_NAMESPACE) {
 		    Enumeration keyEnum = opNS.getKeys().elements();
@@ -364,7 +364,7 @@ public class NameSpaceDialog extends AdminDialog implements
     private boolean deleteNameSpace(String namespace) {
 	CIMClient newCIMClient = null;
 	boolean ret = false;
-	Enumeration enum;
+	Enumeration enumeration;
 	try {
 	    switch (foundClassName) {
 	    case __NAMESPACE:
@@ -380,10 +380,10 @@ public class NameSpaceDialog extends AdminDialog implements
 	    case CIM_NAMESPACE:
 	    default:
 		newCIMClient = CIMClientObject.createInteropClient();
-		enum = newCIMClient.enumerateInstanceNames(
+            enumeration = newCIMClient.enumerateInstanceNames(
 	            new CIMObjectPath("CIM_NameSpace"));
-		while (enum.hasMoreElements()) {
-		    CIMObjectPath opInst =  (CIMObjectPath)enum.nextElement();
+		while (enumeration.hasMoreElements()) {
+		    CIMObjectPath opInst =  (CIMObjectPath)enumeration.nextElement();
 		    Enumeration keyEnum = opInst.getKeys().elements();
 		    while (keyEnum.hasMoreElements()) {
 			CIMProperty keyProp = 

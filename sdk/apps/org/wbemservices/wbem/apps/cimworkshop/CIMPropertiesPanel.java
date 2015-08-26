@@ -18,7 +18,7 @@
  *Sun Microsystems, Inc.
  *
  *Portions created by: Sun Microsystems, Inc.
- *are Copyright © 2001 Sun Microsystems, Inc.
+ *are Copyright Â© 2001 Sun Microsystems, Inc.
  *
  *All Rights Reserved.
  *
@@ -142,7 +142,7 @@ public class CIMPropertiesPanel extends CIMElementsTable {
 	    } while (!done);
 
 	    if (name != null) {
-		String value = dlg.getType();
+		String value = dlg.getSelectedType();
 		CIMProperty prop = new CIMProperty(name);
 		CIMDataType cdt;
 		if ((value).indexOf('_') > 0) {

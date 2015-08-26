@@ -18,7 +18,7 @@
  *Sun Microsystems, Inc.
  *
  *Portions created by: Sun Microsystems, Inc.
- *are Copyright © 2002 Sun Microsystems, Inc.
+ *are Copyright ï¿½ 2002 Sun Microsystems, Inc.
  *
  *All Rights Reserved.
  *
@@ -42,5 +42,5 @@ public class Version {
     public final static String companyName = "WBEM Services";
     public final static String companyContact = "http://wbemservices.sourceforge.net/";
     public final static String productName = "WBEM Services WBEM API";
-    public final static String buildID = "11/01/04:10:48"; 
+    public final static String buildID = "08/26/15:11:16"; 
 }

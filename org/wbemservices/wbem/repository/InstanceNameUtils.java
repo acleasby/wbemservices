@@ -20,7 +20,7 @@
  * Copyright (C) 2002, 2003 AppIQ Inc
  *
  *Portions created by: Sun Microsystems, Inc.
- *are Copyright © 2001 Sun Microsystems, Inc.
+ *are Copyright Â© 2001 Sun Microsystems, Inc.
  *
  *All Rights Reserved.
  * 

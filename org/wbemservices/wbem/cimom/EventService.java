@@ -18,7 +18,7 @@
  *Sun Microsystems, Inc.
  *
  *Portions created by: Sun Microsystems, Inc.
- *are Copyright © 2001 Sun Microsystems, Inc.
+ *are Copyright Â© 2001 Sun Microsystems, Inc.
  *
  *All Rights Reserved.
  *
@@ -152,9 +152,9 @@ InternalProviderAdapter.InternalServiceProvider {
 	}
 
 	// Clean up all this delivery's associations to the filters
-	Enumeration enum = tv.elements();
-	while (enum.hasMoreElements()) {
-	    CIMObjectPath assoc = (CIMObjectPath)enum.nextElement();
+	Enumeration enumeration = tv.elements();
+	while (enumeration.hasMoreElements()) {
+	    CIMObjectPath assoc = (CIMObjectPath)enumeration.nextElement();
 	    // The delete instance should take care of deactivating the
 	    // filters
 	    try {
@@ -969,12 +969,12 @@ InternalProviderAdapter.InternalServiceProvider {
     private void activateFilters() throws CIMException {
 
 	// Get all the namespaces
-	Enumeration enum = ps.enumerateNameSpace("", true).elements();
+	Enumeration enumeration = ps.enumerateNameSpace("", true).elements();
 	// for each namespace, find the instances of filter
 	CIMObjectPath assocOp = new CIMObjectPath(FILTERDELIVERYASSOC);
-	while (enum.hasMoreElements()) {
+	while (enumeration.hasMoreElements()) {
 	    CIMObjectPath op = new CIMObjectPath("", 
-	    (String)enum.nextElement());
+	    (String)enumeration.nextElement());
 	    op.setObjectName(CIMFILTERCLASS);
 	    assocOp.setNameSpace(op.getNameSpace());
 

@@ -18,7 +18,7 @@
  *Sun Microsystems, Inc.
  *
  *Portions created by: Sun Microsystems, Inc.
- *are Copyright © 2002 Sun Microsystems, Inc.
+ *are Copyright ï¿½ 2002 Sun Microsystems, Inc.
  *
  *All Rights Reserved.
  *
@@ -42,6 +42,6 @@ final class Version {
     final static int revision = 0;
     final static String productName = "WBEM Services MOF compiler";
     // The build id is a build date in mm/dd/yy:HH:MM format
-    final static String buildID = "11/01/04:10:48";
+    final static String buildID = "08/26/15:11:16";
 }
 

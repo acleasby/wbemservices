@@ -18,7 +18,7 @@
  *Sun Microsystems, Inc.
  *
  *Portions created by: Sun Microsystems, Inc.
- *are Copyright © 2001 Sun Microsystems, Inc.
+ *are Copyright Â© 2001 Sun Microsystems, Inc.
  *
  *All Rights Reserved.
  *
@@ -59,13 +59,13 @@ import org.wbemservices.wbem.apps.common.Util;
 
 
 /**
- * 
+ *
  * @author 	Sun Microsystems
  */
 
 
-public class CIMElementsTable extends JScrollPane implements 
-    ListSelectionListener, TableModelListener, MouseListener, 
+public class CIMElementsTable extends JScrollPane implements
+    ListSelectionListener, TableModelListener, MouseListener,
     ActionListener {
 
     public final static int PROPERTY_TABLE = 0;
@@ -156,7 +156,7 @@ public class CIMElementsTable extends JScrollPane implements
     	    tableHeading.addElement("");
     	    tableHeading.addElement("");
 	}
-	ActionString asName = new ActionString("LBL_NAME", 
+	ActionString asName = new ActionString("LBL_NAME",
 	    "org.wbemservices.wbem.apps.common.common");
 	ActionString asType = new ActionString("LBL_TYPE");
 	ActionString asValue = new ActionString("LBL_VALUE");
@@ -183,7 +183,7 @@ public class CIMElementsTable extends JScrollPane implements
 		    if (obj == inheritedIcon) {
 			s = I18N.loadStringFormat("MSG_PROP_INHERITED", name);
 		    } else {
-			s = I18N.loadStringFormat("MSG_PROP_NOT_INHERITED", 
+			s = I18N.loadStringFormat("MSG_PROP_NOT_INHERITED",
 						  name);
 		    }
 		} else if (col == KEY_COLUMN) {
@@ -261,7 +261,7 @@ public class CIMElementsTable extends JScrollPane implements
 	setViewportView(table);
 
     }
-    
+
 // BUGFIX. Accessibility fixes
     public JTable getTable() {
 	return table;
@@ -276,7 +276,7 @@ public class CIMElementsTable extends JScrollPane implements
 	// sizeColumnsToFit must be called due to a JTable bug
 	table.sizeColumnsToFit(0);
     }
-	
+
     public void actionPerformed(ActionEvent evt) {
 	String actionCmd = evt.getActionCommand();
 	if (actionCmd.equals("SHOW_VALUE")) {
@@ -289,7 +289,7 @@ public class CIMElementsTable extends JScrollPane implements
 	String name = null;
 	CIMDataType dataType = null;
 	Object value = null;
-	
+
 	CIMElement currentElement = (CIMElement)cimElements.elementAt(
 				    getSelectedRow());
 	name = currentElement.getName();
@@ -310,7 +310,7 @@ public class CIMElementsTable extends JScrollPane implements
 		value = null;
 	    }
 	}
-	CIMValueDialog.showDialog(Util.getFrame(table), value, 
+	CIMValueDialog.showDialog(Util.getFrame(table), value,
 				      name, dataType, false);
     }
 // BUGFIX END. Accessibility fixes
@@ -495,11 +495,11 @@ public class CIMElementsTable extends JScrollPane implements
 		(accessState == NON_EDITABLE)) {
 		b = false;
 	    } else if (newElement) {
-		b = true; 
+		b = true;
 	    } else if (parentElement instanceof CIMInstance) {
 		CIMElement currentElement = (CIMElement)
 		    cimElements.elementAt(row);
-		if ((tableType == PROPERTY_TABLE) && 
+		if ((tableType == PROPERTY_TABLE) &&
 		    (((CIMProperty)currentElement).isKey())) {
 		    b = false;
 		} else {
@@ -524,11 +524,11 @@ public class CIMElementsTable extends JScrollPane implements
 	int currentRow = table.rowAtPoint(point);
 	table.setRowSelectionInterval(currentRow, currentRow);
 	Point vpLocation = getViewport().getViewPosition();
-	popupMenu.show(this, (point.x - vpLocation.x + 10), 
+	popupMenu.show(this, (point.x - vpLocation.x + 10),
 			     (point.y - vpLocation.y));
     }
 
-    
+
     public void mousePressed(MouseEvent evt) {
 	if (evt.isPopupTrigger()) {
 	    createPopupMenu(evt.getPoint());
@@ -554,7 +554,7 @@ public class CIMElementsTable extends JScrollPane implements
     public void mouseExited(MouseEvent evt) {
     }
 
-    
+
     public void tableChanged(TableModelEvent e) {
     }
 
@@ -601,7 +601,7 @@ public class CIMElementsTable extends JScrollPane implements
 	    super(textField);
 	}
 
-	public Component getTableCellEditorComponent(JTable tbl, 
+	public Component getTableCellEditorComponent(JTable tbl,
 	    Object value, boolean isSelected, int row, int column) {
 
 	    currentRow = row;
@@ -609,7 +609,7 @@ public class CIMElementsTable extends JScrollPane implements
 	    ((JTextField)editorComponent).setEditable(isTextFieldEditable());
 
 	    currentElement = (CIMElement)cimElements.elementAt(row);
-	    currentName = currentElement.getName();	    
+	    currentName = currentElement.getName();
 	    if (tableType == PROPERTY_TABLE) {
 		currentDataType = ((CIMProperty)currentElement).getType();
 		CIMValue cv = ((CIMProperty)currentElement).getValue();
@@ -664,9 +664,9 @@ public class CIMElementsTable extends JScrollPane implements
 
 	public boolean shouldSelectCell(EventObject evt) {
 	    if (table.getModel().isCellEditable(currentRow, valueColumn)) {
-		currentValue = CIMValueDialog.showDialog(Util.getFrame(table), 
-							 currentValue, 
-							 currentName, 
+		currentValue = CIMValueDialog.showDialog(Util.getFrame(table),
+							 currentValue,
+							 currentName,
 							 currentDataType, true);
 		// if user clicked Cancel button, currentValue will
 		// be of type CancelObject
@@ -674,8 +674,8 @@ public class CIMElementsTable extends JScrollPane implements
 		    fireEditingCanceled();
 		} else {
 		    fireEditingStopped();
-		}	
-	    }	    
+		}
+	    }
 	    return false;
 	}
 
@@ -688,8 +688,8 @@ public class CIMElementsTable extends JScrollPane implements
 
 	}
 
-	
-	
+
+
     }
 
 
@@ -700,15 +700,15 @@ public class CIMElementsTable extends JScrollPane implements
 
 	String currentName;
 	String currentType;
-	CIMElement currentElement; 
-	
+	CIMElement currentElement;
+
 	int currentRow;
 
 	public CIMTypeEditor(JTextField textField) {
 	    super(textField);
 	}
 
-	public Component getTableCellEditorComponent(JTable tbl, 
+	public Component getTableCellEditorComponent(JTable tbl,
 	    Object value, boolean isSelected, int row, int column) {
 
 	    currentRow = row;
@@ -741,7 +741,7 @@ public class CIMElementsTable extends JScrollPane implements
 	    }
 	    if (accessState == EDITABLE) {
 		if (isClass && (currentElement instanceof CIMProperty)) {
-		    if (((CIMProperty)currentElement).getOriginClass() != 
+		    if (((CIMProperty)currentElement).getOriginClass() !=
 							null) {
 			return false;
 		    }
@@ -768,10 +768,10 @@ public class CIMElementsTable extends JScrollPane implements
 	}
 
 	public void showDialog() {
-	    CIMTypeDialog dlg = new CIMTypeDialog(Util.getFrame(table), 
+	    CIMTypeDialog dlg = new CIMTypeDialog(Util.getFrame(table),
 						  currentType);
-	    
-	    String newType = dlg.getType();
+
+	    String newType = dlg.getSelectedType();
 	    if ((newType == null) || newType.equals(currentType)) {
 		fireEditingCanceled();
 	    } else {
@@ -781,7 +781,7 @@ public class CIMElementsTable extends JScrollPane implements
 	    }
 	}
 
-	    
+
     }
 
 }

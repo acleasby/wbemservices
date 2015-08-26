@@ -18,7 +18,7 @@
  *Sun Microsystems, Inc.
  *
  *Portions created by: Sun Microsystems, Inc.
- *are Copyright © 2001 Sun Microsystems, Inc.
+ *are Copyright Â© 2001 Sun Microsystems, Inc.
  *
  *All Rights Reserved.
  *
@@ -123,7 +123,7 @@ public class CIMMethodsPanel extends JScrollPane implements
     public void populateList(CIMClient cc, CIMElement pElement) {
 	cimClient = cc;
 	Vector methods = new Vector();
-	Enumeration enum;
+	Enumeration enumeration;
 	Util.setWaitCursor(this);
 
 	cimElement = pElement;
@@ -146,8 +146,8 @@ public class CIMMethodsPanel extends JScrollPane implements
 	    } else if (pElement instanceof CIMClass) {
 		methods  = ((CIMClass)pElement).getMethods();
 	    }
-	    for (enum = methods.elements(); enum.hasMoreElements(); ) {
-		CIMMethod method = (CIMMethod)enum.nextElement();
+	    for (enumeration = methods.elements(); enumeration.hasMoreElements(); ) {
+		CIMMethod method = (CIMMethod)enumeration.nextElement();
 		listModel.addElement(method);
 	    }
 	}

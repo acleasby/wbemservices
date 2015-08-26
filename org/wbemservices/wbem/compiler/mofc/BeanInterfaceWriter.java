@@ -18,7 +18,7 @@
  *Sun Microsystems, Inc.
  *
  *Portions created by: Sun Microsystems, Inc.
- *are Copyright © 2002 Sun Microsystems, Inc.
+ *are Copyright Â© 2002 Sun Microsystems, Inc.
  *
  *All Rights Reserved.
  *
@@ -172,11 +172,11 @@ class BeanInterfaceWriter implements BeanGeneratorConstants {
 	    return (sb);
 
 	}
-	Enumeration enum = vProperties.elements();
+	Enumeration enumeration = vProperties.elements();
 	CIMProperty cimProp;
-	while (enum.hasMoreElements()) {
+	while (enumeration.hasMoreElements()) {
 
-	    cimProp = (CIMProperty)enum.nextElement();
+	    cimProp = (CIMProperty)enumeration.nextElement();
 	    sb.append(generatePropertyMethods(cimProp));
 
 	}

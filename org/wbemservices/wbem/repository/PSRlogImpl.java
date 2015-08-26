@@ -17,7 +17,7 @@
  *The Initial Developer of the Original Code is: *Sun Microsystems, Inc.
  *
  *Portions created by: Sun Microsystems, Inc.
- *are Copyright � 2001 Sun Microsystems, Inc.
+ *are Copyright ï¿½ 2001 Sun Microsystems, Inc.
  *
  *All Rights Reserved.
  *
@@ -1274,13 +1274,13 @@ public class PSRlogImpl implements RepositoryIF, EventProvider {
                 ((CIMAssocClassRlogEntry) ccentry).removeClassAssociations();
             }
 
-            ArrayList enum=new ArrayList(ccentry.getSubClassCollection());
-            for (int i = 0; i < enum.size();
+            ArrayList enumeration=new ArrayList(ccentry.getSubClassCollection());
+            for (int i = 0; i < enumeration.size();
             i++){
-                ccentry = (CIMClassRlogEntry) enum.get(i);
+                ccentry = (CIMClassRlogEntry) enumeration.get(i);
                 ArrayList v = new ArrayList(ccentry.getSubClassCollection());
                 for (int j = 0; j < v.size(); j++) {
-                    enum.add(v.get(j));
+                    enumeration.add(v.get(j));
                 }
                 nsentry.removeClass(ccentry.getNameKey());
                 // Remove associations from referenced classes
@@ -1307,13 +1307,13 @@ public class PSRlogImpl implements RepositoryIF, EventProvider {
         if (entry instanceof CIMAssocClassRlogEntry) {
             ((CIMAssocClassRlogEntry) entry).validateClassAsociations();
         }
-        ArrayList enum=new ArrayList(entry.getSubClassCollection());
-        for (int i = 0; i < enum.size();
+        ArrayList enumeration=new ArrayList(entry.getSubClassCollection());
+        for (int i = 0; i < enumeration.size();
         i++){
-            CIMClassRlogEntry ccentry = (CIMClassRlogEntry) enum.get(i);
+            CIMClassRlogEntry ccentry = (CIMClassRlogEntry) enumeration.get(i);
             ArrayList v = new ArrayList(ccentry.getSubClassCollection());
             for (int j = 0; j < v.size(); j++) {
-                enum.add(v.get(j));
+                enumeration.add(v.get(j));
             }
             // validate associations from referenced classes
             if (ccentry instanceof CIMAssocClassRlogEntry) {
@@ -1469,12 +1469,12 @@ public class PSRlogImpl implements RepositoryIF, EventProvider {
     private void enumNameSpaceDo(Vector nslist)
             throws CIMException {
 
-        ArrayList enum=new
+        ArrayList enumeration=new
                 ArrayList(nameSpacesMap.values());
-        for (int i = 0; i < enum.size();
+        for (int i = 0; i < enumeration.size();
         i++){
             CIMNameSpaceRlogEntry ns =
-                    (CIMNameSpaceRlogEntry) enum.get(i);
+                    (CIMNameSpaceRlogEntry) enumeration.get(i);
             nslist.add(ns.getName());
         }
     }
@@ -1680,15 +1680,15 @@ public class PSRlogImpl implements RepositoryIF, EventProvider {
                         CIMException.CIM_ERR_NOT_FOUND, className);
             }
 
-            ArrayList enum=new ArrayList(ccentry.getSubClassCollection());
-            for (int i = 0; i < enum.size();
+            ArrayList enumeration=new ArrayList(ccentry.getSubClassCollection());
+            for (int i = 0; i < enumeration.size();
             i++){
-                ccentry = (CIMClassRlogEntry) enum.get(i);
+                ccentry = (CIMClassRlogEntry) enumeration.get(i);
                 if (deep) {
                     ArrayList v =
                             new ArrayList(ccentry.getSubClassCollection());
                     for (int j = 0; j < v.size(); j++) {
-                        enum.add(v.get(j));
+                        enumeration.add(v.get(j));
                     }
                 }
                 if (needop) {
@@ -1830,16 +1830,16 @@ public class PSRlogImpl implements RepositoryIF, EventProvider {
 
             // Get instances associated with the subclasses
             if (deep) {
-                ArrayList enum=new ArrayList(ccentry.getSubClassCollection());
-                for (int i = 0; i < enum.size();
+                ArrayList enumeration=new ArrayList(ccentry.getSubClassCollection());
+                for (int i = 0; i < enumeration.size();
                 i++){
-                    ccentry = (CIMClassRlogEntry) enum.get(i);
+                    ccentry = (CIMClassRlogEntry) enumeration.get(i);
                     ArrayList v =
                             new ArrayList(ccentry.getSubClassCollection());
                     for (int j = 0; j < v.size(); j++) {
-                        enum.add(v.get(j));
+                        enumeration.add(v.get(j));
                     }
-                    getInstanceList(namespace, (CIMClassRlogEntry) enum.get(i),
+                    getInstanceList(namespace, (CIMClassRlogEntry) enumeration.get(i),
                             needop, instanceList);
                 }
             }
@@ -2317,10 +2317,10 @@ public class PSRlogImpl implements RepositoryIF, EventProvider {
                         CIMException.CIM_ERR_NOT_FOUND, cname);
             }
 
-            ArrayList enum=new ArrayList(ccentry.getSubClassKeys());
-            for (int j = 0; j < enum.size();
+            ArrayList enumeration=new ArrayList(ccentry.getSubClassKeys());
+            for (int j = 0; j < enumeration.size();
             j++){
-                list.add( enum.get(j));
+                list.add( enumeration.get(j));
             }
         }
         return list;

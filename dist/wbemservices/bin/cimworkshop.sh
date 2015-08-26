@@ -41,7 +41,7 @@ TAIL="tail"
 
 # If JDK is not in /usr/java, edit as needed
 if [[ -z $JAVA_HOME ]]; then
-    JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/jre
+    JAVA_HOME="/usr/java"
 fi 
 
 # If java is not in /usr/bin, edit as needed
