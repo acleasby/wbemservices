@@ -1,0 +1,336 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>WBEMServices Win32 Verify Output</TITLE>
+	<STYLE>
+	<!--
+		.stderr { color: #FF0000 }
+		.stdout { color: #0000FF }
+		.stdin  { color: #00DD00 }
+		code, pre { background-color: #EEEEEE }
+	-->
+	</STYLE>
+</HEAD>
+<BODY>
+<H1>Example Output for Verifying Win32 WBEM Services Executables</H1>
+<P>Last Updated 09/26/03</P>
+<P>The following is proper output from <code>verify_cimom.bat</code>
+run in a command window.</P>
+<PRE>C:\&gt;cd \files\open\dist\wbemservices\cimom\bin&gt;
+C:\files\open\dist\wbemservices\cimom\bin&gt;verify_cimom
+<span class="stdout">*********************************************************
+Running program to get class definition for CIM_Collection over HTTP
+*********************************************************
+c:\jdk1.2.2\bin\java -classpath C:\files\open\dist\wbemservices\examples\client\verify;C:\files\open\dist\wbemservices\lib\wbem.jar GetClass localhost CIM_Collection HTTP
+    [Abstract(true),
+     Description(&quot;Collection is an abstract class that provides a commonsuperclass for data elements that represent collections of ManagedElements and its subclasses.&quot;)
+    ]
+class CIM_Collection:CIM_ManagedElement
+{
+    [MaxLen(64),
+     Description(&quot;The Caption property is a short textual description (one-line string) of the object.&quot;)
+    ]
+    string Caption;
+
+    [Description(&quot;The Description property provides a textual description of the object.&quot;)
+    ]
+    string Description;
+
+
+};
+*********************************************************
+Running program to enumerate subclasses for CIM_Collection over HTTP
+*********************************************************
+c:\jdk1.2.2\bin\java -classpath C:\files\open\dist\wbemservices\examples\client\verify;C:\files\open\dist\wbemservices\lib\wbem.jar  EnumClasses localhost CIM_Collection HTTP
+&quot;:CIM_CollectionOfMSEs&quot;
+&quot;:CIM_Group&quot;
+&quot;:CIM_Role&quot;
+&quot;:CIM_InstalledProduct&quot;
+&quot;:CIM_DiskGroup&quot;
+&quot;:CIM_BGPCluster&quot;
+&quot;:CIM_IPAddressRange&quot;
+&quot;:CIM_LogicalNetwork&quot;
+&quot;:CIM_BGPPeerGroup&quot;
+&quot;:CIM_BufferPool&quot;
+&quot;:CIM_IPXNetwork&quot;
+&quot;:CIM_IPSubnet&quot;
+&quot;:CIM_LANSegment&quot;
+*********************************************************
+Running program to get class definition for CIM_LogicalElement over RMI
+*********************************************************
+c:\jdk1.2.2\bin\java -classpath C:\files\open\dist\wbemservices\examples\client\verify;C:\files\open\dist\wbemservices\lib\wbem.jar  GetClass localhost CIM_LogicalElement RMI
+    [Abstract(true),
+     Description(&quot;CIM_LogicalElement is a base class for all the components of a System that represent abstract system components, such as Files, Processes, or system capabilities in the form of Logical Devices.&quot;)
+    ]
+class CIM_LogicalElement:CIM_ManagedSystemElement
+{
+    [Description(&quot;A datetime value indicating when the object was installed. A lack of a value does not indicate that the object is not installed.&quot;),
+     MappingStrings{&quot;MIF.DMTF|ComponentID|001.5&quot;}
+    ]
+    datetime InstallDate;
+
+    [MaxLen(256),
+     Description(&quot;The Name property defines the label by which the object is known. When subclassed, the Name property can be overridden to be a Key property.&quot;)
+    ]
+    string Name;
+
+    [MaxLen(10),
+     Description(&quot;  A string indicating the current status of the object. Various operational and non-operational statuses are defined. Operational statuses are &quot;OK&quot;, &quot;Degraded&quot;, &quot;Stressed&quot; and &quot;Pred Fail&quot;. &quot;Stressed&quot; indicates that the Element is functioning, but needs attention. Examples of &quot;Stressed&quot; states are overload, overheated, etc. The condition &quot;Pred Fail&quot; (failure predicted) indicates that an Element is functioning properly but predicting a failure in the near future. An example is a SMART-enabled hard drive.
+  Non-operational statuses can also be specified. These are &quot;Error&quot;, &quot;NonRecover&quot;, &quot;Starting&quot;, &quot;Stopping&quot;,  &quot;Stopped&quot;, &quot;Service&quot;, &quot;No Contact&quot; and &quot;Lost Comm&quot;. &quot;NonRecover&quot; indicates that a non-recoverable error has occurred. &quot;Service&quot; describes an Element being configured, maintained, cleaned, or otherwise administered. This status could apply during mirror-resilvering of a disk, reload of a user permissions list, or other administrative task. Not all such work is on-line, yet the Element is neither &quot;OK&quot; nor in one of the other states. &quot;No Contact&quot; indicates that the current instance of the monitoring system has knowledge of this Element but has never been able to establish communications with it. &quot;Lost Comm&quot; indicates that the ManagedSystemElement is known to exist and has been contacted successfully in the past, but is currently unreachable.&quot;Stopped&quot; indicates that the ManagedSystemElement is known to exist, it is not operational (i.e. it is unable to provide service to users), but it has not failed. It has purposely been made non-operational. The Element may have never been &quot;OK&quot;, the Element may have initiated its own stop, or a management system may have initiated the stop.&quot;),
+     ValueMap{&quot;OK&quot;,  &quot;Error&quot;,  &quot;Degraded&quot;,  &quot;Unknown&quot;,  &quot;Pred Fail&quot;,  &quot;Starting&quot;,  &quot;Stopping&quot;,  &quot;Service&quot;,  &quot;Stressed&quot;,  &quot;NonRecover&quot;,  &quot;No Contact&quot;,  &quot;Lost Comm&quot;,  &quot;Stopped&quot;}
+    ]
+    string Status;
+
+    [MaxLen(64),
+     Description(&quot;The Caption property is a short textual description (one-line string) of the object.&quot;)
+    ]
+    string Caption;
+
+    [Description(&quot;The Description property provides a textual description of the object.&quot;)
+    ]
+    string Description;
+
+
+};
+*********************************************************
+Running program to enumerate subclasses for CIM_LogicalElement over RMI
+*********************************************************
+
+c:\jdk1.2.2\bin\java -classpath C:\files\open\dist\wbemservices\examples\client\verify;C:\files\open\dist\wbemservices\lib\wbem.jar EnumClasses localhost CIM_LogicalElement RMI
+&quot;:CIM_RoutingPolicy&quot;
+&quot;:CIM_Account&quot;
+&quot;:CIM_SoftwareFeature&quot;
+&quot;:CIM_BGPPathAttributes&quot;
+&quot;:CIM_StaticForwardingEntry&quot;
+&quot;:CIM_PeerIdentityEntry&quot;
+&quot;:CIM_FileSystem&quot;
+&quot;:CIM_DynamicForwardingEntry&quot;
+&quot;:CIM_NextHopRouting&quot;
+&quot;:CIM_AccessControlInformation&quot;
+&quot;:CIM_RedundancyGroup&quot;
+&quot;:CIM_LogicalFile&quot;
+&quot;:CIM_SystemResource&quot;
+&quot;:CIM_FilterEntryBase&quot;
+&quot;:CIM_SoftwareElement&quot;
+&quot;:CIM_JobDestination&quot;
+&quot;:CIM_OperatingSystem&quot;
+&quot;:CIM_System&quot;
+&quot;:CIM_Thread&quot;
+&quot;:CIM_Process&quot;
+&quot;:CIM_PeerGateway&quot;
+&quot;:CIM_AuthenticationRequirement&quot;
+&quot;:CIM_BGPAttributes&quot;
+&quot;:CIM_FilterList&quot;
+&quot;:CIM_Job&quot;
+&quot;:CIM_UnitOfWorkDefinition&quot;
+&quot;:CIM_AdministrativeDistance&quot;
+&quot;:CIM_BGPRouteMap&quot;
+&quot;:CIM_MessageLog&quot;&quot;
+&quot;:CIM_Service&quot;
+&quot;:CIM_ServiceAccessPoint&quot;
+&quot;:CIM_LogicalDevice&quot;
+&quot;:CIM_VideoBIOSFeature&quot;
+&quot;:CIM_BIOSFeature&quot;
+&quot;:CIM_AGPSoftwareFeature&quot;
+&quot;:CIM_LocalFileSystem&quot;
+&quot;:CIM_RemoteFileSystem&quot;
+&quot;:CIM_IPRoute&quot;
+&quot;:CIM_StorageRedundancyGroup&quot;
+&quot;:CIM_SpareGroup&quot;
+&quot;:CIM_ExtraCapacityGroup&quot;
+&quot;:CIM_Directory&quot;
+&quot;:CIM_DeviceFile&quot;
+&quot;:CIM_DataFile&quot;
+&quot;:CIM_DMA&quot;
+&quot;:CIM_MemoryMappedIO&quot;
+&quot;:CIM_IRQ&quot;
+&quot;:CIM_IPSOFilterEntry&quot;
+&quot;:CIM_CredentialFilterEntry&quot;
+&quot;:CIM_PeerIDPayloadFilterEntry&quot;
+&quot;:CIM_FilterEntry&quot;
+&quot;:CIM_VideoBIOSElement&quot;
+&quot;:CIM_BIOSElement&quot;
+&quot;:CIM_PrintQueue&quot;
+&quot;:CIM_ApplicationSystem&quot;
+&quot;:CIM_ComputerSystem&quot;
+&quot;:CIM_AdminDomain&quot;
+&quot;:CIM_StorageLibrary&quot;
+&quot;:CIM_PrintJob&quot;
+&quot;:CIM_NetworkService&quot;
+&quot;:CIM_FibreprotocolService&quot;
+&quot;:CIM_ClusteringService&quot;
+&quot;:CIM_DiagnosticTest&quot;
+&quot;:CIM_BootService&quot;
+&quot;:CIM_SourceRoutingService&quot;
+&quot;:CIM_TransparentBridgingService&quot;
+&quot;:CIM_OOBAlertService&quot;
+&quot;:CIM_WakeUpService&quot;
+&quot;:CIM_PrintService&quot;
+&quot;:CIM_VLANService&quot;&quot;
+&quot;:PRS_SISService&quot;
+&quot;:CIM_SpanningTreeService&quot;
+&quot;:CIM_SecurityService&quot;
+&quot;:CIM_PrintSAP&quot;
+&quot;:CIM_protocolEndpoint&quot;
+&quot;:CIM_CredentialManagementSAP&quot;
+&quot;:CIM_ClusteringSAP&quot;
+&quot;:CIM_BootSAP&quot;
+&quot;:CIM_VLAN&quot;
+&quot;:CIM_PowerSupply&quot;
+&quot;:CIM_Processor&quot;
+&quot;:CIM_MediaAccessDevice&quot;
+&quot;:CIM_NetworkAdapter&quot;
+&quot;:CIM_Sensor&quot;
+&quot;:CIM_Scanner&quot;
+&quot;:CIM_LabelReader&quot;
+&quot;:CIM_Modem&quot;
+&quot;:CIM_Battery&quot;
+&quot;:CIM_AlarmDevice&quot;
+&quot;:CIM_Controller&quot;
+&quot;:CIM_USBDevice&quot;
+&quot;:CIM_CoolingDevice&quot;
+&quot;:CIM_MediaTransferDevice&quot;
+&quot;:CIM_Door&quot;
+&quot;:CIM_LogicalPort&quot;
+&quot;:CIM_UserDevice&quot;
+&quot;:CIM_Watchdog&quot;
+&quot;:CIM_StorageExtent&quot;
+&quot;:CIM_Printer&quot;
+&quot;:CIM_NFS&quot;
+&quot;:CIM_BGPIPRoute&quot;
+&quot;:CIM_PortResource&quot;
+&quot;:CIM_MemoryResource&quot;
+&quot;:CIM_VirtualComputerSystem&quot;
+&quot;:CIM_Cluster&quot;
+&quot;:CIM_UnitaryComputerSystem&quot;
+&quot;:CIM_AutonomousSystem&quot;
+&quot;:CIM_PolicyRepository&quot;
+&quot;:CIM_QoSService&quot;
+&quot;:CIM_RouteCalculationService&quot;
+&quot;:CIM_IKEService&quot;
+&quot;:CIM_PrecedenceService&quot;
+&quot;:CIM_ForwardingService&quot;
+&quot;:CIM_802dot1QVLANService&quot;
+&quot;:CIM_AccountManagementService&quot;
+&quot;:CIM_AuthorizationService&quot;
+&quot;:CIM_AuthenticationService&quot;
+&quot;:CIM_SwitchPort&quot;
+&quot;:CIM_IPXprotocolEndpoint&quot;
+&quot;:CIM_LANEndpoint&quot;
+&quot;:CIM_IPprotocolEndpoint&quot;
+&quot;:CIM_BGPprotocolEndpoint&quot;
+&quot;:CIM_SecurityAssociation&quot;
+&quot;:CIM_UninterruptiblePowerSupply&quot;
+&quot;:CIM_CDROMDrive&quot;
+&quot;:CIM_DVDDrive&quot;
+&quot;:CIM_DiskDrive&quot;
+&quot;:CIM_TapeDrive&quot;
+&quot;:CIM_WORMDrive&quot;
+&quot;:CIM_DisketteDrive&quot;
+&quot;:CIM_MagnetoOpticalDrive&quot;
+&quot;:CIM_FibreChannelAdapter&quot;
+&quot;:CIM_EthernetAdapter&quot;
+&quot;:CIM_TokenRingAdapter&quot;
+&quot;:CIM_MultiStateSensor&quot;
+&quot;:CIM_DiscreteSensor&quot;
+&quot;:CIM_BinarySensor&quot;
+&quot;:CIM_NumericSensor&quot;
+&quot;:CIM_CallBasedModem&quot;
+&quot;:CIM_ConnectionBasedModem&quot;
+&quot;:CIM_VideoController&quot;
+&quot;:CIM_SerialController&quot;
+&quot;:CIM_ManagementController&quot;
+&quot;:CIM_SSAController&quot;
+&quot;:CIM_SCSIController&quot;
+&quot;:CIM_IDEController&quot;
+&quot;:CIM_PCIController&quot;
+&quot;:CIM_ParallelController&quot;
+&quot;:CIM_USBController&quot;
+&quot;:CIM_ESCONController&quot;
+&quot;:CIM_InfraredController&quot;
+&quot;:CIM_PCMCIAController&quot;
+&quot;:CIM_USBHub&quot;
+&quot;:CIM_Fan&quot;
+&quot;:CIM_Refrigeration&quot;
+&quot;:CIM_HeatPipe&quot;
+&quot;:CIM_InterLibraryPort&quot;
+&quot;:CIM_LimitedAccessPort&quot;
+&quot;:CIM_PickerElement&quot;
+&quot;:CIM_ChangerDevice&quot;
+&quot;:CIM_USBPort&quot;
+&quot;:CIM_FibrePort&quot;
+&quot;:CIM_Keyboard&quot;
+&quot;:CIM_PointingDevice&quot;
+&quot;:CIM_Display&quot;
+&quot;:CIM_Snapshot&quot;
+&quot;:CIM_PhysicalExtent&quot;
+&quot;:CIM_AggregatePSExtent&quot;
+&quot;:CIM_Memory&quot;
+&quot;:CIM_ProtectedSpaceExtent&quot;
+&quot;:CIM_LogicalDisk&quot;
+&quot;:CIM_AggregatePExtent&quot;
+&quot;:CIM_StorageVolume&quot;
+&quot;:CIM_MediaPartition&quot;
+&quot;:CIM_8021PService&quot;
+&quot;:CIM_DiffServService&quot;
+&quot;:CIM_BGPService&quot;
+&quot;:CIM_PacketSchedulingService&quot;
+&quot;:CIM_SwitchService&quot;
+&quot;:CIM_ConditioningService&quot;
+&quot;:CIM_CredentialManagementService&quot;
+&quot;:CIM_VerificationService&quot;
+&quot;:CIM_BypassSecurityAssociation&quot;
+&quot;:CIM_IKESecurityAssociation&quot;
+&quot;:CIM_DiscardSecurityAssociation&quot;
+&quot;:CIM_IPsecSecurityAssociation&quot;
+&quot;:CIM_Tachometer&quot;
+&quot;:CIM_CurrentSensor&quot;
+&quot;:CIM_VoltageSensor&quot;
+&quot;:CIM_TemperatureSensor&quot;&quot;
+&quot;:CIM_ISDNModem&quot;
+&quot;:CIM_POTSModem&quot;
+&quot;:CIM_CableModem&quot;
+&quot;:CIM_DSLModem&quot;
+&quot;:CIM_AGPVideoController&quot;
+&quot;:CIM_PCVideoController&quot;
+&quot;:CIM_PCIDevice&quot;
+&quot;:CIM_PCIBridge&quot;
+&quot;:CIM_DesktopMonitor&quot;
+&quot;:CIM_FlatPanel&quot;
+&quot;:CIM_NonVolatileStorage&quot;
+&quot;:CIM_CacheMemory&quot;
+&quot;:CIM_VolatileStorage&quot;
+&quot;:CIM_VolumeSet&quot;
+&quot;:CIM_DiskPartition&quot;
+&quot;:CIM_TapePartition&quot;
+&quot;:CIM_EFService&quot;
+&quot;:CIM_AFService&quot;
+&quot;:CIM_PrioritySchedulingService&quot;
+&quot;:CIM_RoundRobinPacketSchedulingService&quot;
+&quot;:CIM_BandwidthSchedulingService&quot;
+&quot;:CIM_WeightedRoundRobinPacketSchedulingService&quot;
+&quot;:CIM_DropperService&quot;
+&quot;:CIM_QueuingService&quot;
+&quot;:CIM_MeterService&quot;
+&quot;:CIM_ClassifierService&quot;
+&quot;:CIM_MarkerService&quot;
+&quot;:CIM_LocalCredentialManagementService&quot;
+&quot;:CIM_KerberosKeyDistributionCenter&quot;
+&quot;:CIM_CertificateAuthority&quot;
+&quot;:CIM_Notary&quot;
+&quot;:CIM_Unimodem&quot;
+&quot;:CIM_HDSLModem&quot;
+&quot;:CIM_VDSLModem&quot;
+&quot;:CIM_SDSLModem&quot;
+&quot;:CIM_ADSLModem&quot;
+&quot;:CIM_PriorityBndwidthSchedulingService&quot;
+&quot;:CIM_REDDropperService&quot;
+&quot;:CIM_WeightedREDDropperService&quot;
+&quot;:CIM_EWMAMeterService&quot;
+&quot;:CIM_TokenBucketMeterService&quot;
+&quot;:CIM_AverageRateMeterService&quot;
+&quot;:CIM_PublicKeyManagementService&quot;
+&quot;:CIM_SharedSecretService&quot;</span></PRE>
+</BODY>
+</HTML>

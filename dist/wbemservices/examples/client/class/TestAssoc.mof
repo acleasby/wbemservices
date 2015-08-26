@@ -1,0 +1,128 @@
+/*
+ *EXHIBIT A - Sun Industry Standards Source License
+ *
+ *"The contents of this file are subject to the Sun Industry
+ *Standards Source License Version 1.2 (the "License");
+ *You may not use this file except in compliance with the
+ *License. You may obtain a copy of the 
+ *License at http://wbemservices.sourceforge.net/license.html
+ *
+ *Software distributed under the License is distributed on
+ *an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either
+ *express or implied. See the License for the specific
+ *language governing rights and limitations under the License.
+ *
+ *The Original Code is WBEM Services.
+ *
+ *The Initial Developer of the Original Code is:
+ *Sun Microsystems, Inc.
+ *
+ *Portions created by: Sun Microsystems, Inc.
+ *are Copyright ¨ 2001 Sun Microsystems, Inc.
+ *
+ *All Rights Reserved.
+ *
+ *Contributor(s): _______________________________________
+*/
+
+
+#pragma Locale ("en-US")
+#pragma namespace ("root/cimv2")
+
+class Root_Class {
+        [Key, Description("Key")]
+    string key;
+};
+
+class Antecedent_Class : Root_Class {
+        [Description("Antecedent property")]
+    string antecedentProperty;
+};
+
+class Dependent_Class : Root_Class {
+        [Description("Dependent property")]
+    string dependentProperty;
+};
+
+class Other_Class : Root_Class {
+        [Description("Other property")]
+    string otherProperty;
+};
+
+class Class_A1 : Antecedent_Class {
+};
+
+class Class_D1 : Dependent_Class {
+};
+
+class Class_D2 : Dependent_Class {
+};
+
+class Class_D3 : Dependent_Class {
+};
+
+class Class_O1 : Other_Class {
+};
+
+class Class_O2 : Other_Class {
+};
+
+class Class_O3 : Other_Class {
+};
+
+class Dependency_Assoc : CIM_Dependency {
+        [Override ("Antecedent") ]
+    Antecedent_Class REF Antecedent;
+        [Override ("Dependent") ]
+    Dependent_Class REF Dependent;
+};
+
+class Assoc_A1D1 : Dependency_Assoc {
+        [Override ("Antecedent") ]
+    Class_A1 REF Antecedent;
+        [Override ("Dependent") ]
+    Class_D1 REF Dependent;
+};
+     
+class Assoc_A1D2 : Dependency_Assoc {
+        [Override ("Antecedent") ]
+    Class_A1 REF Antecedent;
+        [Override ("Dependent") ]
+    Class_D2 REF Dependent;
+};
+
+class Assoc_A1D3: Dependency_Assoc {
+        [Override ("Antecedent") ]
+    Class_A1 REF Antecedent;
+        [Override ("Dependent") ]
+    Class_D3 REF Dependent;
+};
+
+    [Association]
+class Other_Assoc {
+        [Key]
+    Antecedent_Class REF Source;
+        [Key]
+    Other_Class REF Target;
+};
+
+class Assoc_A1O1 : Other_Assoc {
+        [Override ("Source") ]
+    Class_A1 REF Source;
+        [Override ("Target") ]
+    Class_O1 REF Target;
+};
+
+class Assoc_A1O2 : Other_Assoc {
+        [Override ("Source") ]
+    Class_A1 REF Source;
+        [Override ("Target") ]
+    Class_O2 REF Target;
+};
+
+class Assoc_A1O3 : Other_Assoc {
+        [Override ("Source") ]
+    Class_A1 REF Source;
+        [Override ("Target") ]
+    Class_O3 REF Target;
+};

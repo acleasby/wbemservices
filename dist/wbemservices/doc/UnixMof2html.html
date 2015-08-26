@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>WBEMServices mof2html Unix</TITLE>
+	<STYLE>
+	<!--
+		.stderr { color: #FF0000 }
+		.stdout { color: #0000FF }
+		code, pre { background-color: #EEEEEE }
+	-->
+	</STYLE>
+</HEAD>
+<BODY>
+<H1>How to Run MOF2HTML on Unix</H1>
+<P>Last Updated 09/26/03</P>
+
+<P><code>mof2html</code>
+is a command that generates HTML files for the CIM classes defined in
+a MOF file. <B>WARNING: </B>The MOF
+file should include any Qualifier defintions that its class
+definitions require. See <A HREF="Simple.mof">Simple.mof</A>
+<UL>
+	<LI>Before
+	running <code>mof2html.sh</code>, you must first install Xalan-Java
+	v2.3.1 XSLT processor. Download <A HREF="http://xml.apache.org/xalan-j/index.html">xalan-j_2_3_1-bin.zip</A>
+	and extract into <code>/usr/xalan-j_2_3_1</code>.
+	<B>NOTE:</B> If you install into another directory
+	or have a different version installed, you must edit the
+	XALAN_HOME variable in <code>mof2html.sh</code></LI>
+	<LI>Go to the directory containing the WBEM Services executables.
+	<UL>
+	   <LI>If you built the WBEM Services executables in <code>/files/open</code>, go
+	to directory <code>/files/open/dist/wbemservices/bin</code>.</LI>
+	   <LI>If you downloaded or copied the WBEM Services executables into
+	<code>/wbemservices</code>, go to directory <code>/wbemservices/bin</code></LI>
+	</UL></LI>
+	<LI>Run <code>sh mof2html.sh</code>. You will see the following:
+	<PRE> wbem% cd /files/open/dist/wbemservices/bin
+ wbem% sh mof2html.sh
+<span class="stderr">Usage: sh mof2html.sh mof_file</span>
+ wbem% sh mof2html.sh /files/open/dist/wbemservices/doc/Simple.mof
+<span class="stdout">*********************************************************
+Creating XML files from /files/open/dist/wbemservices/doc/Simple.mof in /files/open/dist/wbemservices/bin/xml
+*********************************************************
+/usr/java/bin/java -classpath .:/files/open/dist/wbemservices/bin/mofcomp.jar:/files/open/dist/wbemservices/cimom/lib/cimom.jar:/files/open/dist/wbemservices/lib/wbem.jar:/files/open/dist/wbemservices/cimom/lib/cimrepository.jar org.wbemservices.wbem.compiler.mofc.CIM_Mofc -v -x -b -o /files/open/dist/wbemservices/bin/xml /file/open/dist/wbemservices/doc/Simple.mof
+Adding qualifier type Abstract
+Adding qualifier type Aggregate
+Adding qualifier type Aggregation
+        :
+        :
+Adding qualifier type Weak
+Adding qualifier type Write
+Adding class Simple_Class
+Compilation succeeded.
+*********************************************************
+Creating HTML files from XML files in /files/open/dist/wbemservices/bin/xml
+*********************************************************
+/usr/java/bin/java -classpath .:/usr/xalan-j_2_3_1/bin/xalan.jar:/usr/xalan-j_2_3_1/bin/xml-apis.jar:/usr/xalan-j_2_3_1/bin/xercesImpl.jar -Xmx128m org.apache.xalan.xslt.Process -in /files/open/dist/wbemservices/bin/xml/mof.xml -xsl /files/open/dist/wbemservices/bin/index.xsl -out /files/open/dist/wbemservices/bin/xml/mof.html
+
+/usr/java/bin/java -classpath .:/usr/xalan-j_2_3_1/bin/xalan.jar:/usr/xalan-j_2_3_1/bin/xml-apis.jar:/usr/xalan-j_2_3_1/bin/xercesImpl.jar -Xmx128m org.apache.xalan.xslt.Process -in /files/open/dist/wbemservices/bin/xml/bigmof.xml -xsl /files/open/dist/wbemservices/bin/multimof.xsl -out /files/open/dist/wbemservices/bin/xml/mof.html
+
+*********************************************************
+In a browser, open /files/open/dist/wbemservices/bin/xml/index.html
+*********************************************************</span>
+ wbem%</PRE>
+    </LI>
+	<LI>The generated <code>.html</code> files will be found in a
+	subdirectory <code>xml</code>; e.g.
+	<code>/files/open/dist/wbemservices/bin/xml</code> or
+	<code>/wbemservices/bin/xml.</code> In
+	a browser, open <code>index.html</code></LI>
+</UL>
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>WBEMServices Win32 Tests</TITLE>
+	<STYLE>
+	<!--
+		.stderr { color: #FF0000 }
+		.stdout { color: #0000FF }
+		code, pre { background-color: #EEEEEE }
+	-->
+	</STYLE>
+</HEAD>
+<BODY>
+<H1>How to Run Test Programs on Win32</H1>
+<P>Last Updated 09/26/03</P>
+
+<P>Test programs are provided to show how to develop client applications and
+providers using the WBEM Services client and provider APIs. Test
+client programs can be found in the <code>examples\client</code>
+subdirectory where the WBEM Services executables are located. Test
+provider programs are found in subdirectory <code>examples\provider</code>. To
+run some of these demonstration programs to illustrate how the client
+and provider APIs work, execute the <code>run_tests</code> script.</P>
+<UL>
+	<LI>First start the <code>CIMOM</code> by following the directions
+    found <A HREF="Win32HowToRun.html">here</A>.</LI>
+	<LI>Open a command window (DOS window).</LI>
+	<LI>Go to the directory containing the WBEM Services executables.
+	<UL>
+	  <LI>If you built the WBEM Services executables in <code>c:\files\open</code>,
+       go to directory <code>c:\files\open\dist\wbemservices\examples.</code></LI>
+      <LI>If you downloaded or copied the WBEM Services executables into
+	   <code>c:\wbemservices</code>, go	to directory
+       <code>c:\wbemservices\examples</code></LI>
+    </UL>
+    </LI>
+	<LI>Run <code>run_tests.bat</code>. You will see the following:
+
+	<PRE>c:&gt;cd c:\files\open\dist\wbemservices\examples
+c:\files\open\dist\wbemservices\examples&gt;run_tests
+<span class="stderr">USAGE: run_tests user passwd protocol [host]
+* protocol is rmi (the default) or http</span>
+c:\files\open\dist\wbemservices\examples&gt;run_tests guest guest_passwd rmi
+<span class="stdout">**********************************************
+Running ClientConnect to localhost over RMI
+**********************************************
+
+C:\files\open\dist\wbemservices\examples\client\connect&gt;c:\j2sdk1.4.0-rc\bin\java -classpath .;C:\files\open\dist\wbemservices\lib\wbem.jar ClientConnect localhost guest guest_passwd !protocol rmi
+CIMClient(objectpath, username, password) connects to
+   localhost as user guest over RMI
+
+**********************************************
+Running ClientConnect to localhost over rmi
+**********************************************
+
+C:\files\open\dist\wbemservices\examples\client\connect&gt;c:\j2sdk1.4.0-rc\bin\java -classpath .;C:\files\open\dist\wbemservices\lib\wbem.jar ClientConnect localhost guest guest_passwd protocol rmi
+CIMClient(objectpath, username, password, protocol) connects to
+   localhost as user guest over rmi
+Press any key to continue . . .
+
+**********************************************
+Running TestCreateNameSpace on localhost\root over rmi
+**********************************************
+
+C:\files\open\dist\wbemservices\examples\client\namespace&gt;c:\j2sdk1.4.0-rc\bin\java -classpath .;C:\files\open\dist\wbemservices\lib\wbem.jar TestCreateNameSpace localhost guest guest_passwd root newchild rmi
+
+    :
+    : &lt;more output&gt;
+    :
+
+**********************************************
+Running DeleteInstance on Class_E over rmi
+**********************************************
+
+C:\files\open\dist\wbemservices\examples\client\instance&gt;c:\j2sdk1.4.0-rc\bin\java -classpath .;C:\files\open\dist\wbemservices\lib\wbem.jar DeleteInstance localhost guest guest_passwd Class_E keyE=E.1 rmi
+deleteInstance(objectpath, CIMInstance) deletes
+   instance E.1 of Class_E
++++++
+When test_lifecycle_listener completes
+Press any key to continue . . .
+
+**********************************************
+Running DeleteClass on Class_E over rmi
+**********************************************
+
+C:\files\open\dist\wbemservices\examples\client\class&gt;c:\j2sdk1.4.0-rc\bin\java -classpath .;C:\files\open\dist\wbemservices\lib\wbem.jar DeleteClass localhost guest guest_passwd Class_E rmi
+deleteClass(objectpath) deletes class Class_E </span>
+C:\files\open\dist\wbemservices\examples&gt;</PRE>
+	</LI>
+    <LI><code>run_tests.bat</code>
+	runs test programs to illustrate how some client APIs interact with
+	the CIMOM. It also runs programs to illustrate how client APIs
+	interact with test providers. In these cases, test classes are added
+	to the CIM Repository as needed. These classes are later removed
+	before <code>run_tests.bat</code> terminates.</LI>
+</UL>
+</P>
+</BODY>
+</HTML>

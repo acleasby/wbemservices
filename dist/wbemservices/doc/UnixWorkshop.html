@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>WBEMServices Unix CIMWorkshop</TITLE>
+	<STYLE>
+	<!--
+		.stderr { color: #FF0000 }
+		.stdout { color: #0000FF }
+		code, pre { background-color: #EEEEEE }
+	-->
+	</STYLE>
+</HEAD>
+<BODY>
+<H1>How to Run CIM Workshop on Unix</H1>
+<P>Last Updated 09/26/03</P>
+<P>CIM Workshop
+provides a graphical user interface that you can use to browse the
+CIM Schema and to perform operations on CIM Classes and Instances. To
+run this application:
+<UL>
+	<LI>First start the <code>CIMOM</code> by following the directions
+    found <A HREF="UnixHowToRun.html">here</A>.</LI>
+	<LI>Go to the directory containing the WBEM Services executables.
+	<UL>
+	    <LI>If you built the WBEM Services executables in <code>/files/open</code>, go
+	     to directory <code>/files/open/dist/wbemservices/bin</code>.</LI>
+	    <LI>If you downloaded or copied the WBEM Services executables into
+		 <code>/wbemservices</code>, go to directory <code>/wbemservices/bin</code>.</LI>
+	</UL>
+	</LI>
+	<LI>To start
+	CIM Workshop, run <code>sh cimworkshop.sh</code>.
+	You will see the following:
+	<PRE>wbem% cd /files/open/dist/wbemservices/bin
+wbem% sh cimworkshop.sh
+<span class="stdout">*********************************************************
+Starting up cimworkshop
+*********************************************************
+/usr/java/bin/java -classpath /files/open/dist/wbemservices/lib:/files/open/dist/wbemservices/bin/cimworkshop.jar:/files/open/dist/wbemservices/lib/wbem.jar -Dinstall.dir=/files/open/dist/wbemservices/bin org.wbemservices.wbem.apps.cimworkshop.CIMWorkshop</span></PRE>
+	<LI>Next, a <code>Login</code> window will appear. By default,
+	cimworkshop will communicate with the CIMOM over RMI. If you want to
+	use HTTP, change the <code>Transfer protocol</code> from RMI to HTTP by
+	clicking on the Down arrow and selecting HTTP.</LI>
+	<LI>Enter values for <code>User Name</code> and <code>Password</code> (any
+	user name and password can be used). Then press OK. A <code>Please
+	Wait</code> window showing an <code>Enumerating Classes</code> message
+	appears. After a few seconds, it is replaced by a <code>Connected To
+	Host</code> window. <B>NOTE</B>: You will see the following error
+	messages if you select the HTTP Transfer protocol. They are harmless
+	and can be ignored. They do not appear when running over RMI.</LI>
+	<PRE><span class="stderr">CIM_ERR_NOT_FOUND: test
+        at org.wbemservices.wbem.cimom.CIMOMImpl.getClass(CIMOMImpl.java:904)
+        at org.wbemservices.wbem.cimom.adapters.client.http.CIMOMXMLImpl.getClass(CIMOMXMLImpl.java:557)
+        at org.wbemservices.wbem.cimom.adapters.client.http.XmlResponder$GetClass.responseDo(XmlResponder.java:370)
+        at org.wbemservices.wbem.cimom.adapters.client.http.XmlResponder$XmlResponse.response(XmlResponder.java:357)
+        at org.wbemservices.wbem.cimom.adapters.client.http.XmlResponder.getSimpleXMLResponse(XmlResponder.java:105)
+        at javax.wbem.cimxml.Response.getXMLResponse(Response.java:223)
+        at javax.wbem.cimxml.CIMXmlImpl.getXMLResponse(CIMXmlImpl.java:397)
+        at org.wbemservices.wbem.cimom.adapters.client.http.XmlResponder.getResponse(XmlResponder.java:83)
+        at org.wbemservices.wbem.cimom.adapters.client.http.CIMRequestHandler.rpc(CIMRequestHandler.java:223)
+        at org.wbemservices.wbem.cimom.adapters.client.http.CIMRequestHandler.handleRequest(CIMRequestHandler.java:99)
+        at javax.wbem.client.adapter.http.transport.HttpServerConnection$Dispatcher.handleRequest(HttpServerConnection.java:263)
+        at javax.wbem.client.adapter.http.transport.HttpServerConnection$Dispatcher.run(HttpServerConnection.java:185)
+        at sun.rmi.runtime.ThreadPool$Worker.run(ThreadPool.java:110)
+        at java.lang.Thread.run(Thread.java:536)</span></PRE>
+	<LI>In the left <code>Class Schema</code> pane, folder icons indicate
+	that subclasses exist. To see them, click on the folder icon; e.g.
+	click on the <code>CIM_NextService</code> folder icon. It will now show
+	the <code>CIM_NextServiceAfterMeter</code> subclass.</LI>
+	<LI>To find a particular class, select <code>Action/Find Class</code>
+	from the top menu. An <code>Input</code> window appears. Enter a class
+	name (e.g. CIM_Process) and press OK.</LI>
+	<LI>The <code>Connect To Host</code> window is refreshed with
+	<code>CIM_Process</code> highlighted in the left <code>Class Schema</code> pane.
+	Its Properties are shown in the right pane.</LI>
+	<LI>To see the instances of <code>CIM_Process</code>, select
+	<code>Action/Show Instances</code> from the top menu. A separate <code>Instances
+	for CIM_Process</code> window appears. The left pane shows <code>No
+	instances for CIM_Process</code> because there is no <code>CIM_Process</code>
+	provider. To close this window, select <code>Instance Editor/Exit</code>
+	from the top menu.</LI>
+	<LI>To see an actual instance, do the following:
+	<UL>
+		<UL>
+			<LI>Select <code>Action/Find Class</code> from the top menu. An <code>Input</code>
+			window appears. Enter
+			<code>WBEMServices_ObjectManagerProviderprotocolAdapter</code> and press
+			OK.</LI>
+			<LI>The <code>Connect To Host</code> window is refreshed with
+			<code>WBEMServices_ObjectManagerProviderprotocolAdapter</code>
+			highlighted in the left <code>Class Schema</code> pane. Its Properties
+			are shown in the right pane.</LI>
+			<LI>To see the instances of
+			<code>WBEMServices_ObjectManagerProviderprotocolAdapter</code>, select
+			<code>Action/Show Instances</code> from the top menu. A separate
+			<code>Instances for WBEMServices_ObjectManagerProviderprotocolAdapter</code>
+			window appears. The <code>Instances</code> left pane shows the object
+			path for one <code>WBEMServices_ObjectManagerProviderprotocolAdapter
+			</code>instance.</LI>
+			<LI>The right pane shows two folder
+			tabs (Properties and Methods). The Properties folder tab is
+			highlighted by default. Here, the properties and values for
+			<code>WBEMServices_ObjectManagerProviderprotocolAdapter</code> are
+			shown. NOTE: Key icons indicate that the property is a Key.</LI>
+			<LI>To view the methods defined for
+			<code>WBEMServices_ObjectManagerProviderprotocolAdapte</code>, select
+			the Methods folder tab in the right pane. It will now show the
+			<code>StartService</code> and <code>StopService</code> methods.</LI>
+			<LI>To close the <code>Instances for
+			WBEMServices_ObjectManagerProviderprotocolAdapter</code> window,
+			select <code>Instance Editor/Exit</code> from the top menu.</LI>
+		</UL>
+	</UL>
+    </LI>
+	<LI>To close the <code>Connect To Host</code>
+	window, select <code>Workshop/Exit</code> from the top menu.</LI>
+</UL>
+</P>
+<P>For further instruction, see the
+<A HREF="http://www.sun.com/software/solaris/programs/solaris9ea/">WBEM
+SDK Developer's Guide</A>.
+<OL>
+	<LI>Select the <code>Documentation</code> link on the left side</LI>
+	<LI>A <B>Pre-Release Binary Software Evaluation</B>
+	agreement is shown. Click on <code>I Accept</code>
+	at the bottom of the page</LI>
+	<LI>A <B>Disclaimer</B> form
+	is shown. Click on <code>Go to Early Access Material.</code> Remember the
+	username and password to use.</LI>
+	<LI>A <B>Browse Documentation by Product</B> page is shown.</LI>
+	<LI>Select <B>Solaris 9 Beta
+	Software Developer Collection</B> and then <B>Solaris WBEM SDK
+	Developer's Guide</B>. Enter username and password and press OK.</LI>
+</OL>
+</P>
+</BODY>
+</HTML>

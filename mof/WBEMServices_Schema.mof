@@ -1,0 +1,45 @@
+/*
+ *EXHIBIT A - Sun Industry Standards Source License
+ *
+ *"The contents of this file are subject to the Sun Industry
+ *Standards Source License Version 1.2 (the "License");
+ *You may not use this file except in compliance with the
+ *License. You may obtain a copy of the 
+ *License at http://wbemservices.sourceforge.net/license.html
+ *
+ *Software distributed under the License is distributed on
+ *an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either
+ *express or implied. See the License for the specific
+ *language governing rights and limitations under the License.
+ *
+ *The Original Code is WBEM Services.
+ *
+ *The Initial Developer of the Original Code is:
+ *Sun Microsystems, Inc.
+ *
+ *Portions created by: Sun Microsystems, Inc.
+ *are Copyright ¨ 2001 Sun Microsystems, Inc.
+ *
+ *All Rights Reserved.
+ *
+ *Contributor(s): _______________________________________
+ */
+
+/*
+Title	    WBEMServices Master MOF 1.0
+Description pragmas to include all other mofs
+Version     1.0 
+*/
+
+#pragma namespace ("interop")
+
+#pragma include ("dmtf/2.8/CIM_Core28.mof")
+#pragma include ("dmtf/2.8/CIM_Physical28.mof")
+#pragma include ("dmtf/2.8/CIM_System28.mof")
+#pragma include ("dmtf/2.8/CIM_Event28.mof")
+#pragma include ("dmtf/2.8/CIM_Interop28.mof")
+
+#pragma include ("WBEMServices_Events.mof")
+#pragma include ("WBEMServices.mof")
+
+

@@ -1,0 +1,147 @@
+/*
+ *EXHIBIT A - Sun Industry Standards Source License
+ *
+ *"The contents of this file are subject to the Sun Industry
+ *Standards Source License Version 1.2 (the "License");
+ *You may not use this file except in compliance with the
+ *License. You may obtain a copy of the 
+ *License at http://wbemservices.sourceforge.net/license.html
+ *
+ *Software distributed under the License is distributed on
+ *an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either
+ *express or implied. See the License for the specific
+ *language governing rights and limitations under the License.
+ *
+ *The Original Code is WBEM Services.
+ *
+ *The Initial Developer of the Original Code is:
+ *Sun Microsystems, Inc.
+ *
+ *Portions created by: Sun Microsystems, Inc.
+ *are Copyright © 2001 Sun Microsystems, Inc.
+ *
+ *All Rights Reserved.
+ *
+ *Contributor(s): _______________________________________
+*/
+options {
+  LOOKAHEAD = 1;
+  CHOICE_AMBIGUITY_CHECK = 2;
+  OTHER_AMBIGUITY_CHECK = 1;
+  STATIC = false;
+  DEBUG_PARSER = false;
+  DEBUG_LOOKAHEAD = false;
+  DEBUG_TOKEN_MANAGER = false;
+  ERROR_REPORTING = true;
+  JAVA_UNICODE_ESCAPE = true;
+  UNICODE_INPUT = true;
+  IGNORE_CASE = false;
+  USER_TOKEN_MANAGER = false;
+  USER_CHAR_STREAM = false;
+  BUILD_PARSER = true;
+  BUILD_TOKEN_MANAGER = true;
+  SANITY_CHECK = true;
+  FORCE_LA_CHECK = false;
+}
+PARSER_BEGIN(CIM_Prep)
+package org.wbemservices.wbem.compiler.prep;
+import java.io.*;
+import java.util.*;
+
+public class CIM_Prep{
+
+    public String pre_FileName;
+    public Hashtable FileNameTable;
+    public DataOutputStream dos;
+    public ByteArrayOutputStream bos;
+
+}
+
+PARSER_END(CIM_Prep)
+
+TOKEN :
+{
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+|  <CHAR: ~[]>
+|  <PRE_PRAGMA: "#" ("p"|"P") ("r"|"R") ("a"|"A") ("g"|"G") ("m"|"M") ("a"|"A") (" "|"\t"|"\n")+ ("i"|"I") ("n"|"N") ("c"|"C") ("l"|"L") ("u"|"U") ("d"|"D") ("e"|"E") (" "|"\t"|"\n")* "(" (" "|"\t"|"\n")* "\"" ("\\\""|~["\""])* "\"" (" "|"\t"|"\n")* ")">
+}
+
+/* The filePath argument is the absolutePath to the main file.
+   This is used for the include files if they are not stated
+   as absolute in the pragma include.
+*/
+void ExpressionList(String filePath, boolean idempotent) throws IOException :
+{
+	Token t;
+}
+{
+  ( t=<CHAR>
+	{
+	  dos.writeBytes(t.image);
+	}
+	|
+	t=<SINGLE_LINE_COMMENT>
+	{
+	  dos.writeBytes(t.image);
+	}
+	|
+	t=<MULTI_LINE_COMMENT>
+	{
+	  dos.writeBytes(t.image);
+	}
+	|
+	t=<PRE_PRAGMA>
+	{
+		String pragmaString;
+		CIM_Prep parser;
+
+                if (filePath == null) {
+                    filePath = "";
+                }                
+		pragmaString = t.image;
+		int FirstQuote = pragmaString.indexOf('"');
+		int LastQuote = pragmaString.lastIndexOf('"');
+		String Filename = pragmaString.substring(FirstQuote+1,LastQuote);
+                
+		if(!idempotent || !FileNameTable.containsKey(Filename)) {
+			FileNameTable.put(Filename,Filename);
+                        //The following lines look for the file using Filename
+                        //(it could be an absolute path or just the default dir)
+                        //If it is the default dir and the dir is not the current
+                        //dir, this will prepend the correct dir to it.
+                        File f = new File(Filename);
+                        if (!f.exists()) {                           
+                            f = new File(filePath, Filename);                            
+                            if (!f.exists()) {
+                                //The file does not exist as listed in the pragma include
+                                //and does not exist from where it was run - the FileInputStream
+                                //will throw an IOexception.
+                            }
+                        }
+                        FileInputStream fis = new FileInputStream(f.getAbsolutePath());
+  			try {                            
+    			    parser = new CIM_Prep(fis);
+			    parser.dos = dos;
+			    parser.FileNameTable = FileNameTable;
+			    dos.writeBytes("##FILE \""+Filename+"\"\n");
+			    parser.pre_FileName = Filename;
+    			    parser.ExpressionList(filePath, idempotent);
+			    fis.close();
+			    dos.writeBytes("##FILE \""+pre_FileName+"\"\n");
+			    dos.writeBytes("##LINE " + (t.endLine-1)+"\n");
+			} catch(Exception e) {                           
+			    //XXX - Need to throw an error and not show exception info to user.
+                            System.out.println(e);
+			    System.exit(1);
+			} finally {
+			    // Clean up the file.
+			    if (fis != null) {
+				fis.close();
+			    }
+			}
+		}
+	}
+  )*
+  <EOF>
+}

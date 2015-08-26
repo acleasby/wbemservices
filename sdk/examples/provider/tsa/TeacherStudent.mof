@@ -1,0 +1,67 @@
+/*
+ *EXHIBIT A - Sun Industry Standards Source License
+ *
+ *"The contents of this file are subject to the Sun Industry
+ *Standards Source License Version 1.2 (the "License");
+ *You may not use this file except in compliance with the
+ *License. You may obtain a copy of the 
+ *License at http://wbemservices.sourceforge.net/license.html
+ *
+ *Software distributed under the License is distributed on
+ *an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either
+ *express or implied. See the License for the specific
+ *language governing rights and limitations under the License.
+ *
+ *The Original Code is WBEM Services.
+ *
+ *The Initial Developer of the Original Code is:
+ *Sun Microsystems, Inc.
+ *
+ *Portions created by: Sun Microsystems, Inc.
+ *are Copyright ¨ 2001 Sun Microsystems, Inc.
+ *
+ *All Rights Reserved.
+ *
+ *Contributor(s): _______________________________________
+*/
+
+/*
+Title       	Teacher Student Association Provider
+Description	includes Teacher Student Qualifiers Classes and Properties
+Date:        	11/17/1999
+Version     	1.0
+(c) Copyright 2001, Sun Microsystems, Inc.
+*/
+
+
+#pragma Locale ("en-US")
+
+    [Provider("java:TeacherStudent")
+    ]
+
+class Ex_Teacher
+{
+    [key]
+    string name;
+};
+
+    [Provider("java:TeacherStudent")
+    ]
+class Ex_Student
+{
+    [key]
+    string name;
+};
+
+    [Association,
+     Provider("java:TeacherStudent")
+    ]
+class Ex_TeacherStudent
+{
+	[key]
+    Ex_Teacher REF teaches;
+
+	[key]
+    Ex_Student REF taughtby;
+};
+

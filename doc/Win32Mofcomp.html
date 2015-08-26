@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>WBEMServices Win32 mofcomp</TITLE>
+	<STYLE>
+	<!--
+		.stderr { color: #FF0000 }
+		.stdout { color: #0000FF }
+		code, pre { background-color: #EEEEEE }
+	-->
+	</STYLE>
+</HEAD>
+<BODY>
+<H1>How to Run MOFCOMP on Win32</H1>
+<P>Last Updated 09/26/03</P>
+
+<P><code>mofcomp</code>
+is a script that adds the CIM classes defined in a MOF file to the
+CIM Repository while the CIMOM is running.
+<UL>
+	<LI>First start the <code>CIMOM</code> by following the directions
+    found <A HREF="Win32HowToRun.html">here</A>.</LI>
+	<LI>Open a command window (DOS window).</LI>
+	<LI>Go to the directory containing the WBEM Services executables.
+	<UL>
+	  <LI>If you built the WBEM Services executables in <code>c:\files\open</code>,
+       go to directory <code>c:\files\open\dist\wbemservices\examples.</code></LI>
+      <LI>If you downloaded or copied the WBEM Services executables into
+	   <code>c:\wbemservices</code>, go	to directory
+       <code>c:\wbemservices\examples</code></LI>
+    </UL>
+	<B>NOTE</B>: In the example shown below, <code>TeacherStudent.mof</code>
+    is found in	the <code>examples\provider\tsa</code> subdirectory</LI>
+	<LI>Run <code>mofcomp.bat</code>. You will see the following:
+	<PRE>c:&gt;cd c:\files\open\dist\wbemservices\bin
+c:\files\open\dist\wbemservices\bin&gt;mofcomp
+<span class="stderr">USAGE: mofcomp user passwd mof_file
+* mof_file must be in current directory</span>
+c:\files\open\dist\wbemservices\bin&gt;mofcomp root root_passwd c:\files\open\dist\wbemservices\examples\provider\tsa\TeacherStudent.mof
+mofvar.inp
+tmp1.bat
+<span class="stdout">
+*********************************************************
+Adding MOF definitions to CIM Repository
+*********************************************************
+
+c:\j2sdk1.4.0-rc\bin\java -classpath .;c:\files\open\dist\wbemservices\bin\mofcomp.jar;c:\files\open\dist\wbemservices\cimom\lib\cimom.jar;c:\files\open\dist\wbemservices\lib\wbem.jar;c:\files\open\dist\wbemservices\cimom\bin\repository.jar org.wbemservices.wbem.compiler.mofc.CIM_Mofc -v -u root -p root_passwd TeacherStudent.mof
+Adding class Ex_Teacher
+Adding class Ex_Student
+Adding class Ex_TeacherStudent
+Compilation succeeded.</span></PRE>
+    </LI>
+	<LI>The	Ex_Teacher, Ex_Student and Ex_TeacherStudent classes defined in
+	<code>c:\files\open\dist\wbemservices\examples\provider\tsa\TeacherStudent.mof</code>
+	have now been added to the CIM Repository. <B>NOTE:</B> If you rerun
+	the example without first deleting the class definitions from the
+	CIM Repository, you will see <code>CIM_ERROR_ALREADY_EXISTS</code> 
+    errors.</LI>
+</UL>
+</P>
+</BODY>
+</HTML>

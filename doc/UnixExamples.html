@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>WBEMServices Unix Examples</TITLE>
+	<STYLE>
+	<!--
+		.stderr { color: #FF0000 }
+		.stdout { color: #0000FF }
+		code, pre { background-color: #EEEEEE }
+	-->
+	</STYLE>
+</HEAD>
+<BODY>
+<H1>How to Run Example Programs on Unix</H1>
+<P>Last Updated 09/26/03</P>
+
+<P>Example programs are provided to show how to develop client applications and
+providers using the WBEM Services client and provider APIs. Example
+client programs can be found in the <code>examples/client</code>
+subdirectory where the WBEM Services executables are located. Example
+provider programs are found in subdirectory <code>examples/provider</code>. To
+run some of these example programs to illustrate how the client and
+provider APIs work, execute the <code>run_examples</code> script.
+<UL>
+	<LI>First start the <code>CIMOM</code> by
+	following the directions found <A HREF="UnixHowToRun.html">here</A>.</LI>
+	<LI>Go to the directory containing the WBEM Services executables.
+	<UL>
+	    <LI>If you built the WBEM Services executables in <code>/files/open</code>,
+	     go	to directory <code>/files/open/dist/wbemservices/examples</code>.</LI>
+	    <LI>If you downloaded or copied the WBEM Services executables into
+	     <code>/wbemservices</code>, go to directory
+	     <code>/wbemservices/examples</code>.</LI>
+	</UL>
+	</LI>
+	<LI>Run <code>sh run_examples.sh</code>. You will see the following:
+	<PRE> wbem% cd /files/open/dist/wbemservices/examples
+ wbem% sh run_examples.sh
+<span class="stderr">USAGE: sh run_examples.sh user password [protocol]
+   where protocol is rmi (the default) or http</span>
+ wbem% sh run_examples.sh root root_passwd
+<span class="stdout">
+*********************************************************
+Creating EX_SFLProvider class
+*********************************************************
+
+*********************************************************
+Adding MOF definitions to CIM Repository
+*********************************************************
+/usr/java/bin/java -classpath .:/files/open/dist/wbemservices/bin/mofcomp.jar:/files/open/dist/wbemservices/cimom/lib/cimom.jar:/files/open/dist/wbemservices/lib/wbem.jar:/files/open/dist/wbemservices/cimom/lib/cimrepository.jar org.wbemservices.wbem.compiler.mofc.CIM_Mofc -v -u root -p root_passwd SFL_Provider.mof
+Adding class EX_SFLProvider
+Compilation succeeded.
+
+*********************************************************
+Running ClientEnum on EX_SFLProvider over RMI
+*********************************************************
+
+/usr/java/bin/java -classpath .:/files/open/dist/wbemservices\lib/wbem.jar ClientEnum localhost root root_passwd EX_SFLProvider RMI
+        :
+        : &lt;more output&gt;
+        :
+
+*********************************************************
+Running DeleteClass on EX_Student over RMI
+*********************************************************
+
+/usr/java/bin/java -classpath .:/files/open/dist/wbemservices/lib/wbem.jar DeleteClass localhost EX_Student root root_passwd RMI</span></PRE>
+</LI>
+	<LI><code>run_examples.sh</code>
+	runs example programs to illustrate how some client APIs interact
+	with the CIMOM. It also runs programs to illustrate how client APIs
+	interact with example providers. In these cases, example classes are
+	added to the CIM Repository as needed. These classes are later
+	removed before <code>run_examples.sh</code> terminates. <B>NOTE:</B> The
+	CIMOM will display harmless error messages when running
+	<code>run_examples.sh</code> over HTTP.</LI>
+</UL>
+</P>
+</BODY>
+</HTML>

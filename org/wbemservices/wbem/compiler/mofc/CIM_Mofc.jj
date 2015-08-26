@@ -1,0 +1,2080 @@
+/*
+ *EXHIBIT A - Sun Industry Standards Source License
+ *
+ *"The contents of this file are subject to the Sun Industry
+ *Standards Source License Version 1.2 (the "License");
+ *You may not use this file except in compliance with the
+ *License. You may obtain a copy of the 
+ *License at http://wbemservices.sourceforge.net/license.html
+ *
+ *Software distributed under the License is distributed on
+ *an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either
+ *express or implied. See the License for the specific
+ *language governing rights and limitations under the License.
+ *
+ *The Original Code is WBEM Services.
+ *
+ *The Initial Developer of the Original Code is:
+ *Sun Microsystems, Inc.
+ *
+ *Portions created by: Sun Microsystems, Inc.
+ *are Copyright © 2001 Sun Microsystems, Inc.
+ *
+ *All Rights Reserved.
+ *
+ *Contributor(s): AppIQ, Inc.____________________________
+*/
+
+options {
+  LOOKAHEAD = 1;
+  CHOICE_AMBIGUITY_CHECK = 4;
+  OTHER_AMBIGUITY_CHECK = 2;
+  STATIC = false;
+  DEBUG_PARSER = false;
+  DEBUG_LOOKAHEAD = false;
+  DEBUG_TOKEN_MANAGER = false;
+  ERROR_REPORTING = true;
+  JAVA_UNICODE_ESCAPE = true;
+  UNICODE_INPUT = true;
+  IGNORE_CASE = false;
+  USER_TOKEN_MANAGER = false;
+  USER_CHAR_STREAM = false;
+  BUILD_PARSER = true;
+  BUILD_TOKEN_MANAGER = true;
+  SANITY_CHECK = true;
+  FORCE_LA_CHECK = false;
+}
+
+PARSER_BEGIN(CIM_Mofc)
+
+package org.wbemservices.wbem.compiler.mofc;
+
+import java.io.*;
+import java.util.*;
+import java.rmi.*;
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+ 
+import javax.wbem.cim.*;
+import javax.wbem.client.*;
+
+import org.wbemservices.wbem.compiler.prep.CIM_Prep;
+
+public class CIM_Mofc {
+
+    private static final int MINMODE = 0;
+    public static final int NORMALMODE = 0;
+    public static final int REGMODE = 1;
+    public static final int UNREGMODE = 2;
+    private static final int MAXMODE = 2;
+    private static final String EXRESOURCE = 
+    "org.wbemservices.wbem.compiler.mofc.Compiler";
+
+    private MofcBackend comp = null; 
+    private int parsePhase = 1;
+    private boolean verbose = false;
+    private boolean onlySynCheck = false;
+    private Locale locale = Locale.getDefault();
+    private static final String NO_SUCH_FILE = "NO_SUCH_FILE";
+    XmlWriter xmlwriter = new XmlWriter();
+    boolean isInvoked = false;
+    int mode = NORMALMODE;
+    CIMOMHandle callBack = null;
+
+    public boolean isVerbose() {
+	return verbose;
+    }
+
+    // This method can be used by any class which wishes to embed a
+    // MOF parser. The parser calls back on the CIMOMHandle when it wants
+    // to do its CIM create/set operations. It only invokes a subset of the
+    // operations, but we're not creating a new interface for now.
+    // @param argv[] - args as passed to mofcomp
+    // @param callBack The handle the mof parser invokes when it wants to
+    // create/set/delete/get CIM elements
+    // @param mode The mode in which this parser runs.
+    // NORMALMODE - parses normal MOF files
+    // REGMODE - allows files to have #pragma namespace directives to ask
+    // the parser to do sets instead of creates and vice versa.
+    // UNREGMODE - allows files to set delete modes on the fly in addition to
+    // to sets and creates.
+    public static void parseMOF(String[] argv, int mode, CIMOMHandle callBack)
+    throws Exception {
+	parseMOF(argv, true, mode, callBack);
+    }
+
+    // This method can be used by any class which wishes to embed a
+    // MOF parser. The parser calls back on the CIMOMHandle when it wants
+    // to do its CIM create/set operations. It only invokes a subset of the
+    // operations, but we're not creating a new interface for now.
+    // @param argv[] - args as passed to mofcomp
+    // @param isInvoked - this parameter if true, tells the parser to not exit, 
+    // but return on success and throw exceptions on failure.
+    // @param callBack The handle the mof parser invokes when it wants to
+    // create/set/delete/get CIM elements
+    // @param mode The mode in which this parser runs.
+    // NORMALMODE - parses normal MOF files
+    // REGMODE - allows files to have #pragma namespace directives to ask
+    // the parser to do sets instead of creates and vice versa.
+    // UNREGMODE - allows files to set delete modes on the fly in addition to
+    // to sets and creates.
+    static void parseMOF(String[] argv, boolean isInvoked,
+    int mode, CIMOMHandle callBack) throws Exception {
+	CIM_Mofc parser = null;
+	CIM_Prep preProc;
+	String fileName = null;
+
+
+	//set I18N Bundle and log name. All instances of the parser will
+	// share these, so they could get overwritten by new instances of
+	// the parser.
+	I18N.setResourceName("org.wbemservices.wbem.compiler.mofc.Compiler");
+	LogFile.setFileName("mofcomp.log");
+
+	//Check Command Line information (before logging)
+	Hashtable clht = CIM_Mofc.checkCommandLine(argv, isInvoked);
+	fileName = (String)clht.get("filename");
+        fileName = new File(fileName).getAbsolutePath();
+	if(fileName == null) {
+	    System.err.println(I18N.loadString("NO_FILE"));
+	    if (!isInvoked) {
+		System.exit(1);
+	    } else {
+		throw new 
+		CIMException(CIMException.CIM_ERR_NOT_FOUND, fileName);
+	    }
+	}
+
+        
+        FileInputStream fis = null;
+	try {
+            boolean idempotent = clht.get("-idempotent") != null;
+            fis = new FileInputStream(fileName);
+	    preProc = new CIM_Prep(fiis, fileName);
+	    preProc.pre_FileName = fileName;
+	    preProc.FileNameTable = new Hashtable();
+	    preProc.FileNameTable.put(fileName, fileName);
+	    preProc.bos = new ByteArrayOutputStream();
+	    preProc.dos = new DataOutputStream(preProc.bos);
+	    preProc.dos.writeBytes("##FILE \"" + fileName + "\"\n");            
+	    try {
+		preProc.ExpressionList(new File(fileName).getParent(), idempotent);
+	    } catch (IOException ioe) {
+                //XXX; need to put real error msg here and remove exceptions
+                //End users MUST never see exception information
+                ioe.printStackTrace();
+                System.exit(-1);
+	    }
+            
+	    parser = 
+	    new CIM_Mofc(new ByteArrayInputStream(preProc.bos.toByteArray()));
+
+	    // initialize all the parser settings
+	    if (clht.get("-s") != null) {
+		parser.onlySynCheck = true;
+	    }
+	    if (clht.get("-v") != null) {
+		parser.verbose = true;
+	    }
+
+	    parser.mode = mode;
+	    parser.isInvoked = isInvoked;
+	    parser.callBack = callBack;
+	    parser.comp = new MofcBackend(clht, parser);
+
+	    //LogFile.add(LogFile.INFORMATIONAL, "Parsing input file: " + fileName + " phase 1");
+	    parser.mofSpecification();
+	    //LogFile.add(LogFile.INFORMATIONAL, "Phase 1 completed");
+	    if(parser.onlySynCheck) {
+		if (!isInvoked) {
+		    System.out.println(I18N.loadString("SYN_SUCCESS"));
+		    System.exit(0);
+		} else {
+		    return;
+		}
+	    }
+
+	    parser.ReInit(new ByteArrayInputStream(preProc.bos.toByteArray()));
+	    parser.parsePhase = 2;
+	    parser.comp.setParsePhase(2);
+	    //If the user set the namespace on the commandline - use it
+	    if (clht.get("-n") != null) {
+		parser.comp.switchNamespace((String)clht.get("namespace"));
+	    }
+	    
+            int i = -1;
+    	    while (i+1 < argv.length) {
+	       i++;
+               if (argv[i].equalsIgnoreCase("-b")) {
+                   parser.comp.setFile(parser.xmlwriter.openXmlFile());
+		   parser.comp.setBigFile(parser.xmlwriter.openBigXmlFile());
+                }
+	    }
+	    parser.mofSpecification();
+	    i = -1;
+            while (i+1 < argv.length) {
+	        i++;
+	        if (argv[i].equalsIgnoreCase("-b")) {
+                     parser.xmlwriter.writeEndTags(parser.xmlwriter.getFile());
+		     parser.xmlwriter.writeBigEndTags(parser.xmlwriter.getBigFile());
+                }
+            }
+            //LogFile.add(LogFile.INFORMATIONAL, "Phase 2 completed");
+	    System.out.println(I18N.loadString("SUCCESS"));
+	} catch(FileNotFoundException fne) {
+	    if (!isInvoked) {
+		System.err.println("ERROR: Can not find file: " + fileName);
+		System.exit(1);
+	    } else {
+		throw fne;
+	    }
+	} catch(Exception e) {
+
+	    if((parser != null) && (parser.comp != null)) {
+		parser.comp.cleanup();
+	    }
+
+	    if (isInvoked) {
+		throw e;
+	    }
+
+	    if(e instanceof CIMException) {
+		System.err.println(
+		parser.toStringCIMException((CIMException)e));
+	    } else {
+		System.err.println(e);
+	    }
+
+	    System.exit(1);
+	} finally {
+	    // Clean up the input stream.
+	    if (fis != null) {
+		fis.close();
+	    }
+	}
+
+	if((parser.comp != null)) {
+		parser.comp.cleanup();
+	}
+
+	if (!isInvoked) {
+	    System.exit(0);
+	}
+    }
+
+    public static void main(String argv[]) throws Exception {
+	parseMOF(argv, false, NORMALMODE, null);
+	Debug.traceOpen("3tmp", "stderr");
+    }
+
+    String toStringCIMException(CIMException cimEx) {
+
+	ResourceBundle bundle = null;
+	String msgString = null;
+    	try {
+	    bundle = ResourceBundle.getBundle(EXRESOURCE, locale);
+	} catch(MissingResourceException  e) {
+	    try {
+		bundle = ResourceBundle.getBundle(EXRESOURCE, Locale.ENGLISH);
+	    } catch(MissingResourceException ee) {
+		System.err.println("CRITICAL ERROR: Could not load resource bundle " + EXRESOURCE);
+	    }
+	}
+
+	String ID = "";
+	if (bundle == null) {
+	    //Since this is an error msg about not being able to locate
+	    //the resource bundle - Do not localize these strings
+	    System.err.println("CRITICAL ERROR: Could not load resource bundle " + EXRESOURCE);
+	    return null;
+	} else {
+	    ID = cimEx.getID();
+	    try {
+		msgString = bundle.getString(ID);		
+	    } catch (MissingResourceException e) {
+		//Since this is an error msg about not being able to locate
+		//the resource bundle - Do not localize these strings
+		System.err.println("WARNING: Could not load ID " +
+				   ID + " resource bundle " + EXRESOURCE);
+		return ID;
+	    }
+	}		
+
+	if (msgString != null) {
+	    return (ID+":"+MessageFormat.format(msgString, cimEx.getParams()));
+	} else {
+	    return null;
+	}
+    }
+
+    public int getCurrentLine() {
+	int a = jj_input_stream.getEndLine();
+	return (a - comp.lineNo);
+    }
+
+    private char parseCharacter(String s) {
+	String t = s.substring(1, s.length()-1);
+	if(t.charAt(0) == '\\') {
+	    switch(t.charAt(1)) {
+		case 'n': return('\n');
+		case 't': return('\t');
+		case 'b': return('\b');
+		case 'r': return('\r');
+		case 'f': return('\f');
+		case '\\': return('\\');
+		case '\'': return('\'');
+		case '"': return('"');
+		default : throw new IllegalArgumentException(s);
+	    }
+	} else {
+	    return(t.charAt(0));
+	}
+    }
+
+    private String parseString(String s) {
+	String t = s.substring(1, s.length()-1);
+	int i = t.length();
+	StringBuffer b = new StringBuffer();
+	for(int j=0; j < i; j++) {
+	    if(t.charAt(j) == '\\') {
+		j++;
+		switch(t.charAt(j)) {
+		    case 'n': b.append('\n');
+			      break;
+		    case 't': b.append('\t');
+			      break;
+		    case 'b': b.append('\b');
+			      break;
+		    case 'r': b.append('\r');
+			      break;
+		    case 'f': b.append('\f');
+			      break;
+		    case '\\': b.append('\\');
+			      break;
+		    case '\'': b.append('\'');
+			      break;
+		    case '"': b.append('"');
+			      break;
+		    default : throw new IllegalArgumentException(s);
+		}
+	    } else {
+		b.append(t.charAt(j));
+	    }
+	}
+	return b.toString();
+    }
+
+    private static Hashtable checkCommandLine(String argv[], 
+    boolean isInvoked) throws CIMException {
+	Hashtable ht = new Hashtable();
+	int igsize = 0;
+    	if ((argv.length == 0)) {
+	    if (!isInvoked) {
+		System.out.println(I18N.loadString("MOFC_COMMAND_LINE_ARGS"));
+		System.exit(0);
+	    } else {
+		throw new CIMException(CIMException.CIM_ERR_INVALID_PARAMETER, 
+		argv);
+	    }
+    	}
+	int i = -1;
+    	while (i+1 < argv.length) {
+	    i++;
+	    if (argv[i].equals("-v")) {
+		LogFile.setVerbose(true);
+		ht.put("-v","-v");
+		continue;
+	    }
+	    //NOTE: I did not make the second char on this 
+	    //      argument programatic on purpose - There are 
+	    //      going to be some changes to the logging class!
+            if (argv[i].equalsIgnoreCase("-l0")) {
+                LogFile.setLevel(LogFile.CRITICAL);
+                LogFile.start();
+		continue;
+            }
+            if (argv[i].equals("-l1")) {
+                LogFile.setLevel(LogFile.WARNING);
+                LogFile.start();
+		continue;
+            }
+            if (argv[i].equals("-l2")) {
+                LogFile.setLevel(LogFile.INFORMATIONAL);
+                LogFile.start();
+		continue;
+            }
+            if (argv[i].equals("-l3")) {
+                LogFile.setLevel(LogFile.DEBUG);
+                LogFile.start();
+		continue;
+            }
+            //This is an unpublished parameter
+            if (argv[i].equals("-lDev")) {
+                LogFile.setLevel(LogFile.DEVELOPMENT);
+                LogFile.start();
+		continue;
+            }
+
+	    if (argv[i].equals("-C")) {
+		// overwrite existing classes.
+		ht.put("-C","-C");
+		continue;
+            }
+
+            if (argv[i].equalsIgnoreCase("-I")) {
+		// overwrite existing instances.
+		ht.put("-I","-I");
+		continue;
+            }
+
+            if (argv[i].equals("-Q")) {
+		// overwrite existing qualifiers.
+		ht.put("-Q","-Q");
+		continue;
+            }
+            if (argv[i].equals("-s")) {
+		// do only syntactic checking
+		ht.put("-s","-s");
+		continue;
+            }
+
+	    //Namespace support
+ 	    if (argv[i].equals("-n")) {
+		i++;
+		ht.put("-n","-n");
+		if(i >= argv.length) {
+		    System.err.println(
+			I18N.loadString("MOFC_COMMAND_LINE_ARGS"));
+		    System.exit(1);
+		}
+	        ht.put("namespace",argv[i]);
+		continue;
+            }
+
+	    //MOF2BEAN support
+ 	    if (argv[i].equalsIgnoreCase("-j")) {
+		i++;
+		ht.put("-j","-j");
+		if(i >= argv.length) {
+		    System.err.println(
+			I18N.loadString("MOFC_COMMAND_LINE_ARGS"));
+		    System.exit(1);
+		}
+                try {
+		    // verify that the specified file exists
+		    FileReader beanArg = new FileReader(argv[i]);
+
+		    // get the PACKAGE, IMPORTS, and EXCEPTIONS values
+		    // from the Bean config file
+		    BeanArgReader beanArgReader = new BeanArgReader(beanArg);
+		    ht.put("beanPackage", beanArgReader.getPackage());
+		    ht.put("beanImports", beanArgReader.getImports());
+		    ht.put("beanExceptions", beanArgReader.getExceptions());
+		} catch(FileNotFoundException fnfe) {
+		    Vector vError = new Vector(1);
+		    vError.addElement(argv[i]);
+		    System.err.println(I18N.loadStringFormat(
+			"ERR_BEAN_ARG_NOT_FOUND", vError));
+		    System.exit(1);
+		}
+		continue;
+	    }
+
+ 	    if (argv[i].equalsIgnoreCase("-x")) {		
+		ht.put("-x","-x");
+		continue;
+            }
+	    if (argv[i].equalsIgnoreCase("-b")) {
+		// internal build option generates bigmof.xml file
+		ht.put("-b","-b");
+		continue;
+            }
+	    if (argv[i].equals("-version")) {
+		if (!isInvoked) {
+		    System.out.println(Version.productName + " " +
+		    Version.major + "." + Version.minor + "." +
+		    Version.revision + " " + Version.buildID);
+		    System.exit(0);
+		} else {
+		    // cant ask for version if invoked
+		    throw new CIMException(
+		    CIMException.CIM_ERR_INVALID_PARAMETER, "version");
+		}
+	    }
+	    if (argv[i].equals("-h")) {
+		if (!isInvoked) {
+		    System.out.println(
+		    I18N.loadString("MOFC_COMMAND_LINE_ARGS"));
+		    System.exit(0);
+		} else {
+		    // cant ask for help if invoked
+		    throw new CIMException(
+		    CIMException.CIM_ERR_INVALID_PARAMETER, "h");
+		}
+	    }
+	    if (argv[i].equals("-c")) {
+		if (isInvoked) {
+		    // cant specify a remote CIM server if invoked, 
+		    // the callBack should take care of that
+		    throw new CIMException(
+		    CIMException.CIM_ERR_INVALID_PARAMETER, "-c");
+		}
+		i++;
+		if(i >= argv.length) {
+		    System.err.println(
+		    I18N.loadString("MOFC_COMMAND_LINE_ARGS"));
+		    System.exit(1);
+		}
+	        ht.put("cimhost",argv[i]);
+		continue;
+	    }
+
+	    if (argv[i].equals("-u")) {
+		if (isInvoked) {
+		    // cant specify a user if invoked, 
+		    // the callBack should take care of that
+		    throw new CIMException(
+		    CIMException.CIM_ERR_INVALID_PARAMETER, "-u");
+		}
+		i++;
+		if(i >= argv.length) {
+		    System.err.println(I18N.loadString("MOFC_COMMAND_LINE_ARGS"));
+		    System.exit(1);
+		}
+	        ht.put("username",argv[i]);
+		continue;
+	    }
+	    if (argv[i].equals("-p")) {
+		if (isInvoked) {
+		    // cant specify a password if invoked, 
+		    // the callBack should take care of that
+		    throw new CIMException(
+		    CIMException.CIM_ERR_INVALID_PARAMETER, "-p");
+		}
+		i++;
+		if(i >= argv.length) {
+		    System.err.println(I18N.loadString("MOFC_COMMAND_LINE_ARGS"));
+		    System.exit(1);
+		}
+	        ht.put("password",argv[i]);
+		continue;
+	    }
+	    if (argv[i].equals("-o")) {
+		i++;
+		if(i >= argv.length) {
+		    if (!isInvoked) {
+			System.err.println(
+			I18N.loadString("MOFC_COMMAND_LINE_ARGS"));
+			System.exit(1);
+		    } else {
+			throw new CIMException(
+			CIMException.CIM_ERR_INVALID_PARAMETER, "-o");
+		    }
+		}
+	        ht.put("logdir",argv[i]);
+	        ht.put("standalone","true");
+		continue;
+	    }
+
+	    ht.put("filename",argv[i]);
+	    // increment the ignored parameter
+	    igsize++;
+	}
+	if(igsize > 1) {
+	    if (!isInvoked) {
+		System.err.println(I18N.loadString("MOFC_COMMAND_LINE_ARGS"));
+	        System.exit(1);
+	    } else {
+		throw new CIMException(
+		CIMException.CIM_ERR_INVALID_PARAMETER, argv);
+	    }
+	}
+	return ht;
+    } 
+}
+
+PARSER_END(CIM_Mofc)
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"
+| "\r"
+| "\n"
+}
+
+SPECIAL_TOKEN : /* COMMENTS */
+{
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+}
+
+TOKEN :  /* Precompiler generated tokens */
+{
+  <PRECOMP_LINE: "##LINE" (" "|"\t"|"\n"|"\r"|"\r\n")>
+| <PRECOMP_FILE: "##FILE" (" "|"\t"|"\n"|"\r"|"\r\n")>
+}
+
+TOKEN [IGNORE_CASE] :
+{
+  <PRAGMA: "#pragma" (" "|"\t"|"\n"|"\r"|"\r\n")>
+|  <NAMESPACE: "namespace">
+|  <SCHEMA: "schema">
+|  <INCLUDE: "include">
+|  <SOURCE: "source">
+|  <LOCALE: "locale">
+|  <NONLOCALE: "nonlocale"> 
+|  <INSTANCELOCALE: "instancelocale"> 
+|  <CLASS: "class"> 
+|  <ASSOCIATION: "association"> 
+|  <INDICATION: "indication"> 
+|  <PROPERTY: "property"> 
+|  <REFERENCE: "reference"> 
+|  <METHOD: "method"> 
+|  <PARAMETER: "parameter"> 
+|  <ANY: "any"> 
+|  <REF: "ref"> 
+|  <INSTANCE: "instance">
+|  <OF: "of"> 
+|  <AS: "as"> 
+|  <QUALIFIER: "qualifier"> 
+|  <SCOPE: "scope"> 
+|  <FLAVOR: "flavor"> 
+|  <ENABLEOVERRIDE: "enableoverride">
+|  <DISABLEOVERRIDE: "disableoverride"> 
+|  <TOSUBCLASS:  "tosubclass">
+|  <RESTRICTED:  "restricted">
+|  <TRANSLATABLE:  "translatable">
+|  <DT_UINT8:  "uint8">
+|  <DT_SINT8:  "sint8">
+|  <DT_UINT16:  "uint16">
+|  <DT_SINT16:  "sint16">
+|  <DT_UINT32:  "uint32">
+|  <DT_SINT32:  "sint32">
+|  <DT_UINT64:  "uint64">
+|  <DT_SINT64:  "sint64">
+|  <DT_REAL32:  "real32">
+|  <DT_REAL64:  "real64">
+|  <DT_CHAR16:  "char16">
+|  <DT_STR:  "string">
+|  <DT_BOOL:  "boolean">
+|  <DT_DATETIME:  "datetime">
+|  <TRUE_VALUE:  "true">
+|  <FALSE_VALUE:  "false">
+|  <NULL_VALUE:  "null">
+}
+
+TOKEN :
+{
+  <BINARY_VALUE: (["-","+"])? (["0","1"])+ ("b"|"B")>
+| <OCTAL_VALUE: (["-","+"])? "0" (["0"-"7"])+>
+| <POS_DECIMAL_VALUE: ("+")? (["1"-"9"]) (["0"-"9"])*>
+| <NEG_DECIMAL_VALUE: "-" (["1"-"9"]) (["0"-"9"])*>
+| <ZERO: (["-","+"])? "0">
+| <HEX_VALUE: (["-","+"])? "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+>
+| <REAL_VALUE: (["+","-"])? (["0"-"9"])* "." (["0"-"9"])+ (["e","E"] (["+","-"])? (["0"-"9"])+)?>
+|
+  < STRING_VALUE:
+      "\""
+//      (   (~["\"","\\","\n","\r"])
+      (   (~["\"","\n","\r"])
+        | ("\\" ["n","t","b","r","f","\\","'","\""])
+      )*
+      "\""
+  >
+| < CHAR_VALUE:
+      "'"
+      (   (~["'","\\","\n","\r"])
+        | ("\\" ["n","t","b","r","f","\\","'","\""])
+      )
+      "'"
+  >
+}
+
+TOKEN :
+{
+  <IDENTIFIER: <IDENT_CHAR> (<IDENT_CHAR>|["0"-"9"])*> 
+| <ALIAS_IDENTIFIER: "$" <IDENT_CHAR> (<IDENT_CHAR>|["0"-"9"])*> 
+| <#IDENT_CHAR: ["a"-"z","A"-"Z","_"]>
+}
+
+TOKEN : 
+{
+  < COMMA: "," >
+| < COLON: ":" >
+| < SEMICOLON: ";" >
+| < EQUAL: "=" >
+| < OPEN_CUR_BRA: "{" >
+| < CLOSE_CUR_BRA: "}" >
+| < OPEN_SQU_BRA: "[" >
+| < CLOSE_SQU_BRA: "]" >
+| < OPEN_BRA: "(" >
+| < CLOSE_BRA: ")" >
+}
+
+/*
+// ------------------------------------------------------------------------
+// MOF Specification: This production parses the specification. Each of
+// the subproductions populate the appropriate element associated with it
+// in an instance (comp) of MofcompBackend. For e.g. if the subproduction
+// is for className, then it populates comp.curClassEl's name. Finally
+// when the entire class has been parsed successfully, the class can be
+// added using the information accumulated in curClassEl.
+// ------------------------------------------------------------------------
+*/
+
+void mofSpecification() throws CIMException :
+{}
+{
+    try {
+    (
+	mofProductions()
+    )?
+    <EOF>
+    }
+    catch(ParseException e) {
+	LogFile.add(LogFile.CRITICAL, "ERR_PARSE", new Object[] {
+				comp.fileName,
+				new Integer(getCurrentLine())
+				});
+	System.err.println(
+	    I18N.loadStringFormat("ERROR_LINE", comp.fileName, 
+	    new Integer(getCurrentLine())));                        
+	throw e;
+    }
+}
+
+void mofProductions() throws CIMException :
+{}
+{
+    (mofProduction())+
+}
+
+void mofProduction() throws CIMException :
+{}
+{
+  compilerDirective()
+| precompilerDirective() 
+// Doing left factoring for LL(1)
+| [qualifierList ()]
+  (classDeclaration() | instanceDeclaration())
+| qualifierTypeDeclaration()
+}
+
+/*
+// ------------------------------------------------------------------------
+// PreCompiler Directive
+// ------------------------------------------------------------------------
+*/
+
+void precompilerDirective() :
+{Token t;}
+{
+  <PRECOMP_LINE>
+  (t = <POS_DECIMAL_VALUE> | t = <ZERO>)
+  {
+      comp.lineNo = t.endLine-Integer.parseInt(t.image);
+  }
+| <PRECOMP_FILE>
+  t = <STRING_VALUE>
+  {    
+    //Removed the parse from this line
+    comp.fileName = t.image;
+    comp.lineNo = t.endLine;
+  }
+}
+
+/*
+// ------------------------------------------------------------------------
+// CompilerDirectives
+// ------------------------------------------------------------------------
+*/
+void compilerDirective() throws CIMException :
+{}
+{
+  <PRAGMA>
+  (
+    namespacePragma()
+  | sourcePragma()
+  | localePragma()
+  | nonlocalePragma()
+  | instancelocalePragma()
+  )
+
+}
+
+void namespacePragma() throws CIMException :
+{Token t;}
+{
+  <NAMESPACE>
+  <OPEN_BRA>
+  // CHANGED
+  t = <STRING_VALUE>
+  <CLOSE_BRA>
+  {
+      comp.switchNamespace(parseString(t.image));
+  }
+}
+
+void sourcePragma() :
+{}
+{
+  <SOURCE>
+  <OPEN_BRA>
+  multiStringValue()
+  <CLOSE_BRA>
+}
+
+void localePragma() :
+{}
+{
+  <LOCALE>
+  <OPEN_BRA>
+  multiStringValue()
+  <CLOSE_BRA>
+}
+
+void nonlocalePragma() :
+{}
+{
+  <NONLOCALE>
+  <OPEN_BRA>
+  multiStringValue()
+  <CLOSE_BRA>
+}
+
+void instancelocalePragma() :
+{}
+{
+  <INSTANCELOCALE>
+  <OPEN_BRA>
+  multiStringValue()
+  <CLOSE_BRA>
+}
+
+String nameToken() :
+{Token t;}
+{
+  (
+    t = <IDENTIFIER>
+  | t = <SCHEMA>
+  | t = <ASSOCIATION>
+  | t = <INDICATION>
+  | t = <REFERENCE>
+  | t = <LOCALE>
+  | t = <SOURCE>
+  )
+  {return t.image;}
+}
+
+/*
+// ------------------------------------------------------------------------
+// Qualifier Type Declaration
+// (set qualifierTypes)
+// (Unit)
+// ------------------------------------------------------------------------
+*/
+void qualifierTypeDeclaration() throws CIMException : 
+{}
+{
+
+qualifierTypeHead()
+qualifierTypeBody()
+qualifierTypeTail()
+
+}
+
+void qualifierTypeHead(): 
+{}
+{
+  <QUALIFIER>
+  {
+      comp.curLevel= "QUALIFIER";
+  }
+}
+
+void qualifierTypeBody() throws CIMException : 
+{}
+{
+  qualifierTypeName()
+  qualifierTypeDataType()
+  qualifierTypeArray_Init()
+  qualifierTypeScope()
+  qualifierTypeFlavor()
+}
+
+void qualifierTypeTail() throws CIMException : 
+{}
+{
+  <SEMICOLON>
+  {
+    comp.addQualifierType();
+    //comp.curLevel="";
+    comp.erroneousUnit=false;
+    comp.erroneousPart=false;
+  }
+}
+
+void qualifierTypeName(): 
+{String s;}
+{
+  s = nameToken()
+  {
+    comp.curQualifierTypeEl.setName(s);
+  }
+}
+
+void qualifierTypeDataType() : 
+{}
+{
+  <COLON>
+  dataType()
+}
+
+void qualifierTypeArray_Init() throws CIMException : 
+{}
+{
+  qualifierTypeArray_ArrayInit()
+| qualifierTypeSimpleInit()
+}
+
+void qualifierTypeArray_ArrayInit() throws CIMException : 
+{}
+{
+  array()
+  {
+    int simpleType = comp.curType.getType();
+    // Create a new array data type.
+    comp.curType = new CIMDataType(CIMDataType.findArrayType(simpleType),
+					comp.size);
+    comp.curQualifierTypeEl.setType(comp.curType);
+  }
+  [
+    <EQUAL>
+    arrayInitializer()
+    {
+	if (!comp.erroneousPart) { 
+	    if(!comp.curValues.isEmpty()) {
+		CIMValue cv = new CIMValue(comp.curValues.vVector);
+		comp.curQualifierTypeEl.setDefaultValue(cv);
+	    }
+	}
+	comp.curValues = new MofcCIMValue();
+    }
+  ]
+}
+
+void qualifierTypeSimpleInit() throws CIMException : 
+{}
+{
+    <EQUAL>
+    simpleInitializer()
+    {
+	comp.curQualifierTypeEl.setType(comp.curType);
+	// simpleInitializer populated comp.curValues
+	if (!comp.erroneousPart) { 
+	    if(!comp.curValues.isEmpty()) {
+		Object o = comp.curValues.vVector.firstElement();
+		comp.curQualifierTypeEl.setDefaultValue(new CIMValue(o));
+	    }
+	}
+	comp.curValues = new MofcCIMValue();
+    }
+| /* empty */
+    {
+	comp.curQualifierTypeEl.setType(comp.curType);
+    }
+}
+
+void qualifierTypeScope() : 
+{}
+{
+  <COMMA>
+  <SCOPE>
+  <OPEN_BRA>
+  ScopeMetaElementList()
+  <CLOSE_BRA>
+}
+
+void ScopeMetaElementList()    : 
+{CIMScope s;}
+{
+  s = ScopeMetaElement()
+  {
+      comp.assignQualifierTypeScope(s);
+  }
+  (
+    <COMMA>
+    s = ScopeMetaElement()
+    {
+	comp.assignQualifierTypeScope(s);
+    }
+  )*
+}
+
+CIMScope ScopeMetaElement() :
+{
+ Token t;
+ int scope;
+}
+{
+  (
+    t = <SCHEMA>
+    { scope = CIMScope.SCHEMA; }
+  | t = <CLASS>
+    { scope = CIMScope.CLASS; }
+  | t = <ASSOCIATION>
+    { scope = CIMScope.ASSOCIATION; }
+  | t = <INDICATION>
+    { scope = CIMScope.INDICATION; }
+  | t = <PROPERTY>
+    { scope = CIMScope.PROPERTY; }
+  | t = <REFERENCE>
+    { scope = CIMScope.REFERENCE; }
+  | t = <METHOD>
+    { scope = CIMScope.METHOD; }
+  | t = <PARAMETER>
+    { scope = CIMScope.PARAMETER; }
+  | t = <ANY>
+    { scope = CIMScope.ANY; }
+  )
+  { return new CIMScope(scope); }
+}
+
+void qualifierTypeFlavor() : 
+{}
+{
+  <COMMA>
+  <FLAVOR>
+  <OPEN_BRA>
+  qualifierTypeFlavorList()
+  <CLOSE_BRA>
+  {
+    // comp.assignQualifierTypeDefaultFlavor();
+  }
+| /* empty */
+  {
+    // comp.assignQualifierTypeDefaultFlavor();
+  }
+}
+
+void qualifierTypeFlavorList() : 
+{CIMFlavor s;}
+{
+  s = flavor()
+  {
+    comp.assignQualifierTypeFlavor(s);
+  }
+  (
+    <COMMA>
+    s = flavor()
+    {
+	comp.assignQualifierTypeFlavor(s);
+    }
+  )*
+}
+
+CIMFlavor flavor() : 
+{
+ int flavor;
+ Token t;
+}
+{
+  (
+    t = <ENABLEOVERRIDE>
+    { flavor = CIMFlavor.ENABLEOVERRIDE; }
+  | t = <DISABLEOVERRIDE>
+    { flavor = CIMFlavor.DISABLEOVERRIDE; }
+  | t = <RESTRICTED>
+    { flavor = CIMFlavor.RESTRICTED; }
+  | t = <TOSUBCLASS>
+    { flavor = CIMFlavor.TOSUBCLASS; }
+  | t = <TRANSLATABLE>
+    { flavor = CIMFlavor.TRANSLATE; }
+  )
+  {return new CIMFlavor(flavor);}
+}
+
+/*
+// ------------------------------------------------------------------------
+// Qualifier List
+// (set comp.qualifiers)
+// (Part)
+// ------------------------------------------------------------------------
+*/
+void qualifierList() throws CIMException :
+{}
+{
+  qualifierListHead()
+  qualifierListBody()
+  qualifierListTail()
+}
+
+void qualifierListHead() : 
+{}
+{
+  <OPEN_SQU_BRA>
+  {
+    comp.curLevel= "QUALIFIERLIST";
+    comp.erroneousQualifierList=false;
+    comp.qualifiers = new Vector();
+  }
+}
+
+void qualifierListBody() throws CIMException : 
+{}
+{
+  qualifier()
+  {
+    comp.addQualifier();
+  }
+  (
+    <COMMA>
+    qualifier()
+    {
+	comp.addQualifier();
+    }
+  )*
+}
+
+void qualifierListTail() throws CIMException : 
+{}
+{
+  <CLOSE_SQU_BRA>
+  {
+    comp.checkQualifierList();
+    //comp.curLevel="";
+  }
+}
+
+void qualifier() throws CIMException :
+{}
+{
+  qualifierName()
+  qualifierParameter()
+  [qualifierFlavor()]
+}
+
+void qualifierName() :
+{String s;}
+{
+  s = nameToken()
+  {
+    comp.assignQualifierNameType(s);
+  }
+}
+
+void qualifierParameter() throws CIMException :
+{}
+{
+  <OPEN_BRA>
+  simpleInitializer()
+  <CLOSE_BRA>
+  {
+    comp.assignQualifierParameter(false);
+  }
+| arrayInitializer()
+  {
+    //comp.checkArraySize(comp.curQualifierEl.getName());
+    comp.assignQualifierParameter(true);
+  }
+| /* empty */
+  {
+    comp.curValues = new MofcCIMValue();
+    comp.assignQualifierParameter(false);
+  }
+}
+
+void qualifierFlavor() :
+{}
+{
+  <COLON>
+  qualifierFlavorList()
+}
+
+void qualifierFlavorList() :
+{CIMFlavor s;}
+{
+  (
+    s = flavor()
+    {
+	comp.assignQualifierFlavor(s);
+    }
+  )+
+}
+
+/*
+// ------------------------------------------------------------------------
+// Class Declaration
+// (set classes, classAliases)
+// (Unit)
+// ------------------------------------------------------------------------
+*/
+void classDeclaration() throws CIMException :
+{}
+{
+  classHead()
+  classBody()
+  classTail()
+}
+
+void classHead() throws CIMException :
+{}
+{
+  <CLASS>
+  className()
+  [classAlias()]
+  [classSuperClassName()]
+  {
+    comp.curLevel= "CLASS";
+    if (comp.erroneousQualifierList) {
+	comp.erroneousUnit=true;
+	comp.qualifiers = new Vector();
+	comp.reportError("ERR_SEM", "ERR_QUALIFIER_LIST_STR", 1, 
+			 comp.curClassEl.getName());
+    } else
+	comp.assignClassQualifiers();
+  }
+}
+
+void classBody() throws CIMException :
+{}
+{
+  <OPEN_CUR_BRA>
+  classFeatureList()
+  <CLOSE_CUR_BRA>
+}
+
+void classTail() throws CIMException :
+{}
+{
+  <SEMICOLON>
+  {
+    comp.addClass();
+    //comp.curLevel="";
+    comp.erroneousUnit=false;
+    comp.erroneousPart=false;
+  }
+}
+
+void className() throws CIMException :
+{Token t;}
+{
+  t = <IDENTIFIER>
+  {
+    comp.assignClassName(t.image);
+  }
+}
+
+void classAlias() :
+{Token t;}
+{
+  <AS> 
+  t = <ALIAS_IDENTIFIER>
+  {
+    comp.assignClassAlias(t.image);
+  }
+}
+
+void classSuperClassName() :
+{Token t;}
+{
+  <COLON>
+  t = <IDENTIFIER>
+  {
+    comp.assignSuperclassName(t.image);
+  }
+}
+
+void classFeatureList() throws CIMException :
+{}
+{
+  (classFeature())*
+}
+
+void classFeature() throws CIMException :
+{}
+{
+  LOOKAHEAD(propertyDeclaration())
+  propertyDeclaration()
+| LOOKAHEAD(methodDeclaration())
+  methodDeclaration()
+| referenceDeclaration()
+}
+
+/*
+// ------------------------------------------------------------------------
+// Property Declaration
+// (set properties)
+// (Part)
+// ------------------------------------------------------------------------
+*/
+void propertyDeclaration() throws CIMException : 
+{}
+{
+  propertyHead()
+  propertyBody()
+  propertyTail()
+| qualifierList()
+  propertyHead()
+  propertyBody()
+  propertyTail()
+}
+
+void propertyHead() throws CIMException :
+{}
+{
+  dataType()
+  propertyName()
+  {
+    comp.curLevel= "PROPERTY";
+    if (comp.erroneousQualifierList) {
+	comp.erroneousUnit=true;
+	comp.qualifiers = new Vector();
+	comp.reportError("ERR_SEM", "ERR_QUALIFIER_LIST_STR", 1, 
+			 comp.curPropRefEl.getName());
+    } else
+	comp.assignPropertyQualifiers();
+  }
+}
+
+void propertyBody() throws CIMException : 
+{}
+{
+  propertyArray_ArrayInit()
+| propertySimpleInit()
+}
+
+void propertyArray_ArrayInit() throws CIMException : 
+{}
+{
+  array()
+  {
+    int simpleType = comp.curType.getType();
+    // Create a new array data type.
+    comp.curType = new CIMDataType(CIMDataType.findArrayType(simpleType),
+					comp.size);
+    comp.curPropRefEl.setType(comp.curType);
+  }
+  [
+    <EQUAL>
+    arrayInitializer()
+    {
+	if (!comp.erroneousPart) { 
+	    if(!comp.curValues.isEmpty()) {
+		CIMValue cv = new CIMValue(comp.curValues.vVector);
+		comp.curPropRefEl.setValue(cv);
+	    }
+	}
+	comp.curValues = new MofcCIMValue();
+    }
+  ]
+}
+
+void propertySimpleInit() throws CIMException : 
+{}
+{
+  <EQUAL>
+  simpleInitializer()
+  {
+    comp.curPropRefEl.setType(comp.curType);
+    if (!comp.erroneousPart) { 
+	if(!comp.curValues.isEmpty()) {
+	    Object o = comp.curValues.vVector.firstElement();
+	    comp.curPropRefEl.setValue(new CIMValue(o));
+	}
+    }
+    comp.curValues = new MofcCIMValue();
+  }
+| /* empty */
+  {
+    //do nothing
+    comp.curPropRefEl.setType(comp.curType);
+  }
+}
+
+void propertyTail() : 
+{}
+{
+  <SEMICOLON>
+  {
+    comp.addProperty();
+    //comp.curLevel="";
+    comp.erroneousPart=false;
+  }
+}
+
+void propertyName() throws CIMException :
+{String s;}
+{
+  s = nameToken()
+  {
+    comp.assignFeatureName(s);
+  }
+}
+
+/*
+// ------------------------------------------------------------------------
+// Reference Declaration
+// (set properties)
+// (Part)
+// ------------------------------------------------------------------------
+*/
+void referenceDeclaration() throws CIMException : 
+{}
+{
+  referenceHead()
+  referenceBody()
+  referenceTail()
+| qualifierList()
+  referenceHead()
+  referenceBody()
+  referenceTail()
+}
+
+void referenceHead() throws CIMException : 
+{}
+{
+  referenceObject()
+  referenceName()
+  { 
+    comp.curLevel = "REFERENCE";
+    if (comp.erroneousQualifierList) {
+	comp.erroneousUnit=true;
+	comp.qualifiers = new Vector();
+	comp.reportError("ERR_SEM", "ERR_QUALIFIER_LIST_STR", 1,
+			 comp.curPropRefEl.getName());
+    } else
+	comp.assignReferenceQualifiers();
+  }
+}
+
+void referenceBody() throws CIMException : 
+{}
+{
+  referenceInitializer()
+}
+
+void referenceTail() : 
+{}
+{
+  <SEMICOLON>
+  {
+    comp.addReference();
+    //comp.curLevel="";
+    comp.erroneousPart=false;
+  }
+}
+
+void referenceName() throws CIMException : 
+{String s;}
+{
+  s = nameToken()
+  {
+    comp.assignFeatureName(s);
+  }
+}
+
+void referenceObject() :		
+{}
+{
+  objectRef()
+  {
+    comp.assignRefClassName(comp.curType);
+  }
+}
+
+void referenceInitializer() throws CIMException : 
+{
+ Token t;
+ String s;
+ CIMValue cv;
+}
+{
+  t = <ALIAS_IDENTIFIER>
+  {
+    comp.curValues.addElement(comp.getInstanceName(t.image));
+    comp.curValues.setIsArrayValue(false);
+    cv = new CIMValue(comp.curValues.firstElement());
+    comp.curPropRefEl.setValue(cv);
+    comp.curValues = new MofcCIMValue();
+  }
+| s = objectPath()
+  {
+    comp.curValues.addElement(new String(s));
+    comp.curValues.setIsArrayValue(false);
+    cv = new CIMValue(comp.curValues.firstElement());
+    comp.curPropRefEl.setValue(cv);
+    comp.curValues = new MofcCIMValue();
+  }
+| /* empty */
+  {
+    //do nothing
+  }
+}
+
+/*
+// ------------------------------------------------------------------------
+// Method Declaration
+// (set methods)
+// (Part)
+// ------------------------------------------------------------------------
+*/
+void methodDeclaration() throws CIMException : 
+{}
+{
+  methodHead()
+  methodBody()
+  methodTail()
+| qualifierList()
+  methodHead()
+  methodBody()
+  methodTail()
+}
+
+void methodHead() throws CIMException : 
+{}
+{
+  dataType()
+  methodName()
+  {
+    comp.curLevel = "METHOD";
+    comp.curMethodEl.setType(comp.curType);
+    if (comp.erroneousQualifierList) {
+	comp.erroneousUnit=true;
+	comp.qualifiers = new Vector();
+	comp.reportError("ERR_SEM", "ERR_QUALIFIER_LIST_STR", 1,
+			 comp.curMethodEl.getName());
+    } else
+	comp.assignMethodQualifiers();
+  }
+}
+
+void methodBody() throws CIMException : 
+{}
+{
+  LOOKAHEAD(2)
+  <OPEN_BRA>
+  methodParameterList()
+  <CLOSE_BRA>
+  {
+    comp.assignMethodParameters();
+  }
+| <OPEN_BRA>
+  <CLOSE_BRA>
+}
+
+void methodTail() :
+{}
+{
+  <SEMICOLON>
+  {
+    comp.addMethod();
+    //comp.curLevel="";
+    comp.erroneousPart=false;
+  }
+}
+
+void methodName() throws CIMException : 
+{String s;}
+{
+  s = nameToken()
+  {
+    comp.assignFeatureName(s);
+  }
+}
+
+void methodParameterList() throws CIMException :
+{}
+{
+  parameter()
+  {
+    comp.addParameter();
+  }
+  (
+    <COMMA>
+    parameter()
+    {
+	comp.addParameter();
+    }
+  )*
+}
+
+/*
+// ------------------------------------------------------------------------
+// MethodParameter Declaration
+// (set parameters)
+// (Part)
+// ------------------------------------------------------------------------
+*/
+void parameter() throws CIMException :
+{}
+{
+  parameterHead()
+  [parameterBody()]
+  parameterTail()
+| qualifierList()
+  parameterHead()
+  [parameterBody()]
+  parameterTail()
+}
+
+void parameterHead() throws CIMException :
+{}
+{
+  parameterDataType()
+  parameterName()
+  {
+    comp.curLevel = "PARAMETER";
+    if (comp.erroneousQualifierList) {
+	comp.erroneousUnit=true;
+	comp.qualifiers = new Vector();
+	comp.reportError("ERR_SEM", "ERR_QUALIFIER_LIST_STR", 1, 
+			 comp.curParameterEl.getName());
+    } else
+	comp.assignParameterQualifiers();
+  }
+}
+
+void parameterBody() throws CIMException :
+{}
+{
+  array()
+  {
+    int simpleType = comp.curType.getType();
+    if(simpleType == CIMDataType.REFERENCE) {
+	comp.reportError("ERR_SEM", "ARRAYS_OF_REFERENCES_STR", 1, "");
+    }
+    else {
+	comp.curType = new CIMDataType(CIMDataType.findArrayType(simpleType),
+					comp.size);
+	comp.curParameterEl.setType(comp.curType);
+    }
+  }
+}
+
+void parameterTail() :
+{}
+{
+/* empty */
+  {
+    //comp.curLevel="";
+  }
+}
+
+void parameterDataType() :
+{}
+{
+  dataType()
+  {
+    comp.curParameterEl.setType(comp.curType);
+  }
+| objectRef()
+  {
+    comp.curParameterEl.setType(comp.curType);
+  }
+}
+
+void parameterName() throws CIMException :
+{String s;}
+{
+  s = nameToken()
+  {
+    comp.assignParameterName(s);
+  }
+}
+
+/*
+// ------------------------------------------------------------------------
+// Instance Declaration
+// (set instances)
+// (Unit)
+// ------------------------------------------------------------------------
+*/
+void instanceDeclaration() throws CIMException :
+{}
+{
+  instanceHead()
+  instanceBody()
+  instanceTail()
+}
+
+void instanceHead() throws CIMException :
+{}
+{
+  <INSTANCE>
+  <OF>
+  instanceClassName()
+  [instanceAlias()]
+  {
+    comp.curLevel = "INSTANCE";
+    if (comp.erroneousQualifierList) {
+	comp.erroneousUnit=true;
+	comp.reportError("ERR_SEM", "ERR_QUALIFIER_LIST_STR", 1,
+			 comp.curInstanceEl.getName());
+    } else
+	comp.assignInstanceQualifiers();
+  }
+}
+
+void instanceBody() throws CIMException :
+{}
+{
+  <OPEN_CUR_BRA>
+  instancePropertyList()
+  <CLOSE_CUR_BRA>
+}
+
+void instanceTail() throws CIMException :
+{}
+{
+  <SEMICOLON>
+  {
+    comp.addInstance();
+    //comp.curLevel="";
+    comp.erroneousUnit=false;
+    comp.erroneousPart=false;
+  }
+}
+
+void instanceClassName() :
+{Token t;}
+{
+  t = <IDENTIFIER>
+  {
+    comp.assignInstanceClass(t.image);
+  }
+}
+
+void instanceAlias() :
+{Token t;}
+{
+  <AS>
+  t = <ALIAS_IDENTIFIER>
+  {
+    comp.assignInstanceAlias(t.image);
+  }
+}
+
+void instancePropertyList() throws CIMException :
+{}
+{
+  (instanceProperty())+
+}
+
+void instanceProperty() throws CIMException :
+{}
+{
+  instancePropertyBody()
+| qualifierList()
+  instancePropertyBody()
+}
+
+void instancePropertyBody() throws CIMException :
+{Token t;}
+{
+  t = <IDENTIFIER>
+  {
+    comp.curLevel= "INSTANCEPROPERTY";
+    comp.curIPropertyEl.setName(t.image);
+
+    if(!comp.erroneousUnit) {
+	if (comp.erroneousQualifierList) {
+	    comp.reportError("ERR_SEM", "ERR_QUALIFIER_LIST_STR", 1, 
+			     comp.curPropRefEl.getName());
+	} else
+	    comp.assignInstancePropertyQualifiers();
+    }
+  }
+  <EQUAL>
+  initializer()
+  {
+    comp.addInstanceProperty();
+    comp.erroneousPart=false;
+  }
+  <SEMICOLON>
+}
+
+/*
+// ------------------------------------------------------------------------
+// Data Type Declaration
+// (set size , curType)
+// (Part)
+// ------------------------------------------------------------------------
+*/
+void objectRef() :
+{Token t;}
+{
+  t = <IDENTIFIER>
+  <REF>
+  {
+    comp.curType=new CIMDataType(t.image);
+    comp.size=CIMDataType.SIZE_SINGLE;
+  }
+}
+
+String objectPath() :
+{String s;}
+{
+  s = multiStringValue()
+  {return s;}
+}
+
+void array() : 
+{Token t;}
+{
+  <OPEN_SQU_BRA>
+  {
+    comp.size=CIMDataType.SIZE_UNLIMITED; 
+  }
+  [
+    t = <POS_DECIMAL_VALUE>
+    {
+	comp.size=Integer.parseInt(t.image);
+    }
+  ]
+  <CLOSE_SQU_BRA>
+}
+
+void dataType() :
+{}
+{
+  intDataType()
+| realDataType()
+| <DT_CHAR16>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType= new CIMDataType(CIMDataType.CHAR16);
+  }
+| <DT_STR>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType=new CIMDataType(CIMDataType.STRING);
+  }
+| <DT_BOOL>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType=new CIMDataType(CIMDataType.BOOLEAN);
+  }
+| <DT_DATETIME>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType=new CIMDataType(CIMDataType.DATETIME);
+  }
+}
+
+void intDataType() :
+{}
+{
+  <DT_UINT8>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType=new CIMDataType(CIMDataType.UINT8);
+  }
+| <DT_SINT8>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType=new CIMDataType(CIMDataType.SINT8);
+  }
+| <DT_UINT16>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType=new CIMDataType(CIMDataType.UINT16);
+  }
+| <DT_SINT16>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType=new CIMDataType(CIMDataType.SINT16);
+  }
+| <DT_UINT32>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType=new CIMDataType(CIMDataType.UINT32);
+  }
+| <DT_SINT32>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType=new CIMDataType(CIMDataType.SINT32);
+  }
+| <DT_UINT64>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType=new CIMDataType(CIMDataType.UINT64);
+  }
+| <DT_SINT64>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType=new CIMDataType(CIMDataType.SINT64);
+  }
+}
+
+void realDataType() :
+{}
+{
+  <DT_REAL32>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType=new CIMDataType(CIMDataType.REAL32);
+  }
+| <DT_REAL64>
+  {
+    comp.size=CIMDataType.SIZE_SINGLE;
+    comp.curType=new CIMDataType(CIMDataType.REAL64);
+  }
+}
+
+/*
+// ------------------------------------------------------------------------
+// Default + Initialzer Declaration
+// (set curValues, curValueType)
+// (Part)
+// ------------------------------------------------------------------------
+*/
+void initializer() throws CIMException :
+{}
+{
+  simpleInitializer()
+  {
+    if (!comp.erroneousPart) { 
+	Object o = comp.curValues.vVector.firstElement();
+	comp.curIPropertyEl.setValue(new CIMValue(o));
+    }
+    comp.curValues = new MofcCIMValue();
+  }
+| arrayInitializer()
+  { 
+	if(!comp.erroneousPart) {
+	    Vector v = comp.curValues.vVector;
+	    comp.curIPropertyEl.setValue(new CIMValue(v));
+	}
+    comp.curValues = new MofcCIMValue();
+  }
+}
+
+void arrayInitializer() throws CIMException :
+{}
+{
+  <OPEN_CUR_BRA>
+  simpleInitializerList()
+  <CLOSE_CUR_BRA>
+  {
+    comp.curValues.setIsArrayValue(true);
+  }
+}
+
+void simpleInitializerList() throws CIMException :
+{}
+{
+  simpleInitializer()
+  (
+    <COMMA>
+    simpleInitializer()
+  )*
+}
+
+void simpleInitializer() throws CIMException :
+{}
+{
+  constantValue()
+  {
+    comp.curValues.setIsArrayValue(false);
+    // comp.check_Type_ValueType();
+  }
+}
+
+void constantValue() throws CIMException :
+{String s;
+ Token t;}
+{
+  s = integerValue()
+  {
+    if(s.charAt(0) == '-')
+	comp.curValues.addElement(new Long(s));
+    else
+	comp.curValues.addElement(new UnsignedInt64(s));
+    comp.curValueType="INT";
+  }
+| t = <REAL_VALUE>
+  {
+    comp.curValues.addElement(new Double(t.image));
+    comp.curValueType="REAL";
+  }
+| t = <CHAR_VALUE>
+  {
+    Character ch = new Character(parseCharacter(t.image));
+    comp.curValues.addElement(ch);
+    comp.curValueType="CHAR";
+  }
+| s = multiStringValue()
+  {
+    comp.curValues.addElement(s);
+    comp.curValueType="STRING";
+  }
+| s = booleanValue()
+  {
+    comp.curValues.addElement(new Boolean(s));
+    comp.curValueType="BOOLEAN";
+  }
+| t = <NULL_VALUE>
+  {
+    comp.curValues.addElement(null);
+    comp.curValueType="ANY";
+  }
+// CHANGED Added this to allow initializing references to aliases
+| t = <ALIAS_IDENTIFIER>
+  {
+    comp.curValues.addElement(comp.getInstanceName(t.image));
+    comp.curValueType="ALIAS";
+  }
+}
+
+String integerValue() :
+{Token t;
+ String s;}
+{
+  t = <BINARY_VALUE>
+  {return t.image;}
+| t =<OCTAL_VALUE>
+  {return t.image;}
+| s = decimalValue()
+  {return s;}
+| t = <HEX_VALUE>
+  {return t.image;}
+}
+
+String decimalValue() :
+{Token t;}
+{
+  (
+    t = <POS_DECIMAL_VALUE>
+  | t = <ZERO>
+  | t = <NEG_DECIMAL_VALUE>
+  )
+  {return t.image;}
+}
+
+String multiStringValue() :
+{Token t;
+ String s = "";
+}
+{
+  (
+    t = <STRING_VALUE>
+    {
+	s = s+parseString(t.image);
+     }
+  )+
+  {return s ;}
+}
+
+String booleanValue() :
+{Token t;}
+{
+  (
+    t = <TRUE_VALUE>
+  | t = <FALSE_VALUE>
+  )
+  {return t.image;}
+}

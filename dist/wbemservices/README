@@ -1,0 +1,1274 @@
+Last updated 11/01/04
+
+VERSION 1.0.2
+-------------
+For instructions on how to run and/or build Java WBEM Services, in a
+browser, open doc/Instructions.html
+
+This release has the following notes and warnings:
+- The default MOF version is now 2.8 Final. The 2.6 MOFs are no
+longer copied into the distribution image in the proto directory.
+- You can only use JDK 1.4.2 to build Java WBEM Services
+- The v1.0.2 executables were built using JDK 1.4.2
+
+NEW DIFFERENCES IN VERSION 1.0.2 SINCE VERSION 1.0.1
+---------------------------------------------------- 
+- Fixed interop issue with getInstance for associations - the key 
+fields in the associations were not getting set properly.
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+
+- JAXP changes
+open/java/wbem/javax/wbem/cimxml/NodeTreeWalker.java
+open/org/wbemservices/wbem/cimom/adapters/client/http/BASE64Decoder.java
+open/org/wbemservices/wbem/cimom/adapters/client/http/CEFormatException.java
+open/org/wbemservices/wbem/cimom/adapters/client/http/CEStreamExhausted.java
+open/org/wbemservices/wbem/cimom/adapters/client/http/CIMRequestHandler.java
+open/org/wbemservices/wbem/cimom/adapters/client/http/CharacterDecoder.java
+open/org/wbemservices/wbem/cimom/adapters/client/http/HttpIndicationHandler.java
+open/org/wbemservices/wbem/cimom/adapters/client/http/RequestObj.java
+open/org/wbemservices/wbem/cimom/adapters/client/http/XmlResponder.java
+
+- Method invocation with REF array now works properly
+open/java/wbem/javax/wbem/cimxml/XmlInstance.java
+
+- Fixed NullPtrException when handling client event requests
+open/java/wbem/javax/wbem/client/adapter/http/HttpEventRequestHandler.java
+NEW DIFFERENCES IN VERSION 1.0.1 SINCE VERSION 1.0
+--------------------------------------------------
+- Various Interoperability fixes, a couple of performance improvements.
+- Note: All providers are required to set the namespace information in object
+paths including the CIMInstance/CIMClass.setObjectPath
+open/java/wbem/javax/wbem/cim/CIMNameSpace.java
+open/java/wbem/javax/wbem/client/adapter/http/transport/HttpSettings.java
+open/org/wbemservices/wbem/cimom/adapters/client/http/XmlResponder.java
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+open/java/wbem/javax/wbem/client/adapter/http/HttpEventListener.java
+open/java/wbem/javax/wbem/cimxml/CIMXmlImpl.java
+open/java/wbem/javax/wbem/cimxml/XMLParser.java
+open/java/wbem/javax/wbem/client/CIMClient.java
+
+
+- Fixed problem with CIMWorkshop changing namespaces when connected to pegasus
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/ObjectTreeFrame.java
+
+- Added support for Array of REFs
+- API Support for enumerateInstances working properly (added propogated)
+- other misc fixes
+open/java/wbem/javax/wbem/cim/CIMClass.java
+open/java/wbem/javax/wbem/cim/CIMDataType.java
+open/java/wbem/javax/wbem/cim/CIMInstance.java
+open/java/wbem/javax/wbem/cim/CIMNameSpace.java
+open/java/wbem/javax/wbem/cim/CIMObject.java
+open/java/wbem/javax/wbem/cim/CIMObjectPath.java
+open/java/wbem/javax/wbem/cim/CIMProperty.java
+open/java/wbem/javax/wbem/cim/CIMValue.java
+open/java/wbem/javax/wbem/cim/CloneUtil.java
+open/java/wbem/javax/wbem/cim/MOFFormatter.java
+open/java/wbem/javax/wbem/client/CIMClient.java
+open/java/wbem/javax/wbem/client/CIMClientAPI.java
+open/java/wbem/javax/wbem/client/Debug.java
+open/java/wbem/javax/wbem/query/BinaryRelQueryExp.java
+open/java/wbem/javax/wbem/query/NumericArrayValue.java
+open/java/wbem/javax/wbem/query/SelectList.java
+open/org/wbemservices/wbem/compiler/mofc/CIM_Mofc.java
+open/java/wbem/javax/wbem/cimxml/CIMXml.java
+open/java/wbem/javax/wbem/cimxml/CIMXmlImpl.java
+open/java/wbem/javax/wbem/cimxml/Response.java
+open/java/wbem/javax/wbem/cimxml/XMLParser.java
+open/java/wbem/javax/wbem/cimxml/XmlInstance.java
+
+- Fixed problem that was causing indications to fail.
+open/java/wbem/javax/wbem/client/adapter/http/transport/Header.java
+
+- Fixed cast Exception with Indications
+open/java/wbem/javax/wbem/query/BinaryRelQueryExp.java
+
+- Fix CIMNamespace to use IPAddress not localhost/hostname
+open/java/wbem/javax/wbem/cim/CIMNameSpace.java
+
+- 864831 Foreign language date encoding error in header?
+open/java/wbem/javax/wbem/client/adapter/http/transport/Header.java
+
+- Fix UserAgent to be something useable
+open/java/wbem/javax/wbem/client/adapter/http/transport/HttpClientConnection.java
+
+- Clean up version file. Allow companies to put own information 
+open/java/wbem/javax/wbem/client/Version.orig
+
+- Fix nullptr ssignment with instances
+open/org/wbemservices/wbem/cimom/CIMOMImpl.java
+
+- 928973 - CIMArgument.setType does not match comments
+open/java/wbem/javax/wbem/cim/CIMArgument.java
+
+- 962608 - getClass doesn"t set isAssociation
+- getClass doesn"t set isIndication
+open/java/wbem/javax/wbem/cimxml/XMLParser.java
+
+- MOFFormatter now produces compileable classes/instances
+open/java/wbem/javax/wbem/cim/CIMNameSpace.java
+open/java/wbem/javax/wbem/cim/MOFFormatter.java
+
+- 945519: getInstance ignoring arguments
+open/org/wbemservices/wbem/cimom/CIMOMImpl.java
+
+- Fix HEX Values for MOF Files
+- Unicode issues with Simplified Chinese
+open/org/wbemservices/wbem/compiler/prep/CIM_Prep.java
+open/org/wbemservices/wbem/compiler/mofc/CIM_Mofc.java
+
+- The CIM Ops spec allows the IPARAM to not exist for optional parameters.
+For null prameters the IPARAMVALUE must exist, but no subelement is required.
+open/org/wbemservices/wbem/cimom/adapters/client/http/XmlResponder.java
+
+- (cimworkshop) Remove println debug statement
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/ObjectTreeFrame.java
+
+- Pegasus can not handle DTD support for 2.1, so we will revert to 2.0,
+since there are no real advantages for changing to 2.1 other than correctness.
+open/java/wbem/javax/wbem/cimxml/XmlInstance.java
+
+- (cimworkshop) fixed problem setting values to qualifiers.  CIMDataType was not set correctly
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CIMElementsTable.java
+
+-  Make sure that datetime values are not quoted for XML representation, but are for MOF
+representation
+open/java/wbem/javax/wbem/cim/CIMDateTime.java
+
+- (cimworkshop) Changed default value on Host URL from http to https
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CWSLoginDialog.java
+
+- Even though its not required, set the value to make some of the other servers happy
+open/java/wbem/javax/wbem/cimxml/XmlInstance.java
+
+- (cimworkshop) modified login dialog to be able to specify interop namespace.
+- (cimworkshop) modifed to use CIM_Namespace or __namespace to manage namespaces
+open/sdk/apps/org/wbemservices/wbem/apps/common/CIMClientObject.java
+open/sdk/apps/org/wbemservices/wbem/apps/common/LoginDialog.java
+open/sdk/apps/org/wbemservices/wbem/apps/common/NameSpaceDialog.java
+open/sdk/apps/org/wbemservices/wbem/apps/common/CWS.properties
+open/sdk/apps/org/wbemservices/wbem/apps/common/common.properties
+open/sdk/apps/org/wbemservices/wbem/apps/help/cimworkshop/locale/C/login_010.htm
+(new) open/sdk/apps/org/wbemservices/wbem/apps/help/cimworkshop/locale/C/login_060.htm
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CIMWorkshop.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CWSLoginDialog.java
+
+- Fix datatype setting for source instance.
+open/org/wbemservices/wbem/repository/EventHelper.java
+
+- Fix default for qualifer
+open/java/wbem/javax/wbem/cimxml/XmlInstance.java
+
+- changed copyright character in header so it would compile in certain Linux platforms
+open/java/wbem/javax/wbem/client/*.java
+open/java/wbem/javax/wbem/security/*.java
+open/java/wbem/javax/wbem/query/*.java
+open/java/wbem/javax/wbem/provider/*.java
+open/java/wbem/javax/wbem/cimxml/*.java
+open/java/wbem/javax/wbem/cim/*.java
+open/java/wbem/javax/wbem/client/adapter/http/*.java
+open/java/wbem/javax/wbem/client/adapter/http/transport/*.java
+
+- misc fixes
+open/org/wbemservices/wbem/cimom/adapters/client/rmi/CIMOMRMIImpl.java
+open/java/wbem/javax/wbem/client/adapter/http/transport/ServerInfo.java
+open/java/wbem/javax/wbem/client/adapter/http/HttpEventListener.java
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+open/org/wbemservices/wbem/client/adapter/rmi/RMIJavaxClient.java
+open/org/wbemservices/wbem/client/adapter/rmi/CIMClientRMI.java
+
+--
+- (cimworkshop) fixed problem setting values to qualifiers
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CIMElementsTable.java
+
+- The XML encoding of a DateTime property is now correct. Previously, 
+it incorrectly included quotes.
+- Previously, a quoted datetime value caused an IllegalArgumentException.
+This has been fixed.
+- 1006100: CIMDateTime mishandles milliseconds
+open/java/wbem/javax/wbem/cim/CIMDateTime.java
+
+- Fix Host information in parse option
+open/java/wbem/javax/wbem/cim/CIMObjectPath.java
+
+- Support for array of REFs for Method Parameters.
+open/java/wbem/javax/wbem/cim/CIMDataType.java
+
+- Associations not setting VALUETYPE correctly for older servers that do not
+support TYPE attribute on KEYVALUE
+- EnumerateInstances does not return complete KEYVALUE when propertyLIst does not
+include all the keys
+open/java/wbem/javax/wbem/cim/CIMClass.java
+open/java/wbem/javax/wbem/cim/CIMObject.java
+open/java/wbem/javax/wbem/cim/MOFFormatter.java
+open/java/wbem/javax/wbem/cim/CIMObjectPath.java
+open/java/wbem/javax/wbem/cimxml/XMLParser.java
+open/java/wbem/javax/wbem/cimxml/XmlInstance.java
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+
+- Disable chunking for now
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+
+- Fix Host to not default on client side when not specefied
+open/java/wbem/javax/wbem/cimxml/XmlInstance.java
+
+NEW DIFFERENCES IN VERSION 1.0 SINCE VERSION 0.97
+--------------------------------------------------
+881900: bad object path from Associators() with IncludeQualifier off
+open\java\wbem\javax\wbem\cim\CIMObjectPath.java
+open\java\wbem\javax\wbem\cimxml\Response.java
+open\java\wbem\javax\wbem\cimxml\XMLParser.java
+
+848422: Make CIMElement abstract
+open\java\wbem\javax\wbem\cim\CIMElement.java
+open\java\wbem\javax\wbem\cimxml\CIMXmlImpl.java
+open\org\wbemservices\wbem\compiler\mofc\MofcBackend.java
+
+877741: Restore the returntype on localElements and filterProperties
+open\java\wbem\javax\wbem\cim\CIMClass.java
+open\java\wbem\javax\wbem\cim\CIMInstance.java
+open\java\wbem\javax\wbem\cim\CIMObject.java
+open\org\wbemservices\wbem\cimom\CIMOMImpl.java
+open\org\wbemservices\wbem\cimom\CIMOMProvider.java
+open\org\wbemservices\wbem\cimom\EventService.java
+open\org\wbemservices\wbem\cimom\NamespaceProvider.java
+open\org\wbemservices\wbem\cimom\OneToManyAssocProvider.java
+open\org\wbemservices\wbem\cimom\ProviderClient.java
+open\sdk\examples\client\event\Class_E_Provider.java
+open\sdk\examples\client\instance\Class_A1_Provider.java
+open\sdk\examples\client\instance\Class_B2_Provider.java
+open\sdk\examples\client\instance\Class_C2_Provider.java
+open\sdk\examples\client\instance\Class_D2_Provider.java
+open\sdk\examples\client\instance\Class_E3_Provider.java
+open\sdk\examples\client\property\Class_P_Provider.java
+open\sdk\examples\client\query\Class_Q_Provider.java
+open\sdk\examples\client\query\Class_R_Provider.java
+open\sdk\examples\provider\sfl\SFLProvider.java
+open\sdk\examples\provider\sip\SimpleInstanceProvider.java
+open\sdk\examples\provider\tsa\TeacherStudent.java
+
+588197: Change default protocol for example programs to be HTTP from RMI
+open/sdk/examples/scripts/*.sh
+open/sdk/examples/client/batching/TestBatch.java
+open/sdk/examples/client/class/AssociatorNames.java
+open/sdk/examples/client/class/Associators.java
+open/sdk/examples/client/class/CreateClass.java
+open/sdk/examples/client/class/DeleteClass.java
+open/sdk/examples/client/class/EnumerateClassNames.java
+open/sdk/examples/client/class/EnumerateClasses.java
+open/sdk/examples/client/class/GetClass.java
+open/sdk/examples/client/class/ReferenceNames.java
+open/sdk/examples/client/class/References.java
+open/sdk/examples/client/class/SetClass.java
+open/sdk/examples/client/class/TestEnumerateClasses.java
+open/sdk/examples/client/connect/ClientConnect.java
+open/sdk/examples/client/enumeration/ClientEnum.java
+open/sdk/examples/client/event/AddCIMListener.java
+open/sdk/examples/client/instance/CreateInstance.java
+open/sdk/examples/client/instance/DeleteInstance.java
+open/sdk/examples/client/instance/DeleteInstances.java
+open/sdk/examples/client/instance/EnumerateInstanceNames.java
+open/sdk/examples/client/instance/EnumerateInstances.java
+open/sdk/examples/client/instance/GetInstance.java
+open/sdk/examples/client/instance/SetInstance.java
+open/sdk/examples/client/method/InvokeCIMMethod.java
+open/sdk/examples/client/namespace/CreateNameSpace.java
+open/sdk/examples/client/namespace/DeleteNameSpace.java
+open/sdk/examples/client/namespace/TestCreateNameSpace.java
+open/sdk/examples/client/namespace/TestDeleteNameSpace.java
+open/sdk/examples/client/namespace/TestEnumNameSpace.java
+open/sdk/examples/client/property/GetProperty.java
+open/sdk/examples/client/property/SetProperty.java
+open/sdk/examples/client/qualifier/CreateQualifierType.java
+open/sdk/examples/client/qualifier/DeleteQualifierType.java
+open/sdk/examples/client/qualifier/EnumQualifierType.java
+open/sdk/examples/client/qualifier/GetQualifierType.java
+open/sdk/examples/client/qualifier/SetQualifierType.java
+open/sdk/examples/client/query/ExampleQuery.java
+open/sdk/examples/client/query/TestExecQuery.java
+open/sdk/examples/client/query/TestQuery.java
+open/sdk/examples/client/verify/EnumClasses.java
+open/sdk/examples/client/verify/SimpleGetClass.java
+
+864489: Strings are immutable, treat them as such
+open/java/wbem/javax/wbem/cimxml/CIMXmlImpl.java
+open/java/wbem/javax/wbem/cimxml/XmlElement.java
+open/java/wbem/javax/wbem/cimxml/XMLParser.java
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+open/java/wbem/javax/wbem/query/SelectList.java
+open/java/wbem/javax/wbem/security/ClientSecurity.java
+open/java/wbem/javax/wbem/security/SecurityToken.java
+open/java/wbem/javax/wbem/security/SecurityUtil.java
+open/java/wbem/javax/wbem/security/UnsecurePswdEncryptionProvider.java
+open/org/wbemservices/wbem/bootstrap/StartWBEMServices.java
+open/org/wbemservices/wbem/cimom/CIMOMImpl.java
+open/org/wbemservices/wbem/cimom/CIMOMUtil.java
+open/org/wbemservices/wbem/cimom/CIMOMVersion.java
+open/org/wbemservices/wbem/cimom/EventService.java
+open/org/wbemservices/wbem/cimom/IPHandleImpl.java
+open/org/wbemservices/wbem/cimom/ServerSecurity.java
+open/org/wbemservices/wbem/cimom/adapters/client/http/HttpService.java
+open/org/wbemservices/wbem/compiler/mofc/BeanArgReader.java
+open/org/wbemservices/wbem/compiler/mofc/BeanGenerator.java
+open/org/wbemservices/wbem/compiler/mofc/CIM_Mofc.java
+open/org/wbemservices/wbem/compiler/mofc/CIM_Mofc.jj
+open/org/wbemservices/wbem/compiler/mofc/LogFile.java
+open/org/wbemservices/wbem/compiler/mofc/MofcBackend.java
+sdk/apps/org/wbemservices/wbem/apps/cimworkshop/DateTimeDialog.java
+sdk/apps/org/wbemservices/wbem/apps/cimworkshop/InvokeMethodDialog.java
+sdk/apps/org/wbemservices/wbem/apps/common/ActionString.java
+sdk/example/client/class/GetClass.java
+sdk/example/client/event/AddCIMListener.java
+sdk/example/client/event/Class_E_Provider.java
+sdk/example/client/instance/Class_A1_Provider.java
+sdk/example/client/instance/Class_B2_Provider.java
+sdk/example/client/instance/Class_C2_Provider.java
+sdk/example/client/instance/Class_D2_Provider.java
+sdk/example/client/instance/Class_E3_Provider.java
+sdk/example/client/method/Class_M_Provider.java
+sdk/example/client/method/Class_N_Provider.java
+sdk/example/client/method/InvokeCIMMethod.java
+sdk/example/client/property/Class_P_Provider.java
+sdk/example/client/qualifier/SetQualifierType.java
+sdk/example/client/query/Class_Q_Provider.java
+sdk/example/client/query/Class_R_Provider.java
+
+864495: Make mof2java return a non zero value on errors
+open\initwb\mof2java.java
+
+864483: Document build targets in build.xml
+open\build.xml
+
+864120: More Javadoc cleanup
+
+848421: Change CIMElement class hierarchy
+open\java\wbem\javax\wbem\cim\CIMArgument.java
+open\java\wbem\javax\wbem\cim\CIMClass.java
+open\java\wbem\javax\wbem\cim\CIMElement.java
+open\java\wbem\javax\wbem\cim\CIMInstance.java
+open\java\wbem\javax\wbem\cim\CIMMethod.java
++open\java\wbem\javax\wbem\cim\CIMObject.java
+open\java\wbem\javax\wbem\cim\CIMParameter.java
+open\java\wbem\javax\wbem\cim\CIMProperty.java
++open\java\wbem\javax\wbem\cim\CIMQualifiedElement.java
+open\java\wbem\javax\wbem\cim\CIMQualifier.java
+open\java\wbem\javax\wbem\cim\CIMQualifierType.java
+open\java\wbem\javax\wbem\cim\CloneUtil.java
+open\java\wbem\javax\wbem\cim\MOFFormatter.java
+open\org\wbemservices\wbem\cimom\CIMOMImpl.java
+open\org\wbemservices\wbem\cimom\CIMOMProvider.java
+open\org\wbemservices\wbem\cimom\EventService.java
+open\org\wbemservices\wbem\cimom\NamespaceProvider.java
+open\org\wbemservices\wbem\cimom\OneToManyAssocProvider.java
+open\org\wbemservices\wbem\cimom\ProviderClient.java
+open\org\wbemservices\wbem\util\InvokeMethodArgumentConverter.java
+open\sdk\examples\client\event\Class_E_Provider.java
+open\sdk\examples\client\instance\Class_A1_Provider.java
+open\sdk\examples\client\instance\Class_B2_Provider.java
+open\sdk\examples\client\instance\Class_C2_Provider.java
+open\sdk\examples\client\instance\Class_D2_Provider.java
+open\sdk\examples\client\instance\Class_E3_Provider.java
+open\sdk\examples\client\property\Class_P_Provider.java
+open\sdk\examples\client\query\Class_Q_Provider.java
+open\sdk\examples\client\query\Class_R_Provider.java
+open\sdk\examples\provider\sfl\SFLProvider.java
+open\sdk\examples\provider\sip\SimpleInstanceProvider.java
+open\sdk\examples\provider\tsa\TeacherStudent.java
+
+860689: Win32Mof2html.html has a mistake
+open\doc\Win32Mof2html.html
+
+849785: Refactor CIMOperations into a set of subclasses
+open\java\wbem\javax\wbem\client\CIMAssociatorNamesOp.java
+open\java\wbem\javax\wbem\client\CIMAssociatorsOp.java
+open\java\wbem\javax\wbem\client\CIMCreateClassOp.java
+open\java\wbem\javax\wbem\client\CIMCreateInstanceOp.java
+open\java\wbem\javax\wbem\client\CIMCreateQualifierTypeOp.java
+open\java\wbem\javax\wbem\client\CIMDeleteClassOp.java
+open\java\wbem\javax\wbem\client\CIMDeleteInstanceOp.java
+open\java\wbem\javax\wbem\client\CIMDeleteQualiferTypeOp.java
++open\java\wbem\javax\wbem\client\CIMElementOp.java
+open\java\wbem\javax\wbem\client\CIMEnumClassNamesOp.java
+open\java\wbem\javax\wbem\client\CIMEnumClassOp.java
+open\java\wbem\javax\wbem\client\CIMEnumElementOp.java
+open\java\wbem\javax\wbem\client\CIMEnumInstanceNamesOp.java
+open\java\wbem\javax\wbem\client\CIMEnumInstancesOp.java
+open\java\wbem\javax\wbem\client\CIMEnumNameSpaceOp.java
+open\java\wbem\javax\wbem\client\CIMEnumQualifierTypesOp.java
+open\java\wbem\javax\wbem\client\CIMExecQueryOp.java
+open\java\wbem\javax\wbem\client\CIMGetClassOp.java
+open\java\wbem\javax\wbem\client\CIMGetInstanceOp.java
++open\java\wbem\javax\wbem\client\CIMGetObjectOp.java
+open\java\wbem\javax\wbem\client\CIMGetPropertyOp.java
+open\java\wbem\javax\wbem\client\CIMGetQualifierTypeOp.java
+open\java\wbem\javax\wbem\client\CIMInvokeArgsMethodOp.java
++open\java\wbem\javax\wbem\client\CIMObjectOp.java
++open\java\wbem\javax\wbem\client\CIMQualfiedPropertiedElementOp.java
+open\java\wbem\javax\wbem\client\CIMReferenceNamesOp.java
+open\java\wbem\javax\wbem\client\CIMReferencesOp.java
+open\java\wbem\javax\wbem\client\CIMSetClassOp.java
+open\java\wbem\javax\wbem\client\CIMSetInstanceOp.java
+open\java\wbem\javax\wbem\client\CIMSetPropertyOp.java
+open\java\wbem\javax\wbem\client\CIMSetQualifierTypeOp.java
+-open\java\wbem\javax\wbem\client\EnumerableInstancesOp.java
+-open\java\wbem\javax\wbem\client\EnumerableNamesOp.java
++open\java\wbem\javax\wbem\client\EnumerableOp.java
+
+849782: Cleanup in javax.wbem.security
+open\java\wbem\javax\wbem\client\ClientProperties.java
+open\java\wbem\javax\wbem\security\BasicClientSecurity.java
+open\java\wbem\javax\wbem\security\ClientSecurity.java
+open\java\wbem\javax\wbem\security\ClientSecurityFactory.java
+open\java\wbem\javax\wbem\security\DigestClientSecurity.java
+open\java\wbem\javax\wbem\security\SecurityUtil.java
+open\java\wbem\javax\wbem\security\SunDigestClientSecurity.java
+
+849395: Javadoc cleanup in client api
+initwb\CIMOMMofReg.java
+initwb\mof2java.java
+open\java\wbem\javax\wbem\cim\CIMClass.java
+open\java\wbem\javax\wbem\cim\CIMDataType.java
+open\java\wbem\javax\wbem\cim\CIMDateTime.java
+open\java\wbem\javax\wbem\cim\CIMException.java
+open\java\wbem\javax\wbem\cim\CIMFlavor.java
+open\java\wbem\javax\wbem\cim\CIMInstance.java
+open\java\wbem\javax\wbem\cim\CIMNameSpace.java
+open\java\wbem\javax\wbem\cim\CIMProperty.java
+open\java\wbem\javax\wbem\cim\CIMSemanticException.java
+open\java\wbem\javax\wbem\cim\CIMValue.java
+open\java\wbem\javax\wbem\cim\StringUtil.java
+open\java\wbem\javax\wbem\cim\UnsignedInt.java
+open\java\wbem\javax\wbem\cim\UnsignedInt8.java
+open\java\wbem\javax\wbem\cim\UnsignedInt16.java
+open\java\wbem\javax\wbem\cim\UnsignedInt32.java
+open\java\wbem\javax\wbem\cim\UnsignedInt64.java
+open\java\wbem\javax\wbem\client\BatchCIMClient.java
+open\java\wbem\javax\wbem\client\CIMClient.java
+open\java\wbem\javax\wbem\client\CIMClientAPI.java
+open\java\wbem\javax\wbem\client\CIMClientFactory.java
+open\java\wbem\javax\wbem\client\CIMListener.java
+open\java\wbem\javax\wbem\client\CIMOMHandle.java
+open\java\wbem\javax\wbem\client\PasswordCredential.java
+open\java\wbem\javax\wbem\provider\CIMAssociationProvider.java
+open\java\wbem\javax\wbem\provider\CIMIndicationProvider.java
+open\java\wbem\javax\wbem\provider\CIMInstanceProvider.java
+open\java\wbem\javax\wbem\provider\CIMMethodProvider.java
+open\java\wbem\javax\wbem\provider\CIMProvider.java
+open\java\wbem\javax\wbem\provider\EventProvider.java
+
+848418: Add a base class for UnsignedInt classes
+open\java\wbem\javax\wbem\cim\UnsignedInt
+open\java\wbem\javax\wbem\cim\UnsignedInt8
+open\java\wbem\javax\wbem\cim\UnsignedInt16
+open\java\wbem\javax\wbem\cim\UnsignedInt32
+open\java\wbem\javax\wbem\cim\UnsignedInt64
+
+NEW DIFFERENCES IN VERSION 0.97 SINCE VERSION 0.96
+--------------------------------------------------
+845916: Can't create qualifiers with array values over XML
+open\java\wbem\javax\wbem\cimxml\CIMXmlImpl.java
+
+
+844158: Deprecations from the 11/6/03 JSR48 meeting
+open\java\wbem\javax\wbem\cim\CIMElement.java
+open\java\wbem\javax\wbem\cim\CIMInstance.java
+open\java\wbem\javax\wbem\cim\CIMNameSpace.java
+open\java\wbem\javax\wbem\cim\CIMValue.java
+open\java\wbem\javax\wbem\cimxml\CIMXml.java
+open\java\wbem\javax\wbem\cimxml\CIMXmlImpl.java
+open\java\wbem\javax\wbem\cimxml\Response.java
++open\java\wbem\javax\wbem\cimxml\XmlResponse.java
+-open\java\wbem\javax\wbem\cimxml\XmlResponseIF.java
+open\org\wbemservices\wbem\cimom\adapters\client\http\XmlResponder.java
+
+844171: CIMArgument clone() method doesn't handle qualifiers correct
+open\java\wbem\javax\wbem\cim\CIMArgument.java
+
+845517: mofTree target doesn't work with a clean build tree
+open\build.xml
+
+844147: Cleanup CIMClientRMI
+open\org\wbemservices\wbem\client\adapter\rmi\CIMClientRMI.java
+
+844144: verify_cimom needs to take a user and password
+initwb\verify_cimom.bat
+initwb\verify_cimom.sh
+sdk\examples\client\verify\EnumClasses.java
+sdk\examples\client\verify\SimpleGetClass.java
+
+843929: NPE in CIMClass setProperties and setMethods
+open\java\wbem\javax\wbem\cim\CIMClass.java
+
+843863: Cleanup CIMVersion
+open\java\wbem\javax\wbem\cim\CIMVersion.java
+
+843857: Cleanup CIMClientXML constructor
+open\java\wbem\javax\wbem\client\adapter\http\CIMClientXML.java
+
+840845: Cleanup unused variables, deadcode, unnecessary casts
+initwb\mof2java.java
+open\java\wbem\javax\wbem\cim\CIMDateTime.java
+open\java\wbem\javax\wbem\cim\CIMNameSpace.java
+open\java\wbem\javax\wbem\cim\CIMProperty.java
+open\java\wbem\javax\wbem\cim\MOFFormatter.java
+open\java\wbem\javax\wbem\cimxml\CIMXmlImpl.java
+open\java\wbem\javax\wbem\cimxml\XmlInstance.java
+open\java\wbem\javax\wbem\cimxml\XMLParser.java
+open\java\wbem\javax\wbem\client\adapter\http\CIMClientXML.java
+open\java\wbem\javax\wbem\client\adapter\http\XmlRpcClient.java
+open\java\wbem\javax\wbem\client\adapter\http\transport\HttpClientConnection.java
++open\java\wbem\javax\wbem\client\adapter\http\transport\HttpConnection.java
+open\java\wbem\javax\wbem\client\adapter\http\transport\HttpServerConnection.java
+open\java\wbem\javax\wbem\client\adapter\http\transport\HttpServerEndpoint.java
+open\java\wbem\javax\wbem\client\adapter\http\transport\ThreadPool.java
+open\java\wbem\javax\wbem\client\CIMAsociatorNamesOp.java
+open\java\wbem\javax\wbem\client\CIMAssociatorsOp.java
+open\java\wbem\javax\wbem\client\CIMCreateInstanceOp.java
+open\java\wbem\javax\wbem\client\CIMEnumClassNamesOp.java
+open\java\wbem\javax\wbem\client\CIMEnumClassOp.java
+open\java\wbem\javax\wbem\client\CIMEnumInstanceNamesOp.java
+open\java\wbem\javax\wbem\client\CIMEnumInstancesOp.java
+open\java\wbem\javax\wbem\client\CIMEnumNameSpaceOp.java
+open\java\wbem\javax\wbem\client\CIMEnumQualifierTypesOp.java
+open\java\wbem\javax\wbem\client\CIMExecQueryOp.java
+open\java\wbem\javax\wbem\client\CIMReferenceNamesOp.java
+open\java\wbem\javax\wbem\client\CIMReferencesOp.java
+open\java\wbem\javax\wbem\client\Version.orig
+open\java\wbem\javax\wbem\client\PasswordCredential.java
+open\java\wbem\javax\wbem\client\UserPrincipal.java
+open\java\wbem\javax\wbem\query\BinaryRelQueryExp.java
+open\java\wbem\javax\wbem\query\Canonize.java
+open\java\wbem\javax\wbem\query\NumericValue.java
+open\java\wbem\javax\wbem\security\BasicClientSecurity.java
+open\java\wbem\javax\wbem\security\DigestClientSecurity.java
+open\java\wbem\javax\wbem\security\SunDigestClientSecurity.java
+open\org\wbemservices\wbem\cimom\AssociatorNamesOperation.java
+open\org\wbemservices\wbem\cimom\CreateClassOperation.java
+open\org\wbemservices\wbem\cimom\CreateInstanceOperation.java
+open\org\wbemservices\wbem\cimom\CreateNameSpaceOperation.java
+open\org\wbemservices\wbem\cimom\CreateQualifierTypeOperation.java
+open\org\wbemservices\wbem\cimom\DeleteClassOperation.java
+open\org\wbemservices\wbem\cimom\DeleteInstanceOperation.java
+open\org\wbemservices\wbem\cimom\DeleteNameSpaceOperation.java
+open\org\wbemservices\wbem\cimom\DeleteQualifierTypeOperation.java
+open\org\wbemservices\wbem\cimom\EnumClassNamesOperation.java
+open\org\wbemservices\wbem\cimom\EnumClassOperation.java
+open\org\wbemservices\wbem\cimom\EnumInstanceNamesOperation.java
+open\org\wbemservices\wbem\cimom\EnumInstancesOperation.java
+open\org\wbemservices\wbem\cimom\EnumNameSpaceOperation.java
+open\org\wbemservices\wbem\cimom\GetClassOperation.java
+open\org\wbemservices\wbem\cimom\GetInstanceOperation.java
+open\org\wbemservices\wbem\cimom\GetPropertyOperation.java
+open\org\wbemservices\wbem\cimom\GetQualifierTypeOperation.java
+open\org\wbemservices\wbem\cimom\Version.orig
+open\org\wbemservices\wbem\cimom\CIMOMImpl.java
+open\org\wbemservices\wbem\cimom\CIMOMProvider.java
+open\org\wbemservices\wbem\cimom\ClassChecker.java
+open\org\wbemservices\wbem\cimom\EventService.java
+open\org\wbemservices\wbem\cimom\FilterActivation.java
+open\org\wbemservices\wbem\cimom\I18N.java
+open\org\wbemservices\wbem\cimom\InternalProviderAdapter.java
+open\org\wbemservices\wbem\cimom\LogFile.java
+open\org\wbemservices\wbem\cimom\MethodChecker.java
+open\org\wbemservices\wbem\cimom\Mofregistry.java
+open\org\wbemservices\wbem\cimom\PropertyChecker.java
+open\org\wbemservices\wbem\cimom\ProviderClient.java
+open\org\wbemservices\wbem\cimom\ServerSecurity.java
+open\org\wbemservices\wbem\cimom\TaskManager.java
+open\org\wbemservices\wbem\cimom\adapters\client\http\CEStreamExhausted.java
+open\org\wbemservices\wbem\cimom\adapters\client\http\XmlResponder.java
+open\org\wbemservices\wbem\cimom\adapters\client\rmi\CIMOMRMIImpl.java
+open\org\wbemservices\wbem\client\SolarisDigestClientSecurity.java
+open\org\wbemservices\wbem\client\WorkMod51.java
+open\org\wbemservices\wbem\client\adapters\rmi\CheckSumGen.java
+open\org\wbemservices\wbem\compiler\mofc\BeanClassWriter.java
+open\org\wbemservices\wbem\compiler\mofc\BeanGenerator.java
+open\org\wbemservices\wbem\compiler\mofc\BeanInterfaceWriter.java
+open\org\wbemservices\wbem\compiler\mofc\CIM_MofcTokenManager.java
+open\org\wbemservices\wbem\compiler\mofc\I18N.java
+open\org\wbemservices\wbem\compiler\mofc\Version.orig
+open\org\wbemservices\wbem\compiler\prep\CIM_PrepTokenManager.java
+open\org\wbemservices\wbem\repository\CIMAssocInstanceRlogEntry.java
+open\org\wbemservices\wbem\repository\PersistentStore.java
+open\org\wbemservices\wbem\repository\PSRlogImpl.java
+open\sdk\apps\org\wbemservices\wbem\apps\cimworkshop\AddClassDialog.java
+open\sdk\apps\org\wbemservices\wbem\apps\cimworkshop\CIMMethodsPanel.java
+open\sdk\apps\org\wbemservices\wbem\apps\cimworkshop\CIMQualifiersPanel.java
+open\sdk\apps\org\wbemservices\wbem\apps\cimworkshop\CreateInstanceDialog.java
+open\sdk\apps\org\wbemservices\wbem\apps\cimworkshop\DateTimeDialog.java
+open\sdk\apps\org\wbemservices\wbem\apps\cimworkshop\InstanceFrame.java
+open\sdk\apps\org\wbemservices\wbem\apps\cimworkshop\IntegerFieldDialog.java
+open\sdk\apps\org\wbemservices\wbem\apps\cimworkshop\InvokeMethodDialog.java
+open\sdk\apps\org\wbemservices\wbem\apps\cimworkshop\ObjectTreeFrame.java
+open\sdk\apps\org\wbemservices\wbem\apps\cimworkshop\QueryActionPanel.java
+open\sdk\apps\org\wbemservices\wbem\apps\cimworkshop\QueryFrame.java
+open\sdk\apps\org\wbemservices\wbem\apps\cimworkshop\Version.orig
+open\sdk\apps\org\wbemservices\wbem\apps\common\AdminDialog.java
+open\sdk\apps\org\wbemservices\wbem\apps\common\DefaultProperties.java
+open\sdk\apps\org\wbemservices\wbem\apps\common\GenInfoPanel.java
+open\sdk\apps\org\wbemservices\wbem\apps\common\JSpinBox.java
+open\sdk\apps\org\wbemservices\wbem\apps\common\LoginDialog.java
+open\sdk\apps\org\wbemservices\wbem\apps\common\TwoStateButton.java
+open\sdk\examples\client\batching\TestBatch.java
+open\sdk\examples\client\event\AddCIMListener.java
+open\sdk\examples\client\event\Class_E_Provider.java
+open\sdk\examples\client\instance\DeleteInstance.java
+open\sdk\examples\client\method\Class_M_Provider.java
+open\sdk\examples\client\method\InvokeCIMMethod.java
+open\sdk\examples\client\qualifier\DeleteQualifierType.java
+open\sdk\examples\client\qualifier\GetQualifierType.java
+open\sdk\examples\client\query\ExampleQuery.java
+open\sdk\examples\client\query\TestQuery.java
+open\sdk\examples\provider\sfl\SFLProvider.java
+
+
+840834: Fix header comment
+open\org\wbemservices\wbem\bootstrap\StartWBEMServices.java
+open\org\wbemservices\wbem\cimom\IndicationRequestCollator.java
+open\org\wbemservices\wbem\cimom\InvokeArgsMethodOperation.java
+open\org\wbemservices\wbem\client\adapter\rmi\RMIJavaxClient.java
+open\org\wbemservices\wbem\util\InvokeMethodArgumentConverter.java
+
+833731: Cleanup example duplication
+open/sdk/examples/scripts/run_examples.bat
+open/sdk/examples/scripts/run_tests.bat
+open/sdk/examples/scripts/test_assoc_class.bat
+open/sdk/examples/scripts/test_base_class.bat
+open/sdk/examples/scripts/test_connect.bat
+open/sdk/examples/scripts/test_lifecycle_event.bat
+open/sdk/examples/scripts/test_lifecycle_listener.bat
+open/sdk/examples/scripts/test_method.bat
+open/sdk/examples/scripts/test_namespace.bat
+open/sdk/examples/scripts/test_property.bat
+open/sdk/examples/scripts/test_qualifier.bat
+open/sdk/examples/scripts/test_query.bat
+-open/sdk/examples/verify/GetClass.java
++open/sdk/examples/verify/SimpleGetClass.java
+-open/sdk/examples/qualifier/CreateQualifierType.java
+-open/sdk/examples/misc/CreateQualifierTYpe.java
+-open/sdk/examples/misc/DeleteClass.java
+-open/sdk/examples/misc/DeleteInstances.java
++open/sdk/examples/instance/DeleteInstances.java
+-open/sdk/examples/instance/TestAssoc.mof
+-open/sdk/examples/instance/TesClass.mof
+open/sdk/examples/class/TestClass.mof
+
+
+833734: Remove odd finally block from EventService class
+open/org/wbemservices/wbem/cimom/EventService.java
+
+831491: mof2bean generates bad code
+open/org/wbemservices/wbem/compiler/mofc/BeanClassWriter.java
+
+819561: Cleanup and improve performance of MOFFormatter
+open/java/wbem/javax/wbem/cim/MOFFormatter.java
+
+827812: Cleanup XSL for a small HTML correctness error
+open/initwb/multiclass.xsl
+
+819398: Move toMof() for CIMArgument to MOFFormatter
+open/java/wbem/javax/wbem/cim/CIMArgument.java
+open/java/wbem/javax/wbem/cim/MOFFormatter.java
+
+818226: RowLayout constructor has an assignment that has no effect
+open/sdk/apps/org.wbemservices/wbem/apps/common/RowLayout.java
+
+817395: Add new getKey() method to CIMObjectPath
+open/java/wbem/javax/wbem/cim/CIMObjectPath.java
+
+816619: Batch operations do not handle absolute objectpaths properly
+open/java/wbem/javax/wbem/client/CIMClient.java
+open/java/wbem/javax/wbem/client/CIMOperation.java
+open/java/wbem/javax/wbem/client/BatchCIMClient.java
+
+815178: Namespace repeatedly prepended to objectpath
+open/java/wbem/javax/wbem/client/CIMClient.java
+
+804733: Improve the error message from HttpClientConnection
+open/java/wbem/javax/wbem/client/adapter/http/transport/HttpClientConnection.java
+
+Misc:
+Cleanup build scripts
+Removed unneeded import statements in numerous files
+Fixed/added document generation scripts to use CIM Schema 2.8.
+Modified scripts to not reference parser.jar
+
+
+NEW DIFFERENCES IN VERSION 0.96 FROM VERSION 0.95c
+- 803856: Cleanup CIMObjectPath toString() and parseOp()
+   1.) Convert CIMObjectPath and CIMNamespace to use '/' instead of '\'
+   2.) Improve CIMObjectPath.toString() more readable and better escape
+       sequence handling
+   3.) Make parseOp() more robust, and match toString()
+   4.) Make CIMObjectPath toString(), parseOp(), equals(),
+       and hashCode() take host into consideration.
+   5.) Remove the duplicate validateNameSpace from CIMObjectPath, 
+       and use the version from CIMNameSpace
+open/java/wbem/javax/wbem/cim/CIMObjectPath.java
+open/java/wbem/javax/wbem/cim/CIMInstance.java
+open/java/wbem/javax/wbem/cim/CIMNameSpace.java
+open/java/wbem/javax/wbem/client/CIMClient.java
+open/java/wbem/javax/wbem/cimxml/CIMXmlImpl.java
+open/java/wbem/javax/wbem/cimxml/XmlInstance.java
+open/org/wbemservices/wbem/cimom/CIMNSStaticMethods.java
+open/org/wbemservices/wbem/cimom/EventService.java
+open/org/wbemservices/wbem/cimom/CIMOMUtils.java
+open/org/wbemservices/wbem/cimom/LogFile.java
+open/org/wbemservices/wbem/cimom/CIMQtypeStaticMethods.java
+open/org/wbemservices/wbem/cimom/CIMOMImpl.java
+open/org/wbemservices/wbem/cimom/adapters/provider/java/JavaProviderAdapter.java
+open/org/wbemservices/wbem/compiler/mofc/LocalCIMClient.java
+open/org/wbemservices/wbem/repository/InstanceNameUtils.java
+open/org/wbemservices/wbem/client/adapter/rmi/CheckSumGen.java
+open/sdk/apps/org/wbemservices/wbem/apps/common/Util.java
+open/sdk/apps/org/wbemservices/wbem/apps/common/CWS.properties
+open/org/wbemservices/wbem/cimom/adapters/client/rmi/CIMOMRMIImpl.java
+open/java/wbem/javax/wbem/cim/StringUtil.java (NEW FILE)
+open/org/wbemservices/wbem/cimom/Parse.java (REMOVED)
+
+- 804730: EventHelper constructer has extranious exception handling
+open/org/wbemservices/wbem/repository/EventHelper.java
+
+- 803853: CIMInstance.setProperty now throws CIMException(NO_SUCH_PROPERTY)
+	 when a property doesn't exist, previously it threw a runtime
+	 IllegalArgumentException. updatePropertyValue/Values() have 
+	 the same change.
+open/java/wbem/javax/wbem/cim/CIMInstance.java
+open/java/wbem/javax/wbem/cimxml/Response.java
+open/org/wbemservices/wbem/cimom/OneToManyAssocProvider.java
+open/org/wbemservices/wbem/cimom/NamespaceProvider.java
+open/org/wbemservices/wbem/cimom/LogFile.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CreateInstanceDialog.java
+
+- 803872: Access static members in a static way
+open/org/wbemservices/wbem/client/SolarisDigestClientSecurity.java
+open/org/wbemservices/wbem/cimom/util/DynClassLoader.java
+open/org/wbemservices/wbem/cimom/EventService.java
+open/org/wbemservices/wbem/cimom/FilterActivation.java
+open/org/wbemservices/wbem/cimom/ServerSecurity.java
+open/org/wbemservices/wbem/cimom/adapters/client/http/XmlResponder.java
+open/org/wbemservices/wbem/compiler/mofc/BeanGenerator.java
+open/org/wbemservices/wbem/compiler/mofc/LocalCIMClient.java
+open/java/wbem/javax/wbem/cimxml/XMLParser.java
+open/sdk/examples/client/query/TestQuery.java
+open/sdk/examples/client/query/ExampleQuery.java
+open/sdk/examples/client/query/TestExecQuery.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/QueryActionPanel.java
+open/sdk/apps/org/wbemservices/wbem/apps/common/JSpinBox.java
+
+- 589613: Indication providers now don't have to be instance providers
+open/org/wbemservices/wbem/cimom/FilterActivation.java
+
+- Allow XML trace option to be different per client
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+
+- Mof compiler include pragma no longer idempotent by default.
+  "-idempotent" flag re-enables old behaviour
+open/org/wbemservices/wbem/compiler/mofc/CIM_Mofc.jj
+open/org/wbemservices/wbem/compiler/mofc/CIM_Mofc.java
+open/org/wbemservices/wbem/compiler/prep/CIM_Prep.jj
+open/org/wbemservices/wbem/compiler/prep/CIM_Prep.java
+
+- CIMObjectPath bugs
+    - change equals() to ignore ClassOrigin of keys in ref values,
+    - fix hashcode to work case insensitive.
+    It's now ok to use CIMObjectPath as the key in a HashMap.
+open/java/wbem/javax/wbem/cim/CIMObjectPath.java
+
+- Debug.java now accepts pluggable implementations. Set
+  wbem.debug.DebugTraceClass to the name of a class implementing
+  javax.wbem.client.Debug.DebugTracer.  Default is current
+  implementation.
+open/org/wbemservices/wbem/cimom/adapters/client/http/CIMRequestHandler.java
+open/org/wbemservices/wbem/cimom/adapters/client/http/HttpIndicationHandler.java
+open/org/wbemservices/wbem/cimom/adapters/client/http/XmlResponder.java
+open/org/wbemservices/wbem/cimom/adapters/client/Debug.java
+open/org/wbemservices/wbem/cimom/ClientProtocolAdapterService.java
+open/org/wbemservices/wbem/cimom/IndicationPoller.java
+open/org/wbemservices/wbem/cimom/IndicationRequestCollator.java
+open/org/wbemservices/wbem/cimom/ProviderAdapterFactory.java
+open/org/wbemservices/wbem/cimom/EventService.java
+
+- BUGFIX. Indications should support CDATA for embedded objects
+open/java/wbem/javax/wbem/cimxml/XMLParser.java
+
+- 797057: Fix Method Parameter Qualifiers being applied to Method
+open/java/wbem/javax/wbem/cimxml/XMLParser.java
+
+- Accessibility fixes for cimworkshop
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/ReferenceTraversalDialog.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/ReferenceTree.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/TrueFalseDialog.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/QualifierWindow.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/QueryFrame.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/QueryInputDialog.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/InstanceFrame.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/InstanceActionPanel.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CreateInstanceDialog.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CIMQualifiersPanel.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CIMScopeDialog.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CIMTableTabbedPane.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CIMMethodsPanel.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CIMPropertiesPanel.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CIMElementsTable.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CIMFlavorDialog.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/AddQualifierDialog.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/AddClassDialog.java
+open/sdk/apps/org/wbemservices/wbem/apps/common/AboutDialog.java
+open/sdk/apps/org/wbemservices/wbem/apps/common/AdminDialog.java
+open/sdk/apps/org/wbemservices/wbem/apps/common/NameSpaceDialog.java
+open/sdk/apps/org/wbemservices/wbem/apps/common/CWS.properties
+
+- BUGFIX. Fix mofcomp error when interval left off of datetime string
+open/java/wbem/javax/wbem/cim/CIMDateTime.java
+
+784843: nullptr exception on CIMInstance.equals()
+open/java/wbem/javax/wbem/cim/CIMObjectPath.java
+
+640363: Repository does not process resultClass properly for associator calls
+open/org/wbemservices/wbem/repository/PSRlogImpl.java
+
+775882: Previously, the repository grew forever.
+open/org/wbemservices/wbem/repository/PersistentStore.java
+
+- Removed support for obsolete InstanceProvider interface
+open/java/wbem/javax/wbem/provider/InstanceProvider.java (remove)
+open/org/wbemservices/wbem/cimom/adapters/provider/java/JavaProviderAdapter.java
+open/org/wbemservices/wbem/cimom/MofregClient.java
+open/org/wbemservices/wbem/cimom/ProviderClient.java
+open/org/wbemservices/wbem/cimom/AbstractInstanceProvider.java (removed)
+open/sdk/examples/client/query/Class_Q_Provider.java
+open/sdk/examples/client/query/Class_R_Provider.java
+open/sdk/examples/provider/sfl/SFLProvider.java
+open/sdk/examples/provider/sip/SimpleInstanceProvider.java
+open/org/wbemservices/wbem/cimom/adapters/provider/java/OldInterfaceConverter.java
+
+- Removed support for obsolete PropertyProvider interface
+open/java/wbem/javax/wbem/provider/PropertyProvider.java (remove)
+open/org/wbemservices/wbem/cimom/adapters/provider/java/JavaProviderAdapter.java
+open/org/wbemservices/wbem/cimom/adapter/provider/ProviderAdapterIF.java
+open/org/wbemservices/wbem/cimom/CIMOMImpl.java
+open/org/wbemservices/wbem/cimom/InternalProviderAdapter.java
+open/org/wbemservices/wbem/cimom/PropertyChecker.java
+open/org/wbemservices/wbem/cimom/ProviderAdapterFactory.java
+wbem/cimom/adapters/provider/java/OldInterfaceConverter.java
+
+- Removed support for obsolete MethodProvider interface
+open/java/wbem/javax/wbem/provider/MethodProvider.java (remove)
+wbem/cimom/adapters/provider/java/OldInterfaceConverter.java
+
+- Removed support for obsolete AssociatorProvider interface
+open/org/wbemservices/wbem/cimom/ProviderClient.java
+open/java/wbem/javax/wbem/provider/AssociatorProvider.java (remove)
+open/sdk/examples/provider/tsa/TeacherStudent.java
+wbem/cimom/adapters/provider/java/OldInterfaceConverter.java
+
+- Removed support for obsolete version of invokeMethod interface
+that used argument vectors instead of argument arrays
+open/org/wbemservices/wbem/cimom/InvokeMethodOperation.java
+open/sdk/apps/org/wbemservices/wbem/apps/cimworkshop/InvokeMethodDialog.java
+open/org/wbemservices/wbem/client/adapter/rmi/CIMClientRMI.java
+org/wbemservices/wbem/cimom/adapters/client/http/CIMOMXMLImpl.java
+org/wbemservices/wbem/cimom/adapters/client/http/XmlResponder.java
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+
+- Removed printStackTrace, Logfile.xxx, and System.out.println
+  statements. Added debug statements
+open/org/wbemservices/wbem/compiler/mofc/CIM_Mofc.java
+open/org/wbemservices/wbem/cimom/CIMOMImpl.java
+org/wbemservices/wbem/cimom/adapters/client/http/HttpService.java
+open/java/wbem/javax/wbem/cimxml/CIMXml.java
+open/java/wbem/javax/wbem/client/adapter/http/transport/HttpSocketFactory.java
+
+- Now uses JRE 1.4 crimson.jar XML parser interfaces instead of
+  parser.jar
+org/wbemservices/wbem/cimom/adapters/client/http/CIMRequestHandler.java
+org/wbemservices/wbem/cimom/adapters/client/http/HttpIndicationHandler.java
+org/wbemservices/wbem/cimom/adapters/client/http/XmlResponder.java
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+open/java/wbem/javax/wbem/client/adapter/http/HttpEventRequestHandler.java
+open/java/wbem/javax/wbem/client/adapter/http/XmlRpcClient.java
+open/java/wbem/javax/wbem/cimxml/CIMXml.java
+open/java/wbem/javax/wbem/cimxml/XMLParser.java
+open/java/wbem/javax/wbem/cimxml/XmlInstance.java
+open/java/wbem/javax/wbem/client/adapter/http/transport/HttpServerRequestHandler.java
+
+- Added URI support
+open/java/wbem/javax/wbem/cim/CIMNameSpace.java
+
+- No longer sends MPOST message first
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+
+- Added hooks for SSL support
+org/wbemservices/wbem/cimom/adapters/client/http/HttpService.java
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+open/java/wbem/javax/wbem/client/adapter/http/transport/HttpServerEndpoint.java
+
+- Cosmetic changes
+open/java/wbem/javax/wbem/client/adapter/http/HttpEventListener.java
+open/java/wbem/javax/wbem/query/SelectExp.java
+open/java/wbem/javax/wbem/query/WQLExp.java
+open/java/wbem/javax/wbem/client/adapter/http/transport/HttpSettings.java
+
+- MOFCOMP now verifies qualifiers
+- BUGFIX 623653 mofcomp does not check for invalid value map values
+open/org/wbemservices/wbem/compiler/mofc/MofcBackend.java
+open/org/wbemservices/wbem/compiler/mofc/Compiler.properties
+
+- BUGFIX mofcomp now returns error is #pragma include file does not exist
+open/org/wbemservices/wbem/compiler/prep/CIMPrep.java
+
+- Events over http cleanup
+org/wbemservices/wbem/cimom/adapters/client/http/HttpService.java
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+org/wbemservices/wbem/cimom/adapters/client/http/HttpIndicationHandler.java
+
+- Added new CIMArgument.toString() method
+open/java/wbem/javax/wbem/cim/MOFFormatter.java
+open/java/wbem/javax/wbem/cim/CIMArgument.java
+
+- BUGFIX. comparison for names of key properties should be case insenstive
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+
+- BUGFIX. when CIM error was returned, its description was missing
+open/java/wbem/javax/wbem/cimxml/Response.java
+
+- BUGFIX. fixed namespace incompatibility with other CIMOMs.
+open/java/wbem/javax/wbem/cimxml/Response.java  
+open/java/wbem/javax/wbem/cimxml/XMLParser.java
+
+- Removed support for heirarchical namespaces
+org/wbemservices/wbem/cimom/adapters/client/http/XmlResponder.java
+open/java/wbem/javax/wbem/cim/CIMNameSpace.java
+
+- SSL support changes
+org/wbemservices/wbem/cimom/adapters/client/http/HttpService.java
+open/java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+open/java/wbem/javax/wbem/client/adapter/http/transport/HttpServerEndpoint.java
+
+- BUGFIX. client SSL mode not enabled properly in some cases 
+open/java/wbem/javax/wbem/client/adapter/http/transport/HttpSocketFactory.java
+
+NEW DIFFERENCES IN VERSION 0.95c FROM VERSION 0.95b
+- 697317: cimworkshop cannot invokeMethod with REF argument
+	sdk/apps/org/wbemservices/wbem/apps/cimworkshop/InvokeMethodDialog.java
+- 679838: make_docs scripts do not work.
+	make_tree26.*, make_tree27.* (new, called by make_moftree)
+	make_mofhtml.*, make_moftree.*, make_javadoc.*
+	build.xml (no longer copies mof2java.* into bin)
+	build.xml (now creates mof2java.class in initwb)
+	initwb/mof2java.(sh,bat)
+Added 2.7.1 Schema and make default Schema
+- 670169: InvokeMethod with Arguments not working properly
+	org/wbemservices/wbem/cimom/ProviderClient.java
+- 670168: Remove all build scripts except ones needed for ANT
+ 	Removed batch and .sh files
+- 670149: Deprecate NameSpace methods
+	java/wbem/javax/wbem/client/CIMClient.java
+- 670150: Deprecate old Provider Interfaces
+	java/wbem/javax/wbem/provider/InstanceProvider.java
+	java/wbem/javax/wbem/provider/MethodProvider.java
+	java/wbem/javax/wbem/provider/PropertyProvider.java
+	java/wbem/javax/wbem/provider/AssociatorProvider.java
+- Fixed output to stderr in Debug.java
+java/wbem/javax/wbem/client/Debug.java
+- 655351 getInstance fails for associators
+Repository should not be using class origin in reference values 
+as keys for associator instances, as these are not included in cimxml.
+NOTE: Repositories built under v0.95b are no longer compatible with the code
+org/wbemservices/wbem/repository/CIMAssocInstanceRlogEntry.java
+org/wbemservices/wbem/repository/InstanceNameUtils.java
+org/wbemservices/wbem/repository/PSRlogImpl.java
+- 660138 no references returned for XML client. 
+Hack in XmlResponder needed to be duplicated for objectName in addition to 
+instanceName.
+org/wbemservices/wbem/cimom/adapters/client/http/XmlResponder.java
+
+NEW DIFFERENCES IN VERSION 0.95b FROM VERSION 0.95a
+- 643944. CIM-XML CPA Port Configuration. CIMOM does not listen on 
+CIM Class cim-xml protocol adapter PortNumber value
+org/wbemservices/wbem/cimom/adapters/client/http/HttpService.java
+- 588720: Inconsistent XML treatment of "".
+Changed XMLParser.getTextNode to treat <VALUE/> identically to <VALUE></VALUE>, per email thread on wg-interop
+java/wbem/javax/wbem/cimxml/XMLParser.java
+- 633335: Cannot set lifecycle indication on a class not in root/cimv2.
+Changed setLifeCycleInstance to check the namespace.
+sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CIMEventsPanel.java
+- 624872: IndexArray error occurs when JWS client tries to connect to
+SNIA CIMOM. This happened because the SNIA CIMOM did not include an 
+EOF in the content trailer and the stream is not closed. JWS now 
+checks how many available number of bytes can be read and just reads 
+to that point. 
+java/wbem/javax/wbem/client/adapter/http/transport/MessageReader.java
+
+NEW DIFFERENCES IN VERSION 0.95a FROM VERSION 0.95
+- 622658: SNIA CIM Browser Enumerate Classes
+org/wbemservices/wbem/cimom/CIMOMImpl.java
+- 622338: CIMQualifierType.isArrayValue not correct
+java/wbem/javax/wbem/cim/CIMQualifierType
+
+- JavaCC.zip is no longer needed.
+MODIFIED
+sdk/apps/org/wbemservices/wbem/apps/cimworksho/Version.java
+NEW
+org/wbemservices/wbem/compiler/prep/CIM_Prep.java 
+org/wbemservices/wbem/compiler/prep/CIM_PrepConstants.java
+org/wbemservices/wbem/compiler/prep/CIM_PrepTokenManager.java
+org/wbemservices/wbem/compiler/prep/ParseException.java
+org/wbemservices/wbem/compiler/prep/SimpleCharStream.java
+org/wbemservices/wbem/compiler/prep/Token.java
+org/wbemservices/wbem/compiler/prep/TokenMgrError.java
+org/wbemservices/wbem/compiler/mofc/CIM_Mofc.java
+org/wbemservices/wbem/compiler/mofc/CIM_MofcConstants.java
+org/wbemservices/wbem/compiler/mofc/CIM_MofcTokenManager.java
+org/wbemservices/wbem/compiler/mofc/ParseException.java
+org/wbemservices/wbem/compiler/mofc/SimpleCharStream.java
+org/wbemservices/wbem/compiler/mofc/Token.java
+org/wbemservices/wbem/compiler/mofc/TokenMgrError.java
+java/wbem/javax/wbem/query/ParseException.java
+java/wbem/javax/wbem/query/SimpleCharStream.java
+java/wbem/javax/wbem/query/Token.java
+java/wbem/javax/wbem/query/TokenMgrError.java
+java/wbem/javax/wbem/query/WQLParser.java
+java/wbem/javax/wbem/query/WQLParserConstants.java
+java/wbem/javax/wbem/query/WQLParserTokenManager.java
+- Now supports Unicode
+MODIFIED
+org/wbemservices/wbem/compiler/mofc/CIM_Mofc.java
+org/wbemservices/wbem/compiler/prep/CIM_Prep.java
+org/wbemservices/wbem/compiler/mofc/CIM_MofcTokenManager.java
+org/wbemservices/wbem/compiler/prep/CIM_PrepTokenManager.java
+NEW
+org/wbemservices/wbem/compiler/mofc/JavaCharStream.java
+org/wbemservices/wbem/compiler/prep/JavaCharStream.java
+REMOVED
+org/wbemservices/wbem/compiler/mofc/SimpleCharStream.java
+org/wbemservices/wbem/compiler/prep/SimpleCharStream.java
+- The http header for the object path should be encoded.
+java/wbem/javax/wbem/cimxml/CIMXmlImpl.java
+- Exception was thrown when creating a qualifier type
+java/wbem/javax/wbem/cimxml/XMLParser.java
+- The XML Generation from the MOF Compiler does not include Qaulifiers
+org/wbemservices/wbem/compiler/mofc/MofcBackend.java
+org/wbemservices/wbem/compiler/mofc/XmlWriter.java
+- When selecting instances in cimworkshop, exception thrown if one pauses 
+for 20-30 seconds between requests
+java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+java/wbem/javax/wbem/client/adapter/http/transport/MessageReader.java
+java/wbem/javax/wbem/client/adapter/http/transport/ServerInfo.java
+
+NEW DIFFERENCES IN VERSION 0.95 FROM VERSION 0.94
+- The CIM Schema v2.6 MOF files have been updated to the Final versions
+mof/CIM*.mof
+- Bug fix: CIM-XML CIMOM Client Protocol Adapter could not load Final
+CIM Schema v2.6 MOFs
+org/wbemservices/wbem/cimom/adapters/client/http/HttpService.java
+- Bug fix: cimworkshop did not properly create assocation because it
+treated all properties as keys.
+sdk/apps/org/wbemservices/wbem/apps/cimworkshop/ReferenceEditDialog.java
+- Bug fix: cimworkshop did not return proper objectpath if the referent
+was an instance of a subclass of the reference type. It now sets the
+classname in the objectpath.
+sdk/apps/org/wbemservices/wbem/apps/cimworkshop/ReferenceEditDialog.java
+- Bug fix: cimworkshop now adds a leading slash to create an absolute
+namespace path. This allows indication subscriptions created by
+cimworkshop to be properly handled by the CIMOM.
+- Bug fix: cimworkshop no longer sends out an empty message
+sdk/apps/org/wbemservices/wbem/apps/cimworkshop/ObjectTreeFrame.java
+sdk/apps/org/wbemservices/wbem/apps/cimworkshop/ReferenceEditDialog.java
+- Bug fix: cimworkshop default is now CIM-XML (formerly called HTTP)
+sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CIMWorkshop.java
+- Bug fix: cimworkshop no longer looks for test class
+sdk/apps/org/wbemservices/wbem/apps/cimworkshop/CWSLoginDialog.java
+- Bug Fix: The pathname component of the destination URL and namespace
+URL was being ignored. 
+java/wbem/javax/wbem/client/adapter/http/transport/HttpClientConnection.java
+org/wbemservices/wbem/cimom/adapters/client/httpttpIndicationHandler.java 
+- Added client side SSL support  
+java/wbem/javax/wbem/client/adapter/http/transport/HttpSocketFactory.java 
+NOTE: The required SSL classes are bundled with JDK 1.4.x. On JDK 1.3.x,
+these SSL classed can be added from JSSE 1.0.3. 
+- Bug fix: Now checks for Error 411 if server does not support 
+chunking, and  then retries request without chunking. 
+java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+- Add Syncmail support (files in CVSROOT)
+- bug Fix: Update MOFCOMP Bat file (mofcomp.bat)
+- bug fix: Update mofcompiler to support relative paths on windows
+org/wbemservices/wbem/compiler/mofc/CIM_Mofc.jj
+org/wbemservices/wbem/compiler/prep/CIM_Prep.jj 
+- Bug fix: do not use URLencoder on HTTP Header strings (object path)
+java/wbem/javax/wbem/cimxml/CIMXmlImpl.java
+- Bug fix: Do not send out illegal payload during options request
+java/wbem/javax/wbem/client/adapter/http/transport/HTTPClientConnection.java
+Bug fix: Turn chunking off until DMTF Interop Group redifenes it for
+interop. java/wbem/javax/wbem/client/adapter/http/CIMClientXML.java
+- Bug fix. Overriding references does not work properly over http.
+java/wbem/javax/wbem/cimxml/XmlInstance.java.
+- Bug fix. When many events happen in parallel, the time to do a thread 
+allocate for each indication dramatically affects performance. Now,
+a pool of them is allocated and re-used.
+org/wbemservices/wbem/cimom/EventService.java
+org/wbemservices/wbem/repository/PSRlogImpl.java
+org/wbemservices/wbem/repository/EventHelper.java
+- Bug fix in java/wbem/javax/wbem/cim/MOFFormatter.java. MOFFormatter 
+did not handle null value. Modified method vectorToMOFString to check 
+for null pointer and append empty string if found.
+- Bug fix in org/wbemservices/wbem/cimom/adapters/client/http/HttpIndicationHandler.java.
+Not all events were being delivered when # of events > 50. Added synchronize
+to deliverEventRequent.
+- Bug fix in java/wbem/javax/wbem/cimxml/XmlInstance.java. EmbeddedObject 
+qualifier needs to have a type attribute. Modified the qualifier method.
+- Bug fix in org/wbemservices/wbem/repository/CIMAssocInstanceRlogEntry.java. Before,
+all non-REF properties in an association instance MOF definition had to be
+initialized. Else CIM_ERR_INVALID_PARAMETER was returned running mofcomp.
+Now unitialized non-REF properties are allowed.
+- Bug fixes in org/wbemservices/wbem/cimom/adapters/http/XmlResponder.java. Calling
+CIMInvokeMethod on method without any input parameters no longer returns
+an error. The change was made to the responseDo method. Another bugfix
+was applied to the setUpCall method. VALUE.REFERENCE is not handled
+correctly.
+- Changed providers in sdk/examples/client/query to be CIMInstanceProviders
+- Created new scripts to create HTML documentation for the WBEM Services 
+Java API, MOF files, and MOF class heirarchy during the build. To view,
+open in a browser, doc/api/index.html, doc/mofhtml/index.html and doc/moftree/index.html, respectively.
+- Added initwb/mof2java.java that converts classes in a MOF file
+into separate .java files for the purpose using javadoc to display
+a MOF class heirarchy. 
+- Bug fix in sdk/examples/scripts/test_method.bat. It was mistakenly
+calling InvokeMethod instead of InvokeCIMMethod
+- Bug fix in java/wbem/javax/wbem/cimxml/XmlInstance.java where
+INSTANCEPATH was not creating a fully qualified objectpath with
+all keys properly set
+- Updated the method descriptions for files in java/wbem/javax/wbem/client and
+java/wbem/javax/provider to correct typos and to clarify ambiguities
+- Modified sdk/example/client/InvokeCIMMethod.java. Changed outParams to
+outArgs, changed inParams to inArgs to be consistent with argument names
+of new invokeMethod
+- Bug fix in org/wbemservices/wbem/cimom/adapters/client/http/XmlResponder.java.
+When login over HTTP using cimworkshop, no more CIM_ERR_NOT_FOUND: test
+error message
+
+NEW FEATURES/MAJOR DIFFERENCES IN VERSION 0.94 FROM VERSION 0.91
+- Modified scripts and examples programs to use the new client API and
+provider interfaces
+- Bug Fix: With HTTP you could not add new class with array properties
+containing values. java/wbem/javax/wbem/cimxml/XMLParser.java
+- Bug Fix: With events over HTTP, the 2nd client subscribing to events
+does not receive events.
+org/wbemservices/wbem/cimom/adapters/client/http/HttpIndicationHandler.java
+- Bug Fix: Methods in some provider interfaces fail in Xml.
+org/wbemservices/wbem/cimom/adapters/client/http/XmlResponder.java
+- Added new mof2html scripts that generate .html files for classes
+defined in a MOF file. NOTE: Before running mof2html, the Xalan XSLT
+processor must first be installed. See Instructions.html for details.
+- Added implementation for new CIMInstanceProvider, CIMMethodProvider,
+and CIMAssociatorProvider interfaces
+- Added implementation for new client setInstance and invokeMethod
+APIs
+- Removed the dependency on JDK 1.4.x. WBEM Services can now be built
+and run on JDK 1.3.x or higher.
+- Added Client XML Tracing capability. To enable, modify CIMClient.java
+in java/wbem/javax/wbem/client as follows:
+* set DEBUG_OFF =3
+* make the real CIMClient constructor public
+See code comments. Then rebuild WBEM Services. When you
+run your client program, the HTTP headers and XML encoding for the
+CIM request and response will be displayed in the window. This
+information is also written to file CIMClientXML_Trace.txt in the
+current directory.
+
+NEW DIFFERENCES IN VERSION 0.91 FROM VERSION 0.9
+- mof2bean.bat and mofcomp.bat no longer need to have the MOF files
+copied into the same directory
+- The bug (hardcoded path) in start_cimom.bat has been fixed
+
+NEW FEATURES/MAJOR DIFFERENCES IN VERSION 0.9 FROM VERSION 0.81
+- New HTTP code that supports HTML 1.1 and Persistent Connections
+- Enhanced MOF compiler features. Specifically, a new -j option parses
+a MOF file to generate its equivalent Java Beans. 
+- Events over HTTP is now supported.
+- cimworkshp now supports HTTP events
+- The XML code in java/wbem/javax/wbem/cimxml has been completely
+rewritten
+- The cimworkshop help files have been moved to a different directory.
+Additionally, they are now bundled into cimworkshop.jar instead of
+being copied to the proto/wbemservices/bin/help subdirectory tree.
+- Version.orig files were created. They are preprocessed to generate
+Version.java files that have a BuildID string based on the current
+date and time.
+- The CIMOM startup process has changed. It now uses 
+StartWBEMServices.class found in wbemstartup.jar.
+- The CIMOM classpath can now be dynamically changed. This feature
+allows a provider to change the running CIMOM's classpath by creating
+an instance of WBEMServices_Classpath as defined in the new file
+initwb/WBEMServices.mof. NOTE: Win32 and Unix classpaths must use ";"
+and ":" as the classpath separators, respectively. Additionally, Win32
+classpaths must use "\\" as the file separator instead of "/".
+
+CIMOM BUG FIXES IN VERSION 0.9
+- All .bat scripts now self initialize the SRC environment variable;
+i.e. it no longer needs to be pre-initialized at the command line.
+- All .sh scripts now run properly on Linux
+- Specify valid Java data types for CIMValue and CIMDataType
+- Not using IndexOOB exception in CIMNamespace
+- Fixed javadoc for String constructor in CIMObjectPath
+- Can not create subclasses with non-key REF attributes       
+java/wbem/javax/wbem/cim/CIMProperty.java
+- Specify valid Java data types for CIMValue and CIMDataType in
+CIMValue
+- CIMParameter does return correct string if is an array
+- The includeClassOrigin arg is not working for associators
+method over HTTP
+- localOnly setting to the enumerateInstances API call is not used 
+overf HTTP
+- deleteQualifierType not working over HTTP
+- HTTP: getId() should return symbolic name only
+- getInstance and enumInstance calls over HTTP return qualifiers twice
+- Fixed javadoc for Listener param in CIMClient
+- Protocols should be able to specify handlers in CIMClient
+- Fixed javadoc for Listener param in CIMOMHandle
+- Fixed javadoc for execQuery namespace parameter in CIMOMHandle
+- scope not included in SolarisPasswordCredential class
+- getIndicationHandler throws a Exception when CIMListener is not null
+over HTTP
+- Added a set listener call.
+- toXml functions don't include class origin
+- HTTP enumQualifierTypes returns CIMObjectPath instead of CIMQualifierType
+- Removed abstract keyword from interface from CIMProvider
+- Added provider for Object manager, protocol adapter association in
+CIMOM
+- Calling initialize on internal provider, made constructor protected
+on InternalProviderAdapter
+- fix NullPointerException in ProviderAdapterFactory.
+- Fixed a NullPointerException if the provider qualifier is empty. It 
+now throws an exception in ProviderAdapterFactory
+- Fixed name of Provider class in ProviderAdapterFactory
+- fixed some debug statements in ProviderAdapterFactory
+- since we have remove the lock from cimom to PSRlogImpl, we don't need the reentry logic any more in CIMOM
+- In CIMOM, make AUDIT constants public for use by UserPasswordProvider 
+implementations. Remove usertype parameter from calls to 
+authenticateUser. User UTF-8 converter for byte array to String 
+conversion. Call authenticateRole in assumeRole instead of 
+getEncryptedPassword and canUserAssumeRole.
+- Removing unnecessary print statement in JavaProviderAdapter
+- Throwing NOT_SUPPORTED exception if listener is not null.
+- Connecting to correct RMI server on retry
+- update mofcomp resources needed for localization
+- Fixed instance enumeration to take in deep flag PSRlogImpl 
+
+CIMWORKSHOP BUG FIXES IN VERSION 0.9
+- remove methods tab when adding new class
+- Allow all properties to be set when adding instance
+- sort trees and lists
+- created methods for adding and deleting specific tabs
+- changed so we don't use Thread.stop()
+- when adding new node, make sure it is sorted correctly
+- Allow all properties to be set when adding instance
+- don't show errors when doing reference traversal
+- if property of instance is changed, ask to save before doing refresh
+- changed call to add events tab
+- sorted types
+- set mnumonic for MNU_REFRESH_CLASS
+- read context help out of jar file
+- ignore case when sorting vector
+

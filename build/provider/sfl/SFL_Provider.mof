@@ -1,0 +1,76 @@
+/*
+ *EXHIBIT A - Sun Industry Standards Source License
+ *
+ *"The contents of this file are subject to the Sun Industry
+ *Standards Source License Version 1.2 (the "License");
+ *You may not use this file except in compliance with the
+ *License. You may obtain a copy of the 
+ *License at http://wbemservices.sourceforge.net/license.html
+ *
+ *Software distributed under the License is distributed on
+ *an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either
+ *express or implied. See the License for the specific
+ *language governing rights and limitations under the License.
+ *
+ *The Original Code is WBEM Services.
+ *
+ *The Initial Developer of the Original Code is:
+ *Sun Microsystems, Inc.
+ *
+ *Portions created by: Sun Microsystems, Inc.
+ *are Copyright ¨ 2001 Sun Microsystems, Inc.
+ *
+ *All Rights Reserved.
+ *
+ *Contributor(s): _______________________________________
+*/
+
+/*
+Title       	SFL Provider
+Description	includes SFL Provider Class and Properties
+Date:        	09/17/1999
+Version     	1.0
+(c) Copyright 2001, Sun Microsystems, Inc.
+*/
+
+
+#pragma Locale ("en-US")
+#pragma namespace ("root/cimv2")
+
+
+    [Provider("java:SFLProvider")
+    ]
+
+class EX_SFLProvider
+{
+    // Properties
+    [Key, Description("Name of the OZ EAST SFL Team")
+    ]
+    string name;
+
+    [Description("Wins")
+    ]
+    uint32 win;
+
+    [Description("lost")
+    ]
+    uint32 lost;
+
+    // Methods
+    [Description("setScore." 
+	         "There is no CIM type void, all methods return a value.")
+    ]
+    uint32 setScore(
+	[IN]
+      string wins,
+	[IN]
+      string losses
+    );
+
+    uint32 getWins();
+
+    uint32 getLosses();
+
+};
+
+

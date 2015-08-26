@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>WBEMServices Mof2Bean Unix</TITLE>
+	<STYLE>
+	<!--
+		.stderr { color: #FF0000 }
+		.stdout { color: #0000FF }
+		code, pre { background-color: #EEEEEE }
+	-->
+	</STYLE>
+</HEAD>
+<BODY>
+<H1>How to Run MOF2BEAN on Unix</H1>
+<P>Last Updated 09/26/03</P>
+
+<P><code>mof2bean</code>
+is a script that generates JavaBeans&trade; that represent the CIM
+classes defined in a MOF file. <code>mof2bean</code>
+also needs a Bean configuration file that defines any desired package
+names, import statements and exceptions that you might want in the
+generated JavaBean.
+</P>
+<P>
+<B>WARNING:</B> The MOF file should include any Qualifier definitions
+that its class definitions require. See <A HREF="Simple.mof">Simple.mof</A>
+</P>
+<P>
+<B>WARNING:</B> The Bean configuration file should not contain any
+blank lines. See <A HREF="bean.txt">bean.txt</A>
+</P>
+<P>
+<UL>
+	<LI>Go to the directory containing the WBEM Services executables.
+	<UL> 
+	   <LI>If you built the WBEM Services executables in <code>/files/open</code>, go
+	to directory <code>/files/open/dist/wbemservices/bin</code>.</LI>
+	   <LI>If you downloaded or copied the WBEM Services executables into
+	<code>/wbemservices</code>, go to directory <code>/wbemservices/bin</code></LI>
+	</UL></LI>
+	<LI>Run <code>sh mof2bean.sh</code>. You will see the following:
+	<PRE> wbem% cd /files/open/dist/wbemservices/bin
+ wbem% sh mof2bean.sh 
+<span class="stderr">Usage: sh mof2bean.sh user passwd bean_config mof_file</span>
+ wbem% sh mof2bean.sh root root_passwd /files/open/dist/wbemservices/doc/bean.txt /files/open/dist/wbemservices/doc/Simple.mof
+<span class="stdout">*********************************************************
+Generating JavaBeans from /files/open/dist/wbemservices/doc/Simple.mof in /files/open/dist/wbemservices/bin/bean
+*********************************************************
+/usr/java/bin/java -classpath .:/files/open/dist/wbemservices/bin/mofcomp.jar:/files/open/dist/wbemservices/cimom/lib/cimom.jar:/files/open/dist/wbemservices/lib/wbem.jar:/files/open/dist/wbemservices/cimom/lib/cimrepository.jar org.wbemservices.wbem.compiler.mofc.CIM_Mofc -u root -p root_passwd -o /files/open/dist/wbemservices/bin/bean /files/open/dist/wbemservices/doc/bean.txt /files/open/dist/wbemservices/doc/Simple.mof
+Compilation succeeded.</span>
+ wbem% ls bean/*.java
+<span class="stdout">bean/CIMBeanImpl.java            bean/Simple_ClassBeanImpl.java
+bean/CIMBean.java                bean/Simple_ClassBean.java</span></PRE>
+	<LI>The generated <code>.java</code> files will be found in the 
+    subdirectory <code>bean</code>; e.g.
+	<code>/files/open/dist/wbemservices/bin/bean</code> or
+	<code>/files/wbemservices/bean</code>. Here,
+	the generated files are <code>CIMBeanImpl.java</code>, <code>CIMBean.java</code>,
+	<code>Simple_ClassBeanImpl.java</code>, and <code>Simple_ClassBean.java</code>. 
+	<code>CIMBean.java</code> defines
+	the base Java interface while <code>CIMBeanImpl.java</code> represents
+	the base bean that implements this interface. Likewise,
+	<code>Simple_ClassBean.java</code> defines the inteface for the
+	<code>Simple_Class</code> as defined in <code>Simple.mof</code> while
+	<code>Simple_ClassBeanImpl.java</code> represents
+	the bean that implements this interface.</LI>
+</UL>
+</P>
+</BODY>
+</HTML>

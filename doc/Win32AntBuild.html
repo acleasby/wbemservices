@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>WBEMServices Win32 Ant Build</TITLE>
+	<STYLE>
+	<!--
+		code, pre { background-color: #EEEEEE }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US">
+<H1>How to Build WBEM Services Executables using ANT on Win32</H1>
+<P>Last Updated 09/26/03</P>
+
+<H2>Introduction</H2>
+<P>ANT is a Java based build tool. This document gives instructions on 
+how to build WBEM Services executables from the source code using ANT
+on a Win32 system; e.g. Win2K, WinNT, Win9x, WinME, WinXP</P>
+
+<H2>Requirements</H2>
+<P>To build executables from the WBEM Services source code using ANT, you first
+need to do the following:
+<UL>
+	<LI>Install <A HREF="http://java.sun.com/j2se/">Java2
+	SDK and JRE</A> (Standard or Enterprise Edition) onto your system,
+	version 1.4.1 (NOTE: Do not use 1.4.1_03 or higher or 1.4.2)</LI>
+	<LI>Install the <A HREF="http://jakarta.apache.org/builds/jakarta-ant/release/v1.4/bin">ANT</A>
+	binaries onto your system, version 1.4; e.g <code>c:\jakarta-ant-1.4</code>.
+	</LI>
+	<LI>Checkout the WBEM Services source code from the 
+	<A HREF="https://sourceforge.net/cvs/?group_id=26421">CVS Repository</A> 
+	</LI>
+</UL>
+</P>
+
+<H2>Instructions for Creating WBEM Executables using ANT on Win32</H2>
+<P>Assuming that the top directory of your WBEM Services source tree is 
+<code>c:\files\open</code>, to create and package the WBEM Services 
+executables,
+do the following:
+<UL>
+	<LI>At the command line, set the JAVA_HOME variable; e.g <code>set JAVA_HOME=c:\j2sdk1.4.0</code></LI>
+	<LI>If ANT is not installed in <code>c:\jakarta-ant-1.4</code>, then set 
+	the ANT_HOME variable; e.g <code>set ANT_HOME=c:\files\jakarta-ant-1.4</code></LI>
+	<LI><code>cd c:\files\open</code></LI>
+	<LI><code>build.bat</code></LI>
+	<LI>The executables can be found in the subdirectories under
+	<code>c:\files\open\dist\wbemservices</code></LI>
+</UL>
+</P>
+</BODY>
+</HTML>

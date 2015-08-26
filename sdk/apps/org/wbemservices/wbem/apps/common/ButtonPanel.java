@@ -1,0 +1,65 @@
+/*
+ *EXHIBIT A - Sun Industry Standards Source License
+ *
+ *"The contents of this file are subject to the Sun Industry
+ *Standards Source License Version 1.2 (the "License");
+ *You may not use this file except in compliance with the
+ *License. You may obtain a copy of the 
+ *License at http://wbemservices.sourceforge.net/license.html
+ *
+ *Software distributed under the License is distributed on
+ *an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either
+ *express or implied. See the License for the specific
+ *language governing rights and limitations under the License.
+ *
+ *The Original Code is WBEM Services.
+ *
+ *The Initial Developer of the Original Code is:
+ *Sun Microsystems, Inc.
+ *
+ *Portions created by: Sun Microsystems, Inc.
+ *are Copyright © 2001 Sun Microsystems, Inc.
+ *
+ *All Rights Reserved.
+ *
+ *Contributor(s): _______________________________________
+*/
+
+package org.wbemservices.wbem.apps.common;
+
+import java.awt.FlowLayout;
+import java.awt.Insets;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+
+/**
+ * The class creates a a panel to add buttons to.
+ * 
+ *
+ * @version 	1.6, 08/16/01
+ * @author 	Sun Microsystems
+ */
+public class ButtonPanel extends JPanel {
+
+    /**
+     * Creates a JPanel with FlowLayout manager
+     */
+    public ButtonPanel() {
+	super(new FlowLayout(FlowLayout.CENTER));
+    }
+
+    /**
+     * adds a buttton to this panel
+     *
+     * @param button button to add to panel.
+     */
+    public void addButton(JButton button) {
+	this.add(button);
+    }
+
+    public Insets getInsets() {
+	return new Insets(5, 5, 5, 5);
+    }
+
+}
+    

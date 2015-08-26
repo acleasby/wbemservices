@@ -1,0 +1,7 @@
+Version 1.0.2
+11/01/04
+- Built with JDK 1.4.2_03
+- For list of changes and bugfixes see README
+
+
+
