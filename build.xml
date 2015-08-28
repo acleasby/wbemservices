@@ -28,481 +28,481 @@
 -->
 <project name="wbemservices" default="dist" basedir=".">
 
-	<property name="debug"       value="on"/>
-	<property name="deprecation" value="on"/>
-	
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<!-- defintion: global properties  -->
-	<!-- Set global properties for this build -->
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<property name="src"          value="."/>
-	<property name="src.wbem"     value="${src}/java/wbem"/>
-	<property name="src.sdk"      value="${src}/sdk/apps"/>
-	<property name="src.initwb"   value="${src}/initwb"/>
-	<property name="src.examples" value="${src}/sdk/examples"/>
-	<property name="src.apps"     value="${src}/sdk/apps"/>
+    <property name="debug" value="on"/>
+    <property name="deprecation" value="on"/>
 
-    <property name="ver.client"   value="${src}/java/wbem/javax/wbem/client"/>
-    <property name="ver.mof"      value="${src}/org/wbemservices/wbem/compiler/mofc"/>
-    <property name="ver.cimom"    value="${src}/org/wbemservices/wbem/cimom"/>
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- defintion: global properties  -->
+    <!-- Set global properties for this build -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <property name="src" value="."/>
+    <property name="src.wbem" value="${src}/java/wbem"/>
+    <property name="src.sdk" value="${src}/sdk/apps"/>
+    <property name="src.initwb" value="${src}/initwb"/>
+    <property name="src.examples" value="${src}/sdk/examples"/>
+    <property name="src.apps" value="${src}/sdk/apps"/>
+
+    <property name="ver.client" value="${src}/java/wbem/javax/wbem/client"/>
+    <property name="ver.mof" value="${src}/org/wbemservices/wbem/compiler/mofc"/>
+    <property name="ver.cimom" value="${src}/org/wbemservices/wbem/cimom"/>
     <property name="ver.workshop" value="${src}/sdk/apps/org/wbemservices/wbem/apps/cimworkshop"/>
 
-	<property name="build"        value="build"/>
-	<property name="build.initwb" value="${build}/initwb"/>
-    <property name="build.xml"    value="${build}/xml" />
+    <property name="build" value="build"/>
+    <property name="build.initwb" value="${build}/initwb"/>
+    <property name="build.xml" value="${build}/xml"/>
 
-	<property name="dist"            value="dist/wbemservices"/>
-	<property name="dist.mof"        value="${dist}/mof"/>
-	<property name="dist.doc"        value="${dist}/doc"/>
-	<property name="dist.bin"        value="${dist}/bin"/>
-	<property name="dist.lib"        value="${dist}/lib"/>
-	<property name="dist.bin.help"   value="${dist.bin}/${help}"/>
-	<property name="dist.cimom"      value="${dist}/cimom"/>
-	<property name="dist.cimom.lib"  value="${dist.cimom}/lib"/>
-	<property name="dist.cimom.bin"  value="${dist.cimom}/bin"/>
-	<property name="dist.cimom.logr" value="${dist.cimom}/logr"/>
-	<property name="dist.examples"   value="${dist}/examples"/>
+    <property name="dist" value="dist/wbemservices"/>
+    <property name="dist.mof" value="${dist}/mof"/>
+    <property name="dist.doc" value="${dist}/doc"/>
+    <property name="dist.bin" value="${dist}/bin"/>
+    <property name="dist.lib" value="${dist}/lib"/>
+    <property name="dist.bin.help" value="${dist.bin}/${help}"/>
+    <property name="dist.cimom" value="${dist}/cimom"/>
+    <property name="dist.cimom.lib" value="${dist.cimom}/lib"/>
+    <property name="dist.cimom.bin" value="${dist.cimom}/bin"/>
+    <property name="dist.cimom.logr" value="${dist.cimom}/logr"/>
+    <property name="dist.examples" value="${dist}/examples"/>
 
-	<property name="workshop.help"   value="help/cimworkshop/locale/C"/>
-	
+    <property name="workshop.help" value="help/cimworkshop/locale/C"/>
 
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<!-- definition: WBEM API classpath  -->
-	<!-- Sets up the classpath for WBEM API, Sun parser.jar -->
-	<!--  + base.path -->
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<path id="wbemapi.path">
-		<pathelement path="${build}" />
-	</path>
 
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<!-- definition: Sun RI classpath  -->
-	<!-- Sets up the classpath for Sun RI + wbemapi.path -->
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<path id="sunri.path">
-		<path refid="wbemapi.path" />
-		<pathelement path="${src}" />
-	</path>
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- definition: WBEM API classpath  -->
+    <!-- Sets up the classpath for WBEM API, Sun parser.jar -->
+    <!--  + base.path -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <path id="wbemapi.path">
+        <pathelement path="${build}"/>
+    </path>
 
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<!-- definition: Sun SDK Apps classpath  -->
-	<!-- Sets up the classpath for Sun SDK Apps + wbemapi.path -->
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<path id="sdkapps.path">
-		<path refid="wbemapi.path" />
-		<pathelement path="${src}/sdk/apps" />
-	</path>
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- definition: Sun RI classpath  -->
+    <!-- Sets up the classpath for Sun RI + wbemapi.path -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <path id="sunri.path">
+        <path refid="wbemapi.path"/>
+        <pathelement path="${src}"/>
+    </path>
 
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<!-- definition: Runtime classpath  -->
-	<!-- Sets up the classpath for creating the repository -->
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<path id="runtime.path">
-		<pathelement path="${dist.bin}/mofcomp.jar" />
-		<pathelement path="${dist.lib}/wbem.jar" />
-		<pathelement path="${dist.lib}/parser.jar" />
-		<pathelement path="${dist.cimom.lib}/cimom.jar" />
-		<pathelement path="${dist.cimom.lib}/cimrepository.jar" />
-	</path>
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- definition: Sun SDK Apps classpath  -->
+    <!-- Sets up the classpath for Sun SDK Apps + wbemapi.path -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <path id="sdkapps.path">
+        <path refid="wbemapi.path"/>
+        <pathelement path="${src}/sdk/apps"/>
+    </path>
 
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<!-- target: init  -->
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<target name="init">
-		<!-- Create the time stamp -->
-		<tstamp>
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- definition: Runtime classpath  -->
+    <!-- Sets up the classpath for creating the repository -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <path id="runtime.path">
+        <pathelement path="${dist.bin}/mofcomp.jar"/>
+        <pathelement path="${dist.lib}/wbem.jar"/>
+        <pathelement path="${dist.lib}/parser.jar"/>
+        <pathelement path="${dist.cimom.lib}/cimom.jar"/>
+        <pathelement path="${dist.cimom.lib}/cimrepository.jar"/>
+    </path>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- target: init  -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp>
             <format property="DATETIME" pattern="MM/dd/yy:hh:mm" locale="en"/>
         </tstamp>
-		<!-- Create the directory structure used by compile, dist -->
-		<mkdir dir="${dist}"/>
-		<mkdir dir="${dist.mof}"/>
-		<mkdir dir="${dist.doc}"/>
-		<mkdir dir="${dist.lib}"/>
-		<mkdir dir="${dist.bin}"/>
-		<mkdir dir="${dist.mof}"/>
-		<mkdir dir="${dist.cimom}"/>
-		<mkdir dir="${dist.cimom.bin}"/>
-		<mkdir dir="${dist.cimom.lib}"/>
-		<mkdir dir="${dist.cimom.logr}"/>
-		<mkdir dir="${dist.examples}/client/batching"/>
-		<mkdir dir="${dist.examples}/client/class"/>
-		<mkdir dir="${dist.examples}/client/connect"/>
-		<mkdir dir="${dist.examples}/client/enumeration"/>
-		<mkdir dir="${dist.examples}/client/event"/>
-		<mkdir dir="${dist.examples}/client/instance"/>
-		<mkdir dir="${dist.examples}/client/method"/>
-		<mkdir dir="${dist.examples}/client/namespace"/>
-		<mkdir dir="${dist.examples}/client/property"/>
-		<mkdir dir="${dist.examples}/client/qualifier"/>
-		<mkdir dir="${dist.examples}/client/query"/>
-		<mkdir dir="${dist.examples}/client/verify"/>
-		<mkdir dir="${dist.examples}/provider/sfl"/>
-		<mkdir dir="${dist.examples}/provider/sip"/>
-		<mkdir dir="${dist.examples}/provider/tsa"/>
-		
+        <!-- Create the directory structure used by compile, dist -->
+        <mkdir dir="${dist}"/>
+        <mkdir dir="${dist.mof}"/>
+        <mkdir dir="${dist.doc}"/>
+        <mkdir dir="${dist.lib}"/>
+        <mkdir dir="${dist.bin}"/>
+        <mkdir dir="${dist.mof}"/>
+        <mkdir dir="${dist.cimom}"/>
+        <mkdir dir="${dist.cimom.bin}"/>
+        <mkdir dir="${dist.cimom.lib}"/>
+        <mkdir dir="${dist.cimom.logr}"/>
+        <mkdir dir="${dist.examples}/client/batching"/>
+        <mkdir dir="${dist.examples}/client/class"/>
+        <mkdir dir="${dist.examples}/client/connect"/>
+        <mkdir dir="${dist.examples}/client/enumeration"/>
+        <mkdir dir="${dist.examples}/client/event"/>
+        <mkdir dir="${dist.examples}/client/instance"/>
+        <mkdir dir="${dist.examples}/client/method"/>
+        <mkdir dir="${dist.examples}/client/namespace"/>
+        <mkdir dir="${dist.examples}/client/property"/>
+        <mkdir dir="${dist.examples}/client/qualifier"/>
+        <mkdir dir="${dist.examples}/client/query"/>
+        <mkdir dir="${dist.examples}/client/verify"/>
+        <mkdir dir="${dist.examples}/provider/sfl"/>
+        <mkdir dir="${dist.examples}/provider/sip"/>
+        <mkdir dir="${dist.examples}/provider/tsa"/>
+
         <mkdir dir="${build}"/>
-		<mkdir dir="${build.initwb}"/>
-		<mkdir dir="${build.xml}"/>
-	</target>
-
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<!-- target: compile  -->
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<target name="compileJavax" depends="init">
-		<copy file="${ver.client}/Version.orig" toFile="${ver.client}/Version.java">
-			<filterset>
-		        <filter token="DATETIME" value="${DATETIME}"/>
-		    </filterset>
-		</copy>
-		
-		<javac debug="${debug}" deprecation="${deprecation}" srcdir="${src.wbem}" destdir="${build}" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
+        <mkdir dir="${build.initwb}"/>
+        <mkdir dir="${build.xml}"/>
     </target>
 
-	<target name="compileOrg" depends="init,compileJavax">
-		<copy file="${ver.mof}/Version.orig" toFile="${ver.mof}/Version.java">
-			<filterset>
-		        <filter token="DATETIME" value="${DATETIME}"/>
-		    </filterset>
-		</copy>
-		<copy file="${ver.cimom}/Version.orig" toFile="${ver.cimom}/Version.java">
-			<filterset>
-		        <filter token="DATETIME" value="${DATETIME}"/>
-		    </filterset>
-		</copy>
-		
-		
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- target: compile  -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <target name="compileJavax" depends="init">
+        <copy file="${ver.client}/Version.orig" toFile="${ver.client}/Version.java">
+            <filterset>
+                <filter token="DATETIME" value="${DATETIME}"/>
+            </filterset>
+        </copy>
+
+        <javac debug="${debug}" deprecation="${deprecation}" srcdir="${src.wbem}" destdir="${build}">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+    </target>
+
+    <target name="compileOrg" depends="init,compileJavax">
+        <copy file="${ver.mof}/Version.orig" toFile="${ver.mof}/Version.java">
+            <filterset>
+                <filter token="DATETIME" value="${DATETIME}"/>
+            </filterset>
+        </copy>
+        <copy file="${ver.cimom}/Version.orig" toFile="${ver.cimom}/Version.java">
+            <filterset>
+                <filter token="DATETIME" value="${DATETIME}"/>
+            </filterset>
+        </copy>
+
+
         <!-- Compile from ${src}/org into ${build} -->
-		<javac debug="${debug}" deprecation="${deprecation}" srcdir="${src}" destdir="${build}" includes="org/**" source="1.4">
-			<classpath refid="sunri.path"/>
-		</javac>
+        <javac debug="${debug}" deprecation="${deprecation}" srcdir="${src}" destdir="${build}" includes="org/**">
+            <classpath refid="sunri.path"/>
+        </javac>
 
-		<!-- Compile RMI implementation stubs -->
-		<rmic classname="org.wbemservices.wbem.client.adapter.rmi.RemoteListenerImpl"
-		        base="${build}">
-			<classpath refid="sunri.path"/>
-		</rmic>
+        <!-- Compile RMI implementation stubs -->
+        <rmic classname="org.wbemservices.wbem.client.adapter.rmi.RemoteListenerImpl"
+              base="${build}">
+            <classpath refid="sunri.path"/>
+        </rmic>
 
-		<rmic classname="org.wbemservices.wbem.cimom.adapters.client.rmi.CIMOM_1Impl"
-		        base="${build}">
-			<classpath refid="sunri.path"/>
-		</rmic>
+        <rmic classname="org.wbemservices.wbem.cimom.adapters.client.rmi.CIMOM_1Impl"
+              base="${build}">
+            <classpath refid="sunri.path"/>
+        </rmic>
 
-		<rmic classname="org.wbemservices.wbem.cimom.adapters.client.rmi.CIMRMILease_Impl"
-		        base="${build}">
-			<classpath refid="sunri.path"/>
-		</rmic>
+        <rmic classname="org.wbemservices.wbem.cimom.adapters.client.rmi.CIMRMILease_Impl"
+              base="${build}">
+            <classpath refid="sunri.path"/>
+        </rmic>
 
     </target>
 
-	<target name="compileInitwb" depends="init,compileJavax">
-		<javac debug="${debug}" deprecation="${deprecation}" srcdir="${src.initwb}" destdir="${build.initwb}" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
+    <target name="compileInitwb" depends="init,compileJavax">
+        <javac debug="${debug}" deprecation="${deprecation}" srcdir="${src.initwb}" destdir="${build.initwb}">
+            <classpath refid="wbemapi.path"/>
+        </javac>
     </target>
 
-	<target name="compileApps" depends="init,compileJavax">
-		<copy file="${ver.workshop}/Version.orig" toFile="${ver.workshop}/Version.java">
-			<filterset>
-		        <filter token="DATETIME" value="${DATETIME}"/>
-		    </filterset>
-		</copy>
-		
-		<!-- Compile from ${src}/sdk/apps into ${build} -->
-		<javac debug="${debug}" deprecation="${deprecation}" srcdir="${src}/sdk/apps" destdir="${build}" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
+    <target name="compileApps" depends="init,compileJavax">
+        <copy file="${ver.workshop}/Version.orig" toFile="${ver.workshop}/Version.java">
+            <filterset>
+                <filter token="DATETIME" value="${DATETIME}"/>
+            </filterset>
+        </copy>
+
+        <!-- Compile from ${src}/sdk/apps into ${build} -->
+        <javac debug="${debug}" deprecation="${deprecation}" srcdir="${src}/sdk/apps" destdir="${build}">
+            <classpath refid="wbemapi.path"/>
+        </javac>
     </target>
 
-	<target name="compileExamples" depends="init,compileJavax">
+    <target name="compileExamples" depends="init,compileJavax">
         <!-- //?? This still isn't clean !-->
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/client/batching"
-			destdir="${dist.examples}/client/batching" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/client/class"
-			destdir="${dist.examples}/client/class" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/client/connect"
-			destdir="${dist.examples}/client/connect" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/client/enumeration"
-			destdir="${dist.examples}/client/enumeration" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/client/event"
-			destdir="${dist.examples}/client/event" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/client/instance"
-			destdir="${dist.examples}/client/instance" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/client/method"
-			destdir="${dist.examples}/client/method" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/client/namespace"
-			destdir="${dist.examples}/client/namespace" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/client/property"
-			destdir="${dist.examples}/client/property" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/client/qualifier"
-			destdir="${dist.examples}/client/qualifier" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/client/query"
-			destdir="${dist.examples}/client/query" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/client/verify"
-			destdir="${dist.examples}/client/verify" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/provider/sfl"
-			destdir="${dist.examples}/provider/sfl" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/provider/sip"
-			destdir="${dist.examples}/provider/sip" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-		<javac debug="${debug}"
-			deprecation="${deprecation}"
-			srcdir="${src.examples}/provider/tsa"
-			destdir="${dist.examples}/provider/tsa" source="1.4">
-			<classpath refid="wbemapi.path"/>
-		</javac>
-	</target>
-
-	<target name="compile" depends="init,compileJavax,compileOrg,compileInitwb,compileExamples,compileApps">
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/client/batching"
+               destdir="${dist.examples}/client/batching">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/client/class"
+               destdir="${dist.examples}/client/class">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/client/connect"
+               destdir="${dist.examples}/client/connect">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/client/enumeration"
+               destdir="${dist.examples}/client/enumeration">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/client/event"
+               destdir="${dist.examples}/client/event">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/client/instance"
+               destdir="${dist.examples}/client/instance">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/client/method"
+               destdir="${dist.examples}/client/method">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/client/namespace"
+               destdir="${dist.examples}/client/namespace">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/client/property"
+               destdir="${dist.examples}/client/property">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/client/qualifier"
+               destdir="${dist.examples}/client/qualifier">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/client/query"
+               destdir="${dist.examples}/client/query">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/client/verify"
+               destdir="${dist.examples}/client/verify">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/provider/sfl"
+               destdir="${dist.examples}/provider/sfl">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/provider/sip"
+               destdir="${dist.examples}/provider/sip">
+            <classpath refid="wbemapi.path"/>
+        </javac>
+        <javac debug="${debug}"
+               deprecation="${deprecation}"
+               srcdir="${src.examples}/provider/tsa"
+               destdir="${dist.examples}/provider/tsa">
+            <classpath refid="wbemapi.path"/>
+        </javac>
     </target>
 
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<!-- target: dist -->
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<target name="dist" depends="jars,repository"  description="Create the distribution package">
-		<!-- Make zip archive -->
-		<zip zipfile="${src}/wbemservices.zip"
-			basedir="dist"
-			includes="**"
-		/>
+    <target name="compile" depends="init,compileJavax,compileOrg,compileInitwb,compileExamples,compileApps">
     </target>
-	
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- target: dist -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <target name="dist" depends="jars,repository" description="Create the distribution package">
+        <!-- Make zip archive -->
+        <zip zipfile="${src}/wbemservices.zip"
+             basedir="dist"
+             includes="**"
+                />
+    </target>
+
     <target name="copy" depends="init">
 
-		<!-- Copy files needed in the product jar files -->
-		<copy todir="${build}">
-			<fileset dir="${src}/java/wbem">
-				<include name="**/*.dtd"/>
-				<include name="**/*.properties"/>
-				<include name="**/*.policy"/>
-			</fileset>
-		</copy>
-		<copy todir="${build}/org">
-			<fileset dir="${src}/org">
-				<include name="**/*.properties"/>
-				<include name="**/*.policy"/>
-			</fileset>
-		</copy>
-		<copy todir="${build}">
-			<fileset dir="${src.sdk}">
-				<include name="**/*.properties"/>
-				<include name="**/*.gif"/>
-				<include name="**/*.htm"/>
-				<include name="**/*.html"/>
-			</fileset>
-		</copy>
-		<copy todir="${build}">
-			<fileset dir="${src}/sdk/examples">
-				<include name="**/*.java"/>
-				<include name="**/*.mof"/>
-			</fileset>
-		</copy>
-		<!-- Copy other files -->
-		<copy todir="${dist.examples}">
-			<fileset dir="${src.examples}">
-				<include name="**"/>
+        <!-- Copy files needed in the product jar files -->
+        <copy todir="${build}">
+            <fileset dir="${src}/java/wbem">
+                <include name="**/*.dtd"/>
+                <include name="**/*.properties"/>
+                <include name="**/*.policy"/>
+            </fileset>
+        </copy>
+        <copy todir="${build}/org">
+            <fileset dir="${src}/org">
+                <include name="**/*.properties"/>
+                <include name="**/*.policy"/>
+            </fileset>
+        </copy>
+        <copy todir="${build}">
+            <fileset dir="${src.sdk}">
+                <include name="**/*.properties"/>
+                <include name="**/*.gif"/>
+                <include name="**/*.htm"/>
+                <include name="**/*.html"/>
+            </fileset>
+        </copy>
+        <copy todir="${build}">
+            <fileset dir="${src}/sdk/examples">
+                <include name="**/*.java"/>
+                <include name="**/*.mof"/>
+            </fileset>
+        </copy>
+        <!-- Copy other files -->
+        <copy todir="${dist.examples}">
+            <fileset dir="${src.examples}">
+                <include name="**"/>
                 <exclude name="scripts/**"/>
-			</fileset>
-		</copy>
-		<copy todir="${dist.examples}">
-			<fileset dir="${build}">
-				<include name="client/**/*.class"/>
-				<include name="provider/**/*.class"/>
-			</fileset>
-		</copy>
-		<copy todir="${dist.examples}">
-			<fileset dir="${src.examples}/scripts">
-				<include name="**"/>
-			</fileset>
-		</copy>
-		<chmod dir="${dist.examples}" perm="ugo+rx" includes="*.sh"/>		
-		<copy todir="${dist.cimom.bin}">
-			<fileset dir="${src}/org/wbemservices/wbem/cimom">
-				<include name="cimom.policy"/>
-			</fileset>
-			<fileset dir="${src.initwb}">
-				<include name="WBEMServices_*.properties"/>
-				<include name="cimom.properties"/>
-				<include name="verify_cimom.*"/>
-				<include name="start_cimom.*"/>
-				<include name="stop_cimom.*"/>
-			</fileset>
-		</copy>
-		<chmod dir="${dist.cimom.bin}" perm="ugo+rx" includes="*.sh"/>		
-		<copy todir="${dist}">
-			<fileset dir="${src}">
-				<include name="README"/>
-				<include name="sissl_1-2.html"/>
-				<include name="version.txt"/>
-			</fileset>
-		</copy>
+            </fileset>
+        </copy>
+        <copy todir="${dist.examples}">
+            <fileset dir="${build}">
+                <include name="client/**/*.class"/>
+                <include name="provider/**/*.class"/>
+            </fileset>
+        </copy>
+        <copy todir="${dist.examples}">
+            <fileset dir="${src.examples}/scripts">
+                <include name="**"/>
+            </fileset>
+        </copy>
+        <chmod dir="${dist.examples}" perm="ugo+rx" includes="*.sh"/>
+        <copy todir="${dist.cimom.bin}">
+            <fileset dir="${src}/org/wbemservices/wbem/cimom">
+                <include name="cimom.policy"/>
+            </fileset>
+            <fileset dir="${src.initwb}">
+                <include name="WBEMServices_*.properties"/>
+                <include name="cimom.properties"/>
+                <include name="verify_cimom.*"/>
+                <include name="start_cimom.*"/>
+                <include name="stop_cimom.*"/>
+            </fileset>
+        </copy>
+        <chmod dir="${dist.cimom.bin}" perm="ugo+rx" includes="*.sh"/>
+        <copy todir="${dist}">
+            <fileset dir="${src}">
+                <include name="README"/>
+                <include name="sissl_1-2.html"/>
+                <include name="version.txt"/>
+            </fileset>
+        </copy>
         <copy todir="${dist.mof}">
             <fileset dir="${src}/mof">
                 <include name="**/*.mof"/>
             </fileset>
         </copy>
-		<copy todir="${dist.doc}">
-			<fileset dir="${src}/doc">
-				<include name="*.*"/>
-			</fileset>
-		</copy>
-		<copy todir="${dist.bin}">
-			<fileset dir="${src.sdk}/scripts">
-				<include name="cimworkshop.*"/>
-			</fileset>
-			<fileset dir="${src.initwb}">
-				<include name="mofcomp*"/>
-				<include name="mof2bean.*"/>
-				<include name="mof2html.*"/>
-				<include name="*.xsl"/>
-				<include name="mof.css"/>
-				<include name="mofvar.inp"/>
-			</fileset>
-		</copy>
-	</target>
+        <copy todir="${dist.doc}">
+            <fileset dir="${src}/doc">
+                <include name="*.*"/>
+            </fileset>
+        </copy>
+        <copy todir="${dist.bin}">
+            <fileset dir="${src.sdk}/scripts">
+                <include name="cimworkshop.*"/>
+            </fileset>
+            <fileset dir="${src.initwb}">
+                <include name="mofcomp*"/>
+                <include name="mof2bean.*"/>
+                <include name="mof2html.*"/>
+                <include name="*.xsl"/>
+                <include name="mof.css"/>
+                <include name="mofvar.inp"/>
+            </fileset>
+        </copy>
+    </target>
 
     <target name="jars" depends="init,compile,copy" description="Create all of the project jar files">
-		<!-- Create .jar files -->
-		<jar jarfile="${dist.lib}/wbem.jar"
-		     basedir="${build}"
-		     includes="javax/wbem/**,
+        <!-- Create .jar files -->
+        <jar jarfile="${dist.lib}/wbem.jar"
+             basedir="${build}"
+             includes="javax/wbem/**,
 		        org/wbemservices/wbem/client/adapter/rmi/*.class,
 		        org/wbemservices/wbem/client/*.class,
 			    org/wbemservices/wbem/cimom/adapters/client/rmi/*Stub.class"
-		     compress="true"
-		/>
-		<jar jarfile="${dist.cimom.lib}/cimom.jar"
-		     basedir="${build}"
-		     includes="org/wbemservices/wbem/cimom/**,
+             compress="true"
+                />
+        <jar jarfile="${dist.cimom.lib}/cimom.jar"
+             basedir="${build}"
+             includes="org/wbemservices/wbem/cimom/**,
 		     	org/wbemservices/wbem/util/**"
-		     compress="true"
-		/>
-		<jar jarfile="${dist.bin}/mofcomp.jar"
-		     basedir="${build}"
-		     includes="org/wbemservices/wbem/compiler/**"
-		     compress="true"
-		/>
-		<jar jarfile="${dist.cimom.lib}/cimrepository.jar"
-		     basedir="${build}"
-		     includes="org/wbemservices/wbem/repository/**"
-		     compress="true"
-		/>
-		<jar jarfile="${dist.cimom.lib}/wbemstartup.jar"
-		     basedir="${build}"
-		     includes="org/wbemservices/wbem/bootstrap/*.class,
+             compress="true"
+                />
+        <jar jarfile="${dist.bin}/mofcomp.jar"
+             basedir="${build}"
+             includes="org/wbemservices/wbem/compiler/**"
+             compress="true"
+                />
+        <jar jarfile="${dist.cimom.lib}/cimrepository.jar"
+             basedir="${build}"
+             includes="org/wbemservices/wbem/repository/**"
+             compress="true"
+                />
+        <jar jarfile="${dist.cimom.lib}/wbemstartup.jar"
+             basedir="${build}"
+             includes="org/wbemservices/wbem/bootstrap/*.class,
 		     	org/wbemservices/wbem/cimom/util/*.class"
-		     compress="true"
-		/>
-		<jar jarfile="${dist.bin}/cimworkshop.jar"
-		     basedir="${build}"
-		     includes="org/wbemservices/wbem/apps/**"
-		     compress="true"
-		/>
-	</target>
+             compress="true"
+                />
+        <jar jarfile="${dist.bin}/cimworkshop.jar"
+             basedir="${build}"
+             includes="org/wbemservices/wbem/apps/**"
+             compress="true"
+                />
+    </target>
 
-	<target name="repository" description="Create the repository">
-		<delete dir="${dist.cimom.logr}"/>
-		<mkdir dir="${dist.cimom.logr}"/>
+    <target name="repository" description="Create the repository">
+        <delete dir="${dist.cimom.logr}"/>
+        <mkdir dir="${dist.cimom.logr}"/>
 
-		<java classname="org.wbemservices.wbem.compiler.mofc.CIM_Mofc" fork="yes"
-                dir="${dist.mof}/dmtf/2.8" failonerror="true" >
-			<classpath refid="runtime.path"/>
-			<sysproperty key="propdir" path="${dist.cimom.bin}" />
-			<sysproperty key="java.security.manager" value=""/>
-			<sysproperty key="java.security.policy"
-                path="${dist.cimom.bin}/cimom.policy" />
-			<sysproperty key="logdir" path="${dist.cimom.logr}" />
-			<sysproperty key="org.wbemservices.wbem.rmiport" value="6987" />
-			<sysproperty key="org.wbemservices.wbem.httpport" value="6988" />
-			<sysproperty key="org.wbemservices.wbem.build" value="true" />
-			<arg line="-v -o" />
-			<arg path="${dist.cimom.logr}" />
-			<arg line="CIM_Schema28.mof" />
-		</java>
-		<java classname="org.wbemservices.wbem.compiler.mofc.CIM_Mofc" fork="yes"
-                dir="${dist.mof}" failonerror="true">
-			<classpath refid="runtime.path"/>
-			<sysproperty key="propdir" path="${dist.cimom.bin}" />
-			<sysproperty key="java.security.manager" value=""/>
-			<sysproperty key="java.security.policy"
-                path="${dist.cimom.bin}/cimom.policy" />
-			<sysproperty key="logdir" path="${dist.cimom.logr}" />
-			<sysproperty key="org.wbemservices.wbem.rmiport" value="6987" />
-			<sysproperty key="org.wbemservices.wbem.httpport" value="6988" />
-			<sysproperty key="org.wbemservices.wbem.build" value="true" />
-			<arg line="-v -n interop -o" />
-			<arg path="${dist.cimom.logr}" />
-			<arg line="WBEMServices_Schema.mof" />
-		</java>
-	</target>
-
-	<target name="mofTree" depends="compileInitwb" description="Create the Mof Tree documentation">
-		<java classname="mof2java" fork="yes"
-                dir="${src}/mof/dmtf/2.8" failonerror="true">
-            <classpath path="${build.initwb}" />
-            <arg value="-out" />
-            <arg file="${build}/schema28" />
-            <arg value="-package" />
-            <arg value="schema28" />
-            <arg value="*.mof" />
+        <java classname="org.wbemservices.wbem.compiler.mofc.CIM_Mofc" fork="yes"
+              dir="${dist.mof}/dmtf/2.8" failonerror="true">
+            <classpath refid="runtime.path"/>
+            <sysproperty key="propdir" path="${dist.cimom.bin}"/>
+            <sysproperty key="java.security.manager" value=""/>
+            <sysproperty key="java.security.policy"
+                         path="${dist.cimom.bin}/cimom.policy"/>
+            <sysproperty key="logdir" path="${dist.cimom.logr}"/>
+            <sysproperty key="org.wbemservices.wbem.rmiport" value="6987"/>
+            <sysproperty key="org.wbemservices.wbem.httpport" value="6988"/>
+            <sysproperty key="org.wbemservices.wbem.build" value="true"/>
+            <arg line="-v -o"/>
+            <arg path="${dist.cimom.logr}"/>
+            <arg line="CIM_Schema28.mof"/>
         </java>
-	
+        <java classname="org.wbemservices.wbem.compiler.mofc.CIM_Mofc" fork="yes"
+              dir="${dist.mof}" failonerror="true">
+            <classpath refid="runtime.path"/>
+            <sysproperty key="propdir" path="${dist.cimom.bin}"/>
+            <sysproperty key="java.security.manager" value=""/>
+            <sysproperty key="java.security.policy"
+                         path="${dist.cimom.bin}/cimom.policy"/>
+            <sysproperty key="logdir" path="${dist.cimom.logr}"/>
+            <sysproperty key="org.wbemservices.wbem.rmiport" value="6987"/>
+            <sysproperty key="org.wbemservices.wbem.httpport" value="6988"/>
+            <sysproperty key="org.wbemservices.wbem.build" value="true"/>
+            <arg line="-v -n interop -o"/>
+            <arg path="${dist.cimom.logr}"/>
+            <arg line="WBEMServices_Schema.mof"/>
+        </java>
+    </target>
+
+    <target name="mofTree" depends="compileInitwb" description="Create the Mof Tree documentation">
+        <java classname="mof2java" fork="yes"
+              dir="${src}/mof/dmtf/2.8" failonerror="true">
+            <classpath path="${build.initwb}"/>
+            <arg value="-out"/>
+            <arg file="${build}/schema28"/>
+            <arg value="-package"/>
+            <arg value="schema28"/>
+            <arg value="*.mof"/>
+        </java>
+
         <javadoc packagenames="schema28"
                  sourcepath="${build}"
                  defaultexcludes="yes"
@@ -512,29 +512,29 @@
                  use="false"
                  public="true"
                  windowtitle="WBEM Services MOF Class Heirarchy">
-          <doctitle><![CDATA[<h1>WBEM Services MOF Class Heirarchy</h1>]]></doctitle>
-          <bottom><![CDATA[<i>WBEM Services MOF Class Heirarchy.</i>]]></bottom>
+            <doctitle><![CDATA[<h1>WBEM Services MOF Class Heirarchy</h1>]]></doctitle>
+            <bottom><![CDATA[<i>WBEM Services MOF Class Heirarchy.</i>]]></bottom>
         </javadoc>
-	</target>
+    </target>
 
-	<target name="mofHtml" depends="jars" description="Create the Mof Html documentation">
-		<java classname="org.wbemservices.wbem.compiler.mofc.CIM_Mofc" fork="yes"
-                dir="${build.xml}" failonerror="true">
-			<classpath refid="runtime.path"/>
-			<arg line="-v -x -b -o" />
-			<arg path="${build.xml}" />
-			<arg path="${src}/mof/dmtf/2.8/CIM_Schema28.mof" />
-		</java>
-        <copy file="${build.xml}/mof.xml" tofile="${src.initwb}/mof.xml" />
+    <target name="mofHtml" depends="jars" description="Create the Mof Html documentation">
+        <java classname="org.wbemservices.wbem.compiler.mofc.CIM_Mofc" fork="yes"
+              dir="${build.xml}" failonerror="true">
+            <classpath refid="runtime.path"/>
+            <arg line="-v -x -b -o"/>
+            <arg path="${build.xml}"/>
+            <arg path="${src}/mof/dmtf/2.8/CIM_Schema28.mof"/>
+        </java>
+        <copy file="${build.xml}/mof.xml" tofile="${src.initwb}/mof.xml"/>
         <style basedir="${build.xml}"
                destdir="${dist.doc}/mofhtml"
                style="${src.initwb}/multimof.xsl"
-               in="${build.xml}/bigmof.xml" out="${build.xml}/mof.html" />
-        <delete file="${src.initwb}/mof.xml" />
+               in="${build.xml}/bigmof.xml" out="${build.xml}/mof.html"/>
+        <delete file="${src.initwb}/mof.xml"/>
         <style basedir="${build.xml}"
                destdir="${dist.doc}/mofhtml"
                style="${src.initwb}/index.xsl"
-               in="${build.xml}/mof.xml" out="${build.xml}/index.tmp" />
+               in="${build.xml}/mof.xml" out="${build.xml}/index.tmp"/>
         <copy todir="${dist.doc}/mofhtml">
             <fileset dir="${build.xml}">
                 <include name="*.html"/>
@@ -545,9 +545,9 @@
                 <include name="mof.css"/>
             </fileset>
         </copy>
-	</target>
+    </target>
 
-	<target name="javadoc" description="Create the Javadocs for the Client API">
+    <target name="javadoc" description="Create the Javadocs for the Client API">
         <copy todir="${build}/javadoc">
             <fileset dir="${src.wbem}">
                 <include name="javax/wbem/**"/>
@@ -595,26 +595,26 @@
                  version="true"
                  use="false"
                  windowtitle="Java(TM) WBEM Services 1.0 API">
-          <doctitle><![CDATA[<h1>Java&trade; WBEM Services 1.0 API</h1>]]></doctitle>
-          <bottom><![CDATA[<i>Java&trade; WBEM Services 1.0 API</i>]]></bottom>
+            <doctitle><![CDATA[<h1>Java&trade; WBEM Services 1.0 API</h1>]]></doctitle>
+            <bottom><![CDATA[<i>Java&trade; WBEM Services 1.0 API</i>]]></bottom>
         </javadoc>
-	</target>
-
-	<target name="docs" depends="javadoc,mofHtml,mofTree"  description="Create all of the project documentation">
     </target>
 
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<!-- target: clean  -->
-	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-	<target name="clean" description="Clean up the build tree">
-		<!-- Delete the ${build} and ${dist} directory trees -->
-		<delete dir="${build}"/>
-		<delete dir="${dist}"/>
-		<delete file="${src}/wbemservices.zip"/>
-		<!-- delete old Version.java files -->
-		<delete file="${ver.client}/Version.java"/>
-		<delete file="${ver.mof}/Version.java"/>
-		<delete file="${ver.cimom}/Version.java"/>
-		<delete file="${ver.workshop}/Version.java"/>
-	</target>
+    <target name="docs" depends="javadoc,mofHtml,mofTree" description="Create all of the project documentation">
+    </target>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- target: clean  -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <target name="clean" description="Clean up the build tree">
+        <!-- Delete the ${build} and ${dist} directory trees -->
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+        <delete file="${src}/wbemservices.zip"/>
+        <!-- delete old Version.java files -->
+        <delete file="${ver.client}/Version.java"/>
+        <delete file="${ver.mof}/Version.java"/>
+        <delete file="${ver.cimom}/Version.java"/>
+        <delete file="${ver.workshop}/Version.java"/>
+    </target>
 </project>

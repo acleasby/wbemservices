@@ -59,9 +59,9 @@ public class EnumQualifierType {
 	    System.out.println("enumQualifierTypes(objectpath) all the qualifiers");
 	    System.out.println("   in namespace " + ParentNameSpace + " on " + Host);
 	    CIMObjectPath qtop = new CIMObjectPath(Host);
-	    Enumeration enum = cc.enumQualifierTypes(qtop);
-	    while (enum.hasMoreElements()) {
-		CIMQualifierType qt = (CIMQualifierType)enum.nextElement();
+	    Enumeration enumeration = cc.enumQualifierTypes(qtop);
+	    while (enumeration.hasMoreElements()) {
+		CIMQualifierType qt = (CIMQualifierType)enumeration.nextElement();
 		System.out.println(qt); 
 	    }
 	}

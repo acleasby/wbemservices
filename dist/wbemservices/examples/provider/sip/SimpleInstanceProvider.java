@@ -26,36 +26,40 @@
 */
 
 import javax.wbem.cim.*;
-import javax.wbem.client.*;
-import javax.wbem.provider.*;
-
-import java.util.*;
-
+import javax.wbem.client.CIMOMHandle;
+import javax.wbem.provider.CIMInstanceProvider;
+import java.util.Vector;
+import java.util.logging.Logger;
 
 /**
- * @author     Sun Microsystems, Inc.
- * @since      WBEM 1.0
+ * @author Sun Microsystems, Inc.
+ * @since WBEM 1.0
  */
 public class SimpleInstanceProvider implements CIMInstanceProvider {
+    private static final Logger LOGGER = Logger.getLogger(SimpleInstanceProvider.class.getCanonicalName());
 
     private static int loop = 0;
 
-    public void initialize(CIMOMHandle cimom) 
-    throws CIMException {
+    public SimpleInstanceProvider() {
+        System.out.println("New SimpleInstanceProvider");
     }
 
-    public void cleanup() 
-    throws CIMException {
+    public void initialize(CIMOMHandle cimom)
+            throws CIMException {
     }
 
-    public CIMInstance[] enumerateInstances(CIMObjectPath op, 
-					      boolean localOnly, 
-					      boolean includeQualifiers, 
-					      boolean includeClassOrigin, 
-					      String[] propList,
-					      CIMClass cc)
-    throws CIMException {
-	return null;
+    public void cleanup()
+            throws CIMException {
+    }
+
+    public CIMInstance[] enumerateInstances(CIMObjectPath op,
+            boolean localOnly,
+            boolean includeQualifiers,
+            boolean includeClassOrigin,
+            String[] propList,
+            CIMClass cc)
+            throws CIMException {
+        return null;
     }
 
     /*
@@ -65,77 +69,78 @@ public class SimpleInstanceProvider implements CIMInstanceProvider {
      * currently the CIMOM only asks for shallow enumeration.
      */
     public CIMObjectPath[] enumerateInstanceNames(CIMObjectPath op, CIMClass cc)
-    throws CIMException {
-	if (op.getObjectName().equalsIgnoreCase("Ex_SimpleInstanceProvider")) {
+            throws CIMException {
+        LOGGER.warning("enumerateInstanceNames");
+        if (op.getObjectName().equalsIgnoreCase("Ex_SimpleInstanceProvider")) {
 
-	    Vector instances = new Vector();
-	    CIMObjectPath cop = new CIMObjectPath(op.getObjectName(),
-						 op.getNameSpace());
-	    if (loop == 0) {
-		cop.addKey("First", new CIMValue("red"));
-		cop.addKey("Last", new CIMValue("apple"));
-		instances.addElement(cop);
-		loop += 1;
-	    } else {
-		cop.addKey("First", new CIMValue("red"));
-		cop.addKey("Last", new CIMValue("apple"));
-		instances.addElement(cop);
+            Vector instances = new Vector();
+            CIMObjectPath cop = new CIMObjectPath(op.getObjectName(),
+                    op.getNameSpace());
+            if (loop == 0) {
+                cop.addKey("First", new CIMValue("red"));
+                cop.addKey("Last", new CIMValue("apple"));
+                instances.addElement(cop);
+                loop += 1;
+            } else {
+                cop.addKey("First", new CIMValue("red"));
+                cop.addKey("Last", new CIMValue("apple"));
+                instances.addElement(cop);
 
-		cop = new CIMObjectPath(op.getObjectName(),
-						 op.getNameSpace());
-		cop.addKey("First", new CIMValue("green"));
-		cop.addKey("Last", new CIMValue("apple"));
-		instances.addElement(cop);
-	    }
+                cop = new CIMObjectPath(op.getObjectName(),
+                        op.getNameSpace());
+                cop.addKey("First", new CIMValue("green"));
+                cop.addKey("Last", new CIMValue("apple"));
+                instances.addElement(cop);
+            }
 
-	    CIMObjectPath[] copArray = new CIMObjectPath[instances.size()];
-	    instances.toArray(copArray);
-	    return copArray;
-	}
-	return null;
+            CIMObjectPath[] copArray = new CIMObjectPath[instances.size()];
+            instances.toArray(copArray);
+            return copArray;
+        }
+        return null;
     }
 
-    public CIMInstance getInstance(CIMObjectPath op, 
-				   boolean localOnly,
-				   boolean includeQualifiers,
-				   boolean includeClassOrigin,
-				   String[] propertyList,
-				   CIMClass cc)
-    throws CIMException {
-	if (op.getObjectName().equalsIgnoreCase("Ex_SimpleInstanceProvider")) {
-	    CIMInstance ci = cc.newInstance();
-	    ci.setProperty("First", new CIMValue("yellow"));
-	    ci.setProperty("Last", new CIMValue("apple"));
-	    if (localOnly) {
-		ci = ci.localElements();
-	    }
-	    return ci.filterProperties(propertyList, 
-					includeQualifiers,
-					includeClassOrigin);
-	}
-	return new CIMInstance();
+    public CIMInstance getInstance(CIMObjectPath op,
+            boolean localOnly,
+            boolean includeQualifiers,
+            boolean includeClassOrigin,
+            String[] propertyList,
+            CIMClass cc)
+            throws CIMException {
+        if (op.getObjectName().equalsIgnoreCase("Ex_SimpleInstanceProvider")) {
+            CIMInstance ci = cc.newInstance();
+            ci.setProperty("First", new CIMValue("yellow"));
+            ci.setProperty("Last", new CIMValue("apple"));
+            if (localOnly) {
+                ci = ci.localElements();
+            }
+            return ci.filterProperties(propertyList,
+                    includeQualifiers,
+                    includeClassOrigin);
+        }
+        return new CIMInstance();
     }
 
-    public CIMInstance[] execQuery(CIMObjectPath op, String query, 
-				   String ql, CIMClass cc)
-    throws CIMException {
-	throw(new CIMException(CIMException.CIM_ERR_NOT_SUPPORTED));
+    public CIMInstance[] execQuery(CIMObjectPath op, String query,
+            String ql, CIMClass cc)
+            throws CIMException {
+        throw (new CIMException(CIMException.CIM_ERR_NOT_SUPPORTED));
     }
 
-    public void setInstance(CIMObjectPath op, CIMInstance ci, 
-	boolean includeQualifiers, String[] propList)
-		throws CIMException {
-	throw(new CIMException(CIMException.CIM_ERR_NOT_SUPPORTED));
+    public void setInstance(CIMObjectPath op, CIMInstance ci,
+            boolean includeQualifiers, String[] propList)
+            throws CIMException {
+        throw (new CIMException(CIMException.CIM_ERR_NOT_SUPPORTED));
     }
 
     public CIMObjectPath createInstance(CIMObjectPath op, CIMInstance ci)
-		throws CIMException {
-	throw(new CIMException(CIMException.CIM_ERR_NOT_SUPPORTED));
+            throws CIMException {
+        throw (new CIMException(CIMException.CIM_ERR_NOT_SUPPORTED));
     }
 
     public void deleteInstance(CIMObjectPath cp)
-		throws CIMException {
-	throw(new CIMException(CIMException.CIM_ERR_NOT_SUPPORTED));
+            throws CIMException {
+        throw (new CIMException(CIMException.CIM_ERR_NOT_SUPPORTED));
     }
 }
 

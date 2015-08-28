@@ -240,9 +240,9 @@ public class MofcBackend {
 
         }
 
-        if (clht.get("-H") != null) {
+//        if (clht.get("-H") != null) {
             protocol = CIMClient.CIM_XML;
-        }
+//        }
 
         cimhost = (String) clht.get("cimhost");
         if ((cimhost == null) || (cimhost.length() == 0)) {
