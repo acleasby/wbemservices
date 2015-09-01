@@ -12,3 +12,5 @@ mvn deploy:deploy-file -Durl="https://admin:n1c3NC0mpl3x!@nexus.infinio.com/cont
 mvn deploy:deploy-file -Durl="https://admin:n1c3NC0mpl3x!@nexus.infinio.com/content/repositories/$REPOSITORY" -Dfile=dist/wbemservices/cimom/lib/wbemstartup.jar -DgroupId=org.sourceforge.wbemservices -DartifactId=wbemstartup -Dversion=$VERSION -Dpackaging=jar
 
 mvn deploy:deploy-file -Durl="https://admin:n1c3NC0mpl3x!@nexus.infinio.com/content/repositories/$REPOSITORY" -Dfile=dist/wbemservices/lib/wbem.jar -DgroupId=org.sourceforge.wbemservices -DartifactId=wbem -Dversion=$VERSION -Dpackaging=jar
+
+mvn deploy:deploy-file -Durl="https://admin:n1c3NC0mpl3x!@nexus.infinio.com/content/repositories/$REPOSITORY" -Dfile=./wbemservices.zip -DgroupId=org.sourceforge.wbemservices -DartifactId=wbemservices -Dversion=$VERSION -Dpackaging=zip
