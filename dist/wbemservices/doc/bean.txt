@@ -1,3 +1,0 @@
-PACKAGE=foo.com
-IMPORTS=java.lang.Exception
-EXCEPTIONS=Exception

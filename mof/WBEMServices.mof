@@ -162,19 +162,19 @@ instance of WBEMServices_CIMXMLObjectManagerClientProtocolAdapter {
     PortNumber		= 5988;
 };
 
-instance of WBEMServices_RMIObjectManagerClientProtocolAdapter {
-
-    Name                = "cim-rmi";
-    CreationClassName   = "WBEMServices_RMIObjectManagerClientProtocolAdapter";
-    StartMode           = "Automatic";
-    Started		= true;
-    SystemCreationClassName = "CIM_ComputerSystem";
-    SystemName          = "junkyard";
-    ImplClass           = "org.wbemservices.wbem.cimom.adapters.client.rmi.CIMOMRMIImpl";
-    Caption             = "Java RMI Protocol Adapter";
-    Description         = "This is the Java RMI Protocol Adapter.";
-    PortNumber		= 5987;
-};
+// instance of WBEMServices_RMIObjectManagerClientProtocolAdapter {
+// 
+//     Name                = "cim-rmi";
+//     CreationClassName   = "WBEMServices_RMIObjectManagerClientProtocolAdapter";
+//     StartMode           = "Automatic";
+//     Started		= true;
+//     SystemCreationClassName = "CIM_ComputerSystem";
+//     SystemName          = "junkyard";
+//     ImplClass           = "org.wbemservices.wbem.cimom.adapters.client.rmi.CIMOMRMIImpl";
+//     Caption             = "Java RMI Protocol Adapter";
+//     Description         = "This is the Java RMI Protocol Adapter.";
+//     PortNumber		= 5987;
+// };
 
 instance of WBEMServices_ObjectManagerProviderProtocolAdapter {
 
