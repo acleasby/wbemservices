@@ -18,3 +18,5 @@ CVS/
 *.zip
 logr/
 out/
+dist/
+*.orig

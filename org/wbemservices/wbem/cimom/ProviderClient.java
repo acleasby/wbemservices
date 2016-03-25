@@ -295,7 +295,7 @@ public class ProviderClient implements ProviderCIMOMHandle {
             boolean deep, boolean localOnly)
             throws CIMException {
 
-        Vector v = cimom.intenumInstances(nameSpace, path, deep, localOnly, true);
+        Vector v = cimom.intenumInstances(nameSpace, path, deep, localOnly, true, null);
         return v.elements();
     }
 
@@ -436,7 +436,7 @@ public class ProviderClient implements ProviderCIMOMHandle {
             throws CIMException {
 
         return cimom.intenumInstances(nameSpace, path, true,
-                localOnly, false).elements();
+                localOnly, false, null).elements();
 
     }
 

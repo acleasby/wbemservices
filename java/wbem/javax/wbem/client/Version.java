@@ -42,5 +42,5 @@ public class Version {
     public final static String companyName = "WBEM Services";
     public final static String companyContact = "http://wbemservices.sourceforge.net/";
     public final static String productName = "WBEM Services WBEM API";
-    public final static String buildID = "08/26/15:11:21"; 
+    public final static String buildID = "03/25/16:01:44"; 
 }

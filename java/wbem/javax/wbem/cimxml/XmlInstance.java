@@ -1246,18 +1246,19 @@ class XmlInstance extends XmlElement {
      */
 
     boolean includeProperty(String property) {
-	if (PropertyList == null) {
-	    return true;
-	}
-	if (PropertyList.length == 0) {
-	    return false;
-	}
-	for (int i = 0; i < PropertyList.length; i++) {
-	    if (property.equalsIgnoreCase(PropertyList[i])) {
+//	if (PropertyList == null) {
+//	    return true;
+//	}
+//	if (PropertyList.length == 0) {
+//	    return false;
+//	}
+//	for (int i = 0; i < PropertyList.length; i++) {
+//	    if (property.equalsIgnoreCase(PropertyList[i])) {
+//		return true;
+//	    }
+//	}
+//	return false;
 		return true;
-	    }
-	}
-	return false;
     }
 
     String property(CIMProperty cp, String name) {

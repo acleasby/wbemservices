@@ -809,7 +809,7 @@ class CIMOMImpl implements CIMInstanceProvider,
             LogFile.methodEntry("enumerateInstances");
             verifyCapabilities(ss, READ, getNameSpace(currNs, path));
             Vector v = intenumInstances(currNs, path, true,
-                    localOnly.booleanValue(), false);
+                    localOnly.booleanValue(), false, propertyList);
             Enumeration e = v.elements();
             Vector tv = new Vector();
             List classList = null;
@@ -1597,7 +1597,7 @@ class CIMOMImpl implements CIMInstanceProvider,
             //Object objs[] = tv.toArray();
             SelectList attrs = exp.getSelectList();
             if (tv.length != 0 && tv[0] == null) {
-                QueryExp wc = exp.getWhereClause();
+                javax.wbem.query.QueryExp wc = exp.getWhereClause();
                 for (int j = 1; j < tv.length; j++) {
                     CIMInstance tci = tv[j];
                     if ((wc == null) ||
@@ -3030,7 +3030,7 @@ class CIMOMImpl implements CIMInstanceProvider,
     }
 
     Vector intenumInstances(CIMNameSpace ns, CIMObjectPath inpath,
-            boolean deep, boolean localOnly, boolean providerCall)
+            boolean deep, boolean localOnly, boolean providerCall, String[] propertyList)
             throws CIMException {
 
         ns.setNameSpace('/' + ns.getNameSpace());
@@ -3087,7 +3087,7 @@ class CIMOMImpl implements CIMInstanceProvider,
                 tv = ip.enumerateInstances(op, localOnly,
                         true /*includeQualifiers */,
                         true /*includeClassOrigin*/,
-                        null /*propertyList */,
+                        propertyList /*propertyList */,
                         cc);
             } else {
                 // There is no instance provider
@@ -3116,7 +3116,7 @@ class CIMOMImpl implements CIMInstanceProvider,
             ServerSecurity ss) throws CIMException {
         try {
             Boolean bln = (deep ? Boolean.TRUE : Boolean.FALSE);
-            return intenumInstances(ns, path, deep, localOnly, false);
+            return intenumInstances(ns, path, deep, localOnly, false, null);
         } catch (CIMException e) {
             Debug.trace2("Got exception", e);
             throw e;

@@ -67,4 +67,4 @@ if [ ! -x $ANT ]; then
 fi
 
 # Start the build using ANT
-$ANT $*
+$ANT -Dant.build.javac.source=1.6 -Dant.build.javac.target=1.6 $*

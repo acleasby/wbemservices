@@ -45,6 +45,6 @@ final class Version {
     final static String productName = "WBEM Services CIM Workshop";
 
     // The build id is a build date in mm/dd/yy:HH:MM format
-    final static String buildID = "08/26/15:11:22";
+    final static String buildID = "03/25/16:01:44";
 }
 

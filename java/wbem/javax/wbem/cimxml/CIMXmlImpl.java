@@ -1299,8 +1299,7 @@ class CIMXmlImpl implements CIMXml, CIMXmlUtil {
 	    nstr = newns.getNameSpace();
 	    v = new Vector();
 	    CIMProperty cp = new CIMProperty("NameSpace");
-	    cp.setValue(new CIMValue(nstr.substring(
-				nstr.lastIndexOf('/') + 1)));
+	    cp.setValue(new CIMValue(nstr));
 	    v.addElement(cp);
 	}
 
